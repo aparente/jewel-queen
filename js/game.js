@@ -145,7 +145,6 @@ class JewelQueenGame {
       onReward: (outcome) => this._applySlotReward(outcome)
     });
 
-    this._buildMarqueeBulbs();
     this._buildCellWells();
     this._bindEvents();
     this._syncMuteIcon();
