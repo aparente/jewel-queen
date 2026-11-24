@@ -17,7 +17,6 @@ import { audio } from './audio.js';
 import { ParticleFX } from './particles.js';
 import { RoyalSlotBar } from './slot.js';
 import { AmbientSalon } from './ambient.js';
-import { LivingOpalTray } from './opal-tray.js';
 import {
   MUSEUM_DOSSIERS,
   COLLECTOR_TIERS,
@@ -127,11 +126,9 @@ class JewelQueenGame {
     this.hintTimer = null;
     this.hintCoords = [];
 
-    // FX, Ambient Salon, Living Opal Tray & Slot systems
+    // FX, Ambient Salon & Slot systems
     this.ambient = new AmbientSalon(document.getElementById('ambientCanvas'));
-    this.opalTray = new LivingOpalTray(document.getElementById('opalTrayCanvas'));
     this.fx = new ParticleFX(document.getElementById('fxCanvas'));
-    this.trayStyle = localStorage.getItem('jq_tray_style') || 'opal';
     this.loupeState = { list: [], index: 0, zoom: 1, panX: 0, panY: 0, dragging: false };
     this.longPressTimer = null;
     this._startAmbientGlints();
@@ -151,7 +148,6 @@ class JewelQueenGame {
     this._buildCellWells();
     this._bindEvents();
     this._syncMuteIcon();
-    this._applyTrayStyle(this.trayStyle);
     this.bestScoreVal.textContent = this.bestScore.toLocaleString();
 
     this.startStage(1);
@@ -201,20 +197,9 @@ class JewelQueenGame {
   }
 
   _bindEvents() {
-    // Resize FX & Living Opal canvases cleanly
-    const ro = new ResizeObserver(() => {
-      this.fx.resize();
-      this.opalTray.resize();
-    });
+    // Resize FX canvas cleanly
+    const ro = new ResizeObserver(() => this.fx.resize());
     ro.observe(this.boardStage);
-
-    // Live Tray Material Switcher (Black Velvet vs. Ethereal Living Opal)
-    document.querySelectorAll('.tray-pill').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        audio.playSelect();
-        this._applyTrayStyle(btn.dataset.tray);
-      });
-    });
 
     // Pointer swipe & tap handling on the board
     this.boardTiles.addEventListener('pointerdown', (e) => this._onPointerDown(e));
@@ -334,16 +319,6 @@ class JewelQueenGame {
   _syncMuteIcon() {
     this.soundOnIcon.hidden = audio.muted;
     this.soundOffIcon.hidden = !audio.muted;
-  }
-
-  _applyTrayStyle(style) {
-    this.trayStyle = style === 'velvet' ? 'velvet' : 'opal';
-    localStorage.setItem('jq_tray_style', this.trayStyle);
-    document.body.dataset.trayStyle = this.trayStyle;
-    this.opalTray.setEnabled(this.trayStyle === 'opal');
-    document.querySelectorAll('.tray-pill').forEach((btn) => {
-      btn.classList.toggle('is-active', btn.dataset.tray === this.trayStyle);
-    });
   }
 
   startStage(stageNum) {
@@ -1020,9 +995,7 @@ class JewelQueenGame {
     if (count === 0) return;
 
     audio.playMatch(cascadeStep, count);
-    const bloomAmt = 0.28 + cascadeStep * 0.18 + (count >= 4 ? 0.22 : 0);
-    this.ambient.pulse(bloomAmt);
-    this.opalTray.pulse(bloomAmt * 1.15);
+    this.ambient.pulse(0.28 + cascadeStep * 0.18 + (count >= 4 ? 0.22 : 0));
     if (count >= 4 || cascadeStep >= 2) vibrate(16);
 
     // Points & Slot Charge
@@ -1236,7 +1209,6 @@ class JewelQueenGame {
   async _applySlotReward(outcome) {
     vibrate([20, 30, 40]);
     this.ambient.pulse(1.1);
-    this.opalTray.pulse(1.3);
     this.fx.coinShower(outcome.tier === 'grand' ? 38 : 22);
     this.fx.popup(this.fx.w / 2, this.fx.h * 0.36, outcome.title, {
       color: '#ffe588',
