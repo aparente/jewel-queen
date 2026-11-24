@@ -16,7 +16,8 @@ Every game prototype in **Jewel Queen** shares the same **38-piece Real Museum J
 | --- | --- | --- | --- |
 | `checkpoint/v1-candy-crush-museum-pokedex` | `main` (`18363b0`) | **Candy Crush Match-3 + Royal Slot + Pokédex Vault** | First complete museum baseline: 7×7 Match-3 + 3-reel slot + 8 Historical Eras + 3× Loupe + MY COLLECTION Pokédex on pure gallery black (original gold marquee frame). |
 | `checkpoint/v1.1-velvet-crystal-trays` | `main` (`7f0953d`) | **Candy Crush + Era-Matched Colored Trays** | First pass replacing the gold frame with 8 era-tinted static rims. |
-| `checkpoint/v1.2-black-velvet-tray` | `main`, `tray/black-velvet` | **Pure Black Velvet Collector's Tray** | Ultra-tactile flocked matte black-velvet jewelry tray with micro-nap grain, soft padded velvet lip, and individual recessed velvet brooch compartments. |
+| `checkpoint/v1.2-black-velvet-tray` | `tray/black-velvet` (`3c81811`) | **Pure Black Velvet Collector's Tray** | Ultra-tactile flocked matte black-velvet jewelry tray with micro-nap grain, soft padded velvet lip, and individual recessed velvet brooch compartments. |
+| `checkpoint/v1.3-living-opal-tray` | `main`, `tray/living-opal`, `game/candy-crush-pokedex` | **Ethereal Living Black Opal + Live Velvet/Opal Switcher** | Real-time 60fps canvas play-of-color Black Opal engine (`js/opal-tray.js`) with shifting cyan/emerald/sapphire/violet/rose/gold silica fire, pinfire micro-glints, pointer-tilt refraction, and match surges — plus a 1-tap `Velvet | Living Opal` switcher in the footer. |
 
 ---
 

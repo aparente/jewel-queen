@@ -164,9 +164,10 @@
         </div>
       </section>
 
-      <!-- Main 7x7 Velvet Jewelry Tray with Era-Matched Velvet / Crystal Bezel -->
+      <!-- Main 7x7 Jewelry Tray (Toggleable: Pure Black Velvet vs. Ethereal Living Opal) -->
       <section class="board-area" aria-label="Jewelry Match-3 Board">
         <div class="board-shell" id="boardShell">
+          <canvas class="opal-tray-canvas" id="opalTrayCanvas" aria-hidden="true"></canvas>
           <div class="tray-rim-shimmer" aria-hidden="true"></div>
           <div class="fever-ribbon" id="feverRibbon" hidden>3× GLAMOUR FEVER · <span id="feverCount">0</span></div>
 
@@ -185,11 +186,15 @@
         <div class="power-chip"><strong>MATCH 5</strong><span>Queen Tiara Wild</span></div>
       </section>
 
-      <!-- Subtle Gilded Footer -->
+      <!-- Subtle Gilded Footer + Live Tray Material Switcher (Velvet vs. Living Opal) -->
       <footer class="cabinet-footer">
         <span class="footer-stat">BEST <strong id="bestScoreVal">0</strong></span>
+        <div class="tray-switcher" role="group" aria-label="Tray material">
+          <button type="button" class="tray-pill" data-tray="velvet">Velvet</button>
+          <button type="button" class="tray-pill is-active" data-tray="opal">Living Opal</button>
+        </div>
         <button type="button" class="footer-loupe-btn" id="footerLoupeBtn" title="Zoom in & read jewelry history">
-          🔍 Hold jewel or tap for Loupe ✦
+          🔍 Loupe
         </button>
       </footer>
     </main>
