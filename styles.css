@@ -31,7 +31,7 @@
   --font-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
 }
 
-/* Pure Museum-Gallery Black Backdrop + Era-Matched Luxury Jewelry Tray Materials */
+/* Pure Museum-Gallery Black Backdrop & Tactile Black Velvet Collector's Tray */
 body[data-era='art-nouveau'],
 body[data-era='chinoiserie'],
 body[data-era='mayan-egyptian'],
@@ -43,205 +43,18 @@ body[data-era='paris-runway'],
 body[data-era='power-80s'],
 body[data-era='sovereign'] {
   --velvet-deep: #040406;
-  --era-bg-base: radial-gradient(circle at 50% 22%, #131117 0%, #050507 60%, #020203 100%);
+  --era-bg-base: radial-gradient(circle at 50% 24%, #0f0e13 0%, #050507 62%, #020203 100%);
   --era-pattern: none;
   --era-ink: #fffaf0;
   --era-ink-soft: #c9bfb4;
-  --era-plaque-bg: linear-gradient(180deg, rgba(20, 18, 24, 0.94) 0%, rgba(9, 8, 12, 0.97) 100%);
-  --era-slot-bg: linear-gradient(180deg, rgba(24, 21, 28, 0.96) 0%, rgba(10, 9, 13, 0.98) 100%);
+  --era-plaque-bg: linear-gradient(180deg, rgba(18, 17, 22, 0.95) 0%, rgba(9, 8, 11, 0.98) 100%);
+  --era-slot-bg: linear-gradient(180deg, rgba(20, 19, 25, 0.96) 0%, rgba(9, 8, 12, 0.98) 100%);
   --era-stage-center: #121116;
-  --era-stage-mid: #09080c;
-  --era-stage-edge: #040406;
-  --era-well-alt: rgba(255, 245, 220, 0.045);
+  --era-stage-mid: #0a090d;
+  --era-stage-edge: #050507;
+  --era-well-alt: rgba(255, 252, 245, 0.022);
   --era-title-grad: linear-gradient(180deg, #fffdf0 0%, #ffe082 48%, #c98a1e 100%);
   --era-title-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
-}
-
-/* Stage 1: Art Nouveau — Iridescent Black Opal & Mother-of-Pearl Crystal Rim */
-body[data-era='art-nouveau'] {
-  --tray-frame: linear-gradient(
-    135deg,
-    #1c182c 0%,
-    #3d5a73 18%,
-    #7e649c 36%,
-    #335c5a 54%,
-    #8c7ca6 74%,
-    #252338 100%
-  );
-  --tray-piping: rgba(196, 232, 245, 0.42);
-  --tray-glow: rgba(126, 198, 224, 0.24);
-  --tray-shimmer: conic-gradient(
-    from 0deg,
-    rgba(130, 240, 230, 0.45),
-    rgba(196, 152, 255, 0.42),
-    rgba(255, 232, 186, 0.36),
-    rgba(104, 206, 255, 0.45),
-    rgba(130, 240, 230, 0.45)
-  );
-  --era-stage-center: #13121c;
-  --era-stage-mid: #0a0910;
-}
-
-/* Stage 2: Deco Chinoiserie — Glossy Black Lacquer & Imperial Jadeite Inlay Tray */
-body[data-era='chinoiserie'] {
-  --tray-frame: linear-gradient(
-    145deg,
-    #0e1f19 0%,
-    #225e48 22%,
-    #0d1915 48%,
-    #2b7058 76%,
-    #0c1613 100%
-  );
-  --tray-piping: rgba(114, 224, 174, 0.44);
-  --tray-glow: rgba(46, 168, 120, 0.22);
-  --tray-shimmer: conic-gradient(
-    from 0deg,
-    rgba(110, 235, 176, 0.4),
-    rgba(255, 224, 152, 0.3),
-    rgba(220, 72, 82, 0.28),
-    rgba(110, 235, 176, 0.4)
-  );
-  --era-stage-center: #0d1915;
-  --era-stage-mid: #070e0c;
-}
-
-/* Stage 3: Global Revival — Volcanic Obsidian, Lapis & Turquoise Mosaic Case */
-body[data-era='mayan-egyptian'] {
-  --tray-frame: linear-gradient(
-    140deg,
-    #1c1718 0%,
-    #185c68 24%,
-    #2d221c 48%,
-    #1f4d78 74%,
-    #1a1516 100%
-  );
-  --tray-piping: rgba(94, 214, 220, 0.42);
-  --tray-glow: rgba(42, 166, 184, 0.22);
-  --tray-shimmer: conic-gradient(
-    from 0deg,
-    rgba(72, 214, 220, 0.42),
-    rgba(232, 172, 92, 0.35),
-    rgba(66, 126, 224, 0.38),
-    rgba(72, 214, 220, 0.42)
-  );
-  --era-stage-center: #141215;
-  --era-stage-mid: #0a090c;
-}
-
-/* Stage 4: Weird, Adorable & Chic — Plush Padded Mulberry-Rose Crushed Velvet Tray */
-body[data-era='bakelite'] {
-  --tray-frame: linear-gradient(
-    145deg,
-    #4c1830 0%,
-    #290b1a 32%,
-    #5a1d39 58%,
-    #240917 84%,
-    #3d1327 100%
-  );
-  --tray-piping: rgba(255, 198, 222, 0.36);
-  --tray-glow: rgba(196, 62, 118, 0.26);
-  --tray-shimmer: conic-gradient(
-    from 0deg,
-    rgba(255, 174, 210, 0.4),
-    rgba(255, 226, 174, 0.34),
-    rgba(224, 96, 152, 0.36),
-    rgba(255, 174, 210, 0.4)
-  );
-  --era-stage-center: #1c0a14;
-  --era-stage-mid: #10060c;
-}
-
-/* Stage 5: Golden Age & Christian Dior — Smoked Diamond-Crystal & Satin Velvet Case */
-body[data-era='golden-age'] {
-  --tray-frame: linear-gradient(
-    135deg,
-    #24212a 0%,
-    #5c5468 20%,
-    #1c1922 44%,
-    #6e657a 70%,
-    #1d1a24 100%
-  );
-  --tray-piping: rgba(242, 236, 255, 0.46);
-  --tray-glow: rgba(212, 200, 240, 0.22);
-  --tray-shimmer: conic-gradient(
-    from 0deg,
-    rgba(255, 255, 255, 0.45),
-    rgba(196, 224, 255, 0.38),
-    rgba(255, 224, 236, 0.38),
-    rgba(255, 255, 255, 0.45)
-  );
-  --era-stage-center: #141218;
-  --era-stage-mid: #0a090d;
-}
-
-/* Stage 6: Swinging 60s Cocktail — Faceted Rock-Crystal & Peacock-Turquoise Velvet Rim */
-body[data-era='mid-century'] {
-  --tray-frame: linear-gradient(
-    135deg,
-    #122e34 0%,
-    #277982 22%,
-    #11272d 48%,
-    #368e96 74%,
-    #0f2429 100%
-  );
-  --tray-piping: rgba(154, 245, 242, 0.46);
-  --tray-glow: rgba(56, 204, 212, 0.24);
-  --tray-shimmer: conic-gradient(
-    from 0deg,
-    rgba(116, 250, 244, 0.45),
-    rgba(255, 234, 168, 0.32),
-    rgba(92, 184, 255, 0.4),
-    rgba(116, 250, 244, 0.45)
-  );
-  --era-stage-center: #0c191c;
-  --era-stage-mid: #060e10;
-}
-
-/* Stage 7: Baroque Revival — Royal Oxblood Museum Crushed-Velvet Presentation Tray */
-body[data-era='paris-runway'] {
-  --tray-frame: linear-gradient(
-    145deg,
-    #441118 0%,
-    #22070b 32%,
-    #52151e 58%,
-    #1f060a 84%,
-    #3a0e14 100%
-  );
-  --tray-piping: rgba(242, 198, 134, 0.38);
-  --tray-glow: rgba(168, 36, 56, 0.26);
-  --tray-shimmer: conic-gradient(
-    from 0deg,
-    rgba(247, 206, 128, 0.38),
-    rgba(214, 72, 92, 0.36),
-    rgba(255, 232, 184, 0.32),
-    rgba(247, 206, 128, 0.38)
-  );
-  --era-stage-center: #1a090d;
-  --era-stage-mid: #0e0507;
-}
-
-/* Stage 8: Maximalist Grand Finale — Wallace Chan Iridescent Anodized Titanium Prism */
-body[data-era='power-80s'] {
-  --tray-frame: linear-gradient(
-    135deg,
-    #2b123a 0%,
-    #86286e 22%,
-    #254b6e 46%,
-    #a82c7c 72%,
-    #241136 100%
-  );
-  --tray-piping: rgba(255, 192, 242, 0.5);
-  --tray-glow: rgba(218, 72, 178, 0.32);
-  --tray-shimmer: conic-gradient(
-    from 0deg,
-    rgba(255, 118, 214, 0.5),
-    rgba(98, 238, 232, 0.45),
-    rgba(255, 224, 122, 0.42),
-    rgba(168, 118, 255, 0.48),
-    rgba(255, 118, 214, 0.5)
-  );
-  --era-stage-center: #180b1d;
-  --era-stage-mid: #0c0510;
 }
 
 /* Era 6: Surrealist & Sovereign Vault — Dreamy Wisteria-Lilac & Celestial Gold Stars */
@@ -773,23 +586,36 @@ body {
   place-items: center;
 }
 
+/* Tactile Padded Black Velvet Collector's Presentation Tray */
 .board-shell {
   position: relative;
   width: min(100cqw, 100cqh, 412px);
   height: min(100cqw, 100cqh, 412px);
   display: grid;
   place-items: center;
-  padding: 10px;
-  border-radius: 22px;
-  overflow: visible;
-  background: var(--tray-frame, linear-gradient(145deg, #24212a, #121018));
-  border: 1px solid var(--tray-piping, rgba(255, 245, 220, 0.28));
+  padding: 13px;
+  border-radius: 18px;
+  overflow: hidden;
+  /* Soft padded black-velvet lip with subtle directional velvet-nap lighting */
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 90 90'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='90' height='90' filter='url(%23n)' opacity='0.09'/%3E%3C/svg%3E"),
+    linear-gradient(148deg, #211f26 0%, #111015 36%, #0b0a0e 72%, #18161d 100%);
+  border: 1px solid rgba(255, 248, 236, 0.09);
   box-shadow:
-    inset 0 2px 5px rgba(255, 255, 255, 0.16),
-    inset 0 -4px 10px rgba(0, 0, 0, 0.72),
-    0 14px 36px rgba(0, 0, 0, 0.85),
-    0 0 32px var(--tray-glow, rgba(255, 255, 255, 0.12));
-  transition: background 450ms ease, border-color 450ms ease, box-shadow 450ms ease;
+    inset 0 2px 3px rgba(255, 255, 255, 0.08),
+    inset 0 -3px 8px rgba(0, 0, 0, 0.92),
+    inset 0 0 0 4px rgba(0, 0, 0, 0.25),
+    0 18px 44px rgba(0, 0, 0, 0.94);
+  transition: box-shadow 360ms ease, border-color 360ms ease;
+}
+
+.board-shell.is-fever {
+  border-color: rgba(255, 224, 146, 0.36);
+  box-shadow:
+    inset 0 2px 3px rgba(255, 244, 210, 0.14),
+    inset 0 -3px 8px rgba(0, 0, 0, 0.92),
+    0 18px 44px rgba(0, 0, 0, 0.94),
+    0 0 28px rgba(247, 206, 104, 0.22);
 }
 
 .board-shell.is-shaking {
@@ -804,93 +630,72 @@ body {
   80% { transform: translate3d(3px, 2px, 0); }
 }
 
-/* Subtle Iridescent Crystal / Velvet Rim Sheen (swells prismatically during 3x Fever!) */
 .tray-rim-shimmer {
-  position: absolute;
-  inset: -1px;
-  border-radius: 22px;
-  padding: 1.5px;
-  background: var(--tray-shimmer, conic-gradient(from 0deg, rgba(255,255,255,0.3), rgba(200,180,255,0.25), rgba(255,255,255,0.3)));
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0.58;
-  pointer-events: none;
-  transition: opacity 300ms ease, filter 300ms ease;
-}
-
-.board-shell.is-fever .tray-rim-shimmer {
-  opacity: 1;
-  filter: brightness(1.35) drop-shadow(0 0 8px rgba(255, 224, 150, 0.65));
-  animation: trayFeverBreath 1.4s ease-in-out infinite;
-}
-
-@keyframes trayFeverBreath {
-  0%, 100% { opacity: 0.72; }
-  50% { opacity: 1; }
+  display: none;
 }
 
 .fever-ribbon {
   position: absolute;
-  top: -10px;
+  top: 4px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 12;
   padding: 3px 12px;
   border-radius: 99px;
-  background: linear-gradient(90deg, #d81b60, #f59e0b, #d81b60);
-  border: 1.5px solid #fff4b8;
-  font-size: 0.66rem;
+  background: linear-gradient(90deg, #9d174d, #d97706, #9d174d);
+  border: 1px solid #fff4b8;
+  font-size: 0.64rem;
   font-weight: 800;
   letter-spacing: 0.09em;
   color: #fffef5;
   white-space: nowrap;
-  box-shadow: 0 4px 12px rgba(216, 27, 96, 0.65);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.72);
   animation: feverFloat 1.2s ease-in-out infinite;
 }
 
 @keyframes feverFloat {
   0%, 100% { transform: translateX(-50%) scale(1); }
-  50% { transform: translateX(-50%) scale(1.06); }
+  50% { transform: translateX(-50%) scale(1.05); }
 }
 
-/* Recessed Plush Velvet Jewelry Tray Stage */
+/* Recessed Flocked Black-Velvet Tray Interior */
 .board-stage {
   position: relative;
   width: 100%;
   height: 100%;
-  border-radius: 15px;
+  border-radius: 10px;
   overflow: hidden;
   background:
-    radial-gradient(circle at 50% 42%, var(--era-stage-center) 0%, var(--era-stage-mid) 70%, var(--era-stage-edge) 100%);
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 90 90'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='90' height='90' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E"),
+    radial-gradient(circle at 46% 36%, #17151c 0%, #0d0c11 65%, #07060a 100%);
   box-shadow:
-    inset 0 2px 14px rgba(0, 0, 0, 0.92),
-    inset 0 0 0 1px var(--tray-piping, rgba(255, 240, 200, 0.25));
+    inset 0 4px 16px rgba(0, 0, 0, 0.96),
+    inset 0 0 0 1px rgba(255, 250, 240, 0.06);
   touch-action: none;
-  transition: background 420ms ease, box-shadow 420ms ease;
 }
 
 .board-cells {
   position: absolute;
-  inset: 4px;
+  inset: 5px;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(7, 1fr);
-  gap: 2px;
+  gap: 3px;
 }
 
+/* Individual Padded Velvet Ring/Brooch Compartments */
 .cell-well {
   position: relative;
-  border-radius: 8px;
-  background: rgba(20, 4, 16, 0.42);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.55);
+  border-radius: 6px;
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.025) 0%, rgba(0, 0, 0, 0.35) 100%);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.8),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.035);
   transition: background 260ms ease, box-shadow 260ms ease;
 }
 
 .cell-well.alt {
-  background: var(--era-well-alt);
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.036) 0%, rgba(0, 0, 0, 0.28) 100%);
 }
 
 .cell-well.is-gilded {

@@ -15,7 +15,8 @@ Every game prototype in **Jewel Queen** shares the same **38-piece Real Museum J
 | Checkpoint Tag | Branch | Game Dynamic | Highlights |
 | --- | --- | --- | --- |
 | `checkpoint/v1-candy-crush-museum-pokedex` | `main` (`18363b0`) | **Candy Crush Match-3 + Royal Slot + Pokédex Vault** | First complete museum baseline: 7×7 Match-3 + 3-reel slot + 8 Historical Eras + 3× Loupe + MY COLLECTION Pokédex on pure gallery black (original gold marquee frame). |
-| `checkpoint/v1.1-velvet-crystal-trays` | `main`, `game/candy-crush-pokedex` | **Candy Crush + Pokédex + Era Velvet/Crystal Trays** | Replaces the gold marquee frame & bulbs with **8 bespoke era-matched luxury jewelry trays** (iridescent black opal, jadeite lacquer, obsidian turquoise inlay, crushed mulberry velvet, smoked diamond crystal, peacock rock crystal, oxblood museum velvet, and iridescent anodized titanium prism). |
+| `checkpoint/v1.1-velvet-crystal-trays` | `main` (`7f0953d`) | **Candy Crush + Era-Matched Colored Trays** | First pass replacing the gold frame with 8 era-tinted static rims. |
+| `checkpoint/v1.2-black-velvet-tray` | `main`, `tray/black-velvet` | **Pure Black Velvet Collector's Tray** | Ultra-tactile flocked matte black-velvet jewelry tray with micro-nap grain, soft padded velvet lip, and individual recessed velvet brooch compartments. |
 
 ---
 
