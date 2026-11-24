@@ -1,7 +1,10 @@
 /**
- * Elevated teamLab × Museum Light-Art Particle FX:
- * faceted crystal prisms, luminous pearl sparks, refractive water-light ripples,
- * pure prismatic laser filaments, and editorial Cormorant Garamond italic callouts.
+ * SOTA teamLab × Museum Light-Art Particle FX:
+ * - Curved flowing silk Bezier light-ribbons (Royal Tiara sovereign sweeps!)
+ * - Dual-core chromatic-dispersion split laser beams (Match-4 Light Beam)
+ * - Dual-ring refractive water-light ripples (L/T Aura Burst)
+ * - Silk-decelerating faceted crystal shards & pearl starlight bursts
+ * - Refined Cormorant Garamond italic callouts
  */
 
 export class ParticleFX {
@@ -11,7 +14,7 @@ export class ParticleFX {
     this.particles = [];
     this.beams = [];
     this.rings = [];
-    this.arcs = [];
+    this.ribbons = [];
     this.popups = [];
     this.running = false;
     this.lastTime = 0;
@@ -41,7 +44,7 @@ export class ParticleFX {
         this.particles.length ||
         this.beams.length ||
         this.rings.length ||
-        this.arcs.length ||
+        this.ribbons.length ||
         this.popups.length
       ) {
         requestAnimationFrame(tick);
@@ -53,89 +56,108 @@ export class ParticleFX {
     requestAnimationFrame(tick);
   }
 
-  burst(x, y, color = '#d8f4ff', count = 14) {
+  burst(x, y, color = '#d8f4ff', count = 16) {
     const n = this.reducedMotion ? Math.min(5, count) : count;
+    // Soft instant core flash ring
+    this.rings.push({
+      x,
+      y,
+      color,
+      radius: 4,
+      maxRadius: 34,
+      life: 0,
+      maxLife: 0.34,
+      thin: true
+    });
+
     for (let i = 0; i < n; i++) {
-      const angle = (Math.PI * 2 * i) / n + (Math.random() - 0.5) * 0.45;
-      const speed = 55 + Math.random() * 155;
-      const isStar = i % 2 === 0;
+      const angle = (Math.PI * 2 * i) / n + (Math.random() - 0.5) * 0.42;
+      const speed = 50 + Math.random() * 165;
+      const kind = i % 3 === 0 ? 'petal' : i % 2 === 0 ? 'star' : 'spark';
       this.particles.push({
-        kind: isStar ? 'star' : 'spark',
+        kind,
         x,
         y,
         vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed - 24,
-        size: isStar ? 4.5 + Math.random() * 5.5 : 2 + Math.random() * 3,
-        color: i % 3 === 0 ? '#ffffff' : color,
-        rot: Math.random() * Math.PI,
-        vrot: (Math.random() - 0.5) * 7,
+        vy: Math.sin(angle) * speed - 22,
+        size: kind === 'star' ? 5 + Math.random() * 5.5 : kind === 'petal' ? 4 + Math.random() * 4 : 2 + Math.random() * 2.5,
+        color: i % 4 === 0 ? '#ffffff' : color,
+        rot: angle,
+        vrot: (Math.random() - 0.5) * 6,
         life: 0,
-        maxLife: 0.52 + Math.random() * 0.38
+        maxLife: 0.55 + Math.random() * 0.42
       });
     }
     this._ensureLoop();
   }
 
-  /* Shower of drifting iridescent crystal prisms & pearl light petals (replaces casino coins!) */
-  coinShower(count = 28) {
+  /* Drifting iridescent crystal prisms & light petals on jackpots & big combos */
+  coinShower(count = 32) {
     const n = this.reducedMotion ? 8 : count;
     const prismColors = ['#d6faf6', '#e6d8ff', '#ffe2ec', '#ffffff', '#cde8ff'];
     for (let i = 0; i < n; i++) {
       this.particles.push({
         kind: 'prism',
-        x: this.w * (0.08 + Math.random() * 0.84),
-        y: -14 - Math.random() * 85,
-        vx: (Math.random() - 0.5) * 75,
-        vy: 90 + Math.random() * 145,
-        size: 5 + Math.random() * 6,
+        x: this.w * (0.06 + Math.random() * 0.88),
+        y: -14 - Math.random() * 95,
+        vx: (Math.random() - 0.5) * 70,
+        vy: 82 + Math.random() * 145,
+        size: 5 + Math.random() * 6.5,
         phase: Math.random() * Math.PI * 2,
-        vphase: 5 + Math.random() * 5,
+        vphase: 4.5 + Math.random() * 5.5,
         color: prismColors[i % prismColors.length],
         life: 0,
-        maxLife: 1.55 + Math.random() * 0.8
+        maxLife: 1.65 + Math.random() * 0.85
       });
     }
     this._ensureLoop();
   }
 
-  shockwave(x, y, color = '#d6f4ff', maxRadius = 115) {
-    this.rings.push({
-      x,
-      y,
-      color,
-      radius: 8,
-      maxRadius,
-      life: 0,
-      maxLife: 0.52
-    });
+  shockwave(x, y, color = '#d6f4ff', maxRadius = 122) {
+    // Dual refractive concentric water-light ripples
+    this.rings.push({ x, y, color, radius: 8, maxRadius, life: 0, maxLife: 0.56, thin: false });
+    this.rings.push({ x, y, color: '#ffffff', radius: 4, maxRadius: maxRadius * 0.72, life: -0.06, maxLife: 0.48, thin: true });
     this._ensureLoop();
   }
 
   laserBeam(x, y, orientation = 'h', color = '#d8f4ff') {
-    this.beams.push({
-      x,
-      y,
-      orientation,
-      color,
-      life: 0,
-      maxLife: 0.42
-    });
+    this.beams.push({ x, y, orientation, color, life: 0, maxLife: 0.46 });
+    // Scatter luminous diamond dust along the beam path
+    const steps = this.reducedMotion ? 4 : 11;
+    for (let i = 0; i < steps; i++) {
+      const t = (i + 0.5) / steps;
+      const px = orientation === 'h' ? t * this.w : x + (Math.random() - 0.5) * 14;
+      const py = orientation === 'v' ? t * this.h : y + (Math.random() - 0.5) * 14;
+      this.particles.push({
+        kind: 'star',
+        x: px,
+        y: py,
+        vx: (Math.random() - 0.5) * 55,
+        vy: (Math.random() - 0.5) * 55 - 15,
+        size: 3.5 + Math.random() * 4.5,
+        color: i % 2 === 0 ? '#ffffff' : color,
+        rot: Math.random() * Math.PI,
+        vrot: (Math.random() - 0.5) * 6,
+        life: 0,
+        maxLife: 0.45 + Math.random() * 0.3
+      });
+    }
     this._ensureLoop();
   }
 
-  lightningArc(x1, y1, x2, y2, color = '#e4f6ff') {
-    const segs = 6;
-    const pts = [{ x: x1, y: y1 }];
-    for (let i = 1; i < segs; i++) {
-      const t = i / segs;
-      const jitter = 12;
-      pts.push({
-        x: x1 + (x2 - x1) * t + (Math.random() - 0.5) * jitter,
-        y: y1 + (y2 - y1) * t + (Math.random() - 0.5) * jitter
-      });
-    }
-    pts.push({ x: x2, y: y2 });
-    this.arcs.push({ pts, color, life: 0, maxLife: 0.36 });
+  /**
+   * Curved flowing teamLab silk light-ribbon snaking from (x1,y1) -> (x2,y2).
+   */
+  lightningArc(x1, y1, x2, y2, color = '#d8f6ff') {
+    const mx = (x1 + x2) * 0.5;
+    const my = (y1 + y2) * 0.5;
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    const bend = (Math.random() > 0.5 ? 1 : -1) * (24 + Math.random() * 32);
+    const len = Math.max(1, Math.hypot(dx, dy));
+    const cx = mx - (dy / len) * bend;
+    const cy = my + (dx / len) * bend;
+    this.ribbons.push({ x1, y1, cx, cy, x2, y2, color, life: 0, maxLife: 0.46 });
     this._ensureLoop();
   }
 
@@ -148,7 +170,7 @@ export class ParticleFX {
       scale,
       big,
       life: 0,
-      maxLife: big ? 1.2 : 0.9
+      maxLife: big ? 1.25 : 0.9
     });
     this._ensureLoop();
   }
@@ -157,7 +179,7 @@ export class ParticleFX {
     const ctx = this.ctx;
     ctx.clearRect(0, 0, this.w, this.h);
 
-    // Prismatic Silk Light Beams
+    // 1. Chromatic-Dispersion Split Laser Beams (Cyan + Violet fringe + Pure White Core)
     for (let i = this.beams.length - 1; i >= 0; i--) {
       const b = this.beams[i];
       b.life += dt;
@@ -166,37 +188,48 @@ export class ParticleFX {
         continue;
       }
       const p = b.life / b.maxLife;
-      const alpha = 1 - p;
-      const thickness = (1 - p * 0.45) * 22;
+      const alpha = Math.pow(1 - p, 1.3);
+      const thick = (1 - p * 0.55) * 24;
+      const offset = 3.5 * (1 - p * 0.3);
+
       ctx.save();
       ctx.globalCompositeOperation = 'lighter';
       ctx.globalAlpha = alpha;
       if (b.orientation === 'h') {
-        const g = ctx.createLinearGradient(0, b.y - thickness, 0, b.y + thickness);
-        g.addColorStop(0, 'rgba(200,242,255,0)');
-        g.addColorStop(0.5, b.color);
-        g.addColorStop(1, 'rgba(200,242,255,0)');
-        ctx.fillStyle = g;
-        ctx.fillRect(0, b.y - thickness, this.w, thickness * 2);
+        const drawBand = (yOff, cHex, hSize) => {
+          const g = ctx.createLinearGradient(0, b.y + yOff - hSize, 0, b.y + yOff + hSize);
+          g.addColorStop(0, 'rgba(0,0,0,0)');
+          g.addColorStop(0.5, cHex);
+          g.addColorStop(1, 'rgba(0,0,0,0)');
+          ctx.fillStyle = g;
+          ctx.fillRect(0, b.y + yOff - hSize, this.w, hSize * 2);
+        };
+        drawBand(-offset, 'rgba(130, 244, 255, 0.7)', thick * 0.85);
+        drawBand(offset, 'rgba(210, 160, 255, 0.7)', thick * 0.85);
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, b.y - 1.5, this.w, 3);
       } else {
-        const g = ctx.createLinearGradient(b.x - thickness, 0, b.x + thickness, 0);
-        g.addColorStop(0, 'rgba(200,242,255,0)');
-        g.addColorStop(0.5, b.color);
-        g.addColorStop(1, 'rgba(200,242,255,0)');
-        ctx.fillStyle = g;
-        ctx.fillRect(b.x - thickness, 0, thickness * 2, this.h);
+        const drawBand = (xOff, cHex, wSize) => {
+          const g = ctx.createLinearGradient(b.x + xOff - wSize, 0, b.x + xOff + wSize, 0);
+          g.addColorStop(0, 'rgba(0,0,0,0)');
+          g.addColorStop(0.5, cHex);
+          g.addColorStop(1, 'rgba(0,0,0,0)');
+          ctx.fillStyle = g;
+          ctx.fillRect(b.x + xOff - wSize, 0, wSize * 2, this.h);
+        };
+        drawBand(-offset, 'rgba(130, 244, 255, 0.7)', thick * 0.85);
+        drawBand(offset, 'rgba(210, 160, 255, 0.7)', thick * 0.85);
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(b.x - 1.5, 0, 3, this.h);
       }
       ctx.restore();
     }
 
-    // Refractive Water-Light Ripples
+    // 2. Refractive Water-Light Ripples
     for (let i = this.rings.length - 1; i >= 0; i--) {
       const r = this.rings[i];
       r.life += dt;
+      if (r.life < 0) continue;
       if (r.life >= r.maxLife) {
         this.rings.splice(i, 1);
         continue;
@@ -206,41 +239,57 @@ export class ParticleFX {
       const rad = r.radius + (r.maxRadius - r.radius) * ease;
       ctx.save();
       ctx.globalCompositeOperation = 'lighter';
-      ctx.globalAlpha = (1 - p) * 0.85;
+      ctx.globalAlpha = (1 - p) * (r.thin ? 0.65 : 0.85);
       ctx.strokeStyle = r.color;
-      ctx.lineWidth = Math.max(1, 5 * (1 - p));
+      ctx.lineWidth = Math.max(0.8, (r.thin ? 2.2 : 5.5) * (1 - p));
       ctx.beginPath();
       ctx.arc(r.x, r.y, rad, 0, Math.PI * 2);
       ctx.stroke();
       ctx.restore();
     }
 
-    // Optical Light Filaments (Tiara Wild)
-    for (let i = this.arcs.length - 1; i >= 0; i--) {
-      const a = this.arcs[i];
-      a.life += dt;
-      if (a.life >= a.maxLife) {
-        this.arcs.splice(i, 1);
+    // 3. Curved Flowing Silk Light-Ribbons (Royal Tiara)
+    for (let i = this.ribbons.length - 1; i >= 0; i--) {
+      const rb = this.ribbons[i];
+      rb.life += dt;
+      if (rb.life >= rb.maxLife) {
+        this.ribbons.splice(i, 1);
         continue;
       }
-      const alpha = 1 - a.life / a.maxLife;
+      const p = rb.life / rb.maxLife;
+      const head = Math.min(1, p * 2.1);
+      const alpha = p > 0.45 ? (1 - p) / 0.55 : 1;
+
       ctx.save();
       ctx.globalCompositeOperation = 'lighter';
       ctx.globalAlpha = alpha;
-      ctx.strokeStyle = a.color;
-      ctx.lineWidth = 3;
-      ctx.shadowColor = '#c8f3ff';
+      ctx.lineCap = 'round';
+
+      // Draw partial quadratic Bezier up to `head`
+      const drawPartial = (width, stroke) => {
+        ctx.strokeStyle = stroke;
+        ctx.lineWidth = width;
+        ctx.beginPath();
+        const segs = 14;
+        for (let s = 0; s <= segs; s++) {
+          const t = (s / segs) * head;
+          const mt = 1 - t;
+          const px = mt * mt * rb.x1 + 2 * mt * t * rb.cx + t * t * rb.x2;
+          const py = mt * mt * rb.y1 + 2 * mt * t * rb.cy + t * t * rb.y2;
+          if (s === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        }
+        ctx.stroke();
+      };
+
+      ctx.shadowColor = rb.color;
       ctx.shadowBlur = 14;
-      ctx.beginPath();
-      a.pts.forEach((pt, idx) => (idx === 0 ? ctx.moveTo(pt.x, pt.y) : ctx.lineTo(pt.x, pt.y)));
-      ctx.stroke();
-      ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = 1.2;
-      ctx.stroke();
+      drawPartial(5.2 * (1 - p * 0.4), rb.color);
+      drawPartial(1.6, '#ffffff');
       ctx.restore();
     }
 
-    // Particles
+    // 4. Particles (Silk-Decelerating Crystal Shards, Light Petals & Prisms)
     for (let i = this.particles.length - 1; i >= 0; i--) {
       const pt = this.particles[i];
       pt.life += dt;
@@ -251,8 +300,8 @@ export class ParticleFX {
       const p = pt.life / pt.maxLife;
 
       if (pt.kind === 'prism') {
-        pt.vy += 180 * dt;
-        pt.x += pt.vx * dt + Math.sin(pt.phase) * 18 * dt;
+        pt.vy += 155 * dt;
+        pt.x += pt.vx * dt + Math.sin(pt.phase) * 22 * dt;
         pt.y += pt.vy * dt;
         pt.phase += pt.vphase * dt;
         const spinW = Math.max(0.2, Math.abs(Math.cos(pt.phase)));
@@ -261,42 +310,48 @@ export class ParticleFX {
         ctx.globalCompositeOperation = 'lighter';
         ctx.globalAlpha = alpha;
         ctx.translate(pt.x, pt.y);
-        ctx.rotate(Math.sin(pt.phase * 0.5) * 0.5);
+        ctx.rotate(Math.sin(pt.phase * 0.5) * 0.45);
         ctx.scale(spinW, 1);
         ctx.fillStyle = pt.color;
         ctx.beginPath();
         ctx.moveTo(0, -pt.size);
-        ctx.lineTo(pt.size * 0.65, 0);
+        ctx.lineTo(pt.size * 0.62, 0);
         ctx.lineTo(0, pt.size);
-        ctx.lineTo(-pt.size * 0.65, 0);
+        ctx.lineTo(-pt.size * 0.62, 0);
         ctx.closePath();
         ctx.fill();
         ctx.restore();
       } else {
-        pt.vy += 210 * dt;
+        // Silky fluid deceleration like particles suspended in dark gallery air
+        pt.vy += 140 * dt;
         pt.x += pt.vx * dt;
         pt.y += pt.vy * dt;
-        pt.vx *= 0.96;
+        pt.vx *= 0.93;
+        pt.vy *= 0.96;
         pt.rot += pt.vrot * dt;
-        const alpha = 1 - p;
-        const sz = pt.size * (1 - p * 0.4);
+        const alpha = Math.pow(1 - p, 1.15);
+        const sz = pt.size * (1 - p * 0.38);
+
         ctx.save();
         ctx.globalCompositeOperation = 'lighter';
         ctx.globalAlpha = alpha;
         ctx.translate(pt.x, pt.y);
         ctx.rotate(pt.rot);
         ctx.fillStyle = pt.color;
+
         if (pt.kind === 'star') {
           ctx.beginPath();
           for (let k = 0; k < 8; k++) {
-            const rad = k % 2 === 0 ? sz : sz * 0.24;
+            const rad = k % 2 === 0 ? sz : sz * 0.22;
             const ang = (k * Math.PI) / 4;
-            const px = Math.cos(ang) * rad;
-            const py = Math.sin(ang) * rad;
-            if (k === 0) ctx.moveTo(px, py);
-            else ctx.lineTo(px, py);
+            if (k === 0) ctx.moveTo(Math.cos(ang) * rad, Math.sin(ang) * rad);
+            else ctx.lineTo(Math.cos(ang) * rad, Math.sin(ang) * rad);
           }
           ctx.closePath();
+          ctx.fill();
+        } else if (pt.kind === 'petal') {
+          ctx.beginPath();
+          ctx.ellipse(0, 0, sz * 1.35, sz * 0.45, 0, 0, Math.PI * 2);
           ctx.fill();
         } else {
           ctx.beginPath();
@@ -307,7 +362,7 @@ export class ParticleFX {
       }
     }
 
-    // Editorial Serif Popups
+    // 5. Editorial Serif Callouts
     for (let i = this.popups.length - 1; i >= 0; i--) {
       const pop = this.popups[i];
       pop.life += dt;
@@ -316,21 +371,21 @@ export class ParticleFX {
         continue;
       }
       const p = pop.life / pop.maxLife;
-      const rise = (pop.big ? 56 : 40) * (1 - Math.pow(1 - p, 2));
+      const rise = (pop.big ? 58 : 42) * (1 - Math.pow(1 - p, 2.4));
       const punch = p < 0.16 ? 0.78 + (p / 0.16) * 0.28 : 1.06 - Math.min(0.06, (p - 0.16) * 0.3);
-      const alpha = p > 0.65 ? (1 - p) / 0.35 : 1;
+      const alpha = p > 0.64 ? (1 - p) / 0.36 : 1;
 
       ctx.save();
       ctx.globalAlpha = alpha;
       ctx.translate(pop.x, pop.y - rise);
       ctx.scale(punch * pop.scale, punch * pop.scale);
       ctx.font = pop.big
-        ? 'italic 600 24px "Cormorant Garamond", Georgia, serif'
+        ? 'italic 400 26px "Cormorant Garamond", Georgia, serif'
         : '500 15px "Inter", system-ui, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.lineWidth = 4;
-      ctx.strokeStyle = 'rgba(4, 4, 8, 0.88)';
+      ctx.strokeStyle = 'rgba(3, 3, 7, 0.88)';
       ctx.strokeText(pop.text, 0, 0);
       ctx.fillStyle = pop.color;
       ctx.fillText(pop.text, 0, 0);

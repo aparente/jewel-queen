@@ -651,7 +651,7 @@ body {
 
 .jewel-tile.is-falling {
   transition:
-    transform 270ms cubic-bezier(0.22, 0.95, 0.34, 1.04),
+    transform 310ms cubic-bezier(0.22, 1.12, 0.36, 1),
     opacity 180ms ease;
 }
 

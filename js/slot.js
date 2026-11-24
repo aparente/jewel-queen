@@ -59,7 +59,7 @@ export class RoyalSlotBar {
     this.charge = Math.min(100, this.charge + delta);
     this._updateUI();
     if (!wasReady && this.charge >= 100) {
-      this.setBanner('ROYAL SPIN READY! TAP TO PULL');
+      this.setBanner('VAULT DRAW READY · TAP TO PULL', true);
     }
   }
 
@@ -87,9 +87,9 @@ export class RoyalSlotBar {
       if (this.spinning) {
         this.meterLabel.textContent = 'DRAWING...';
       } else if (ready) {
-        this.meterLabel.textContent = 'PRISM SPIN';
+        this.meterLabel.textContent = 'VAULT DRAW';
       } else {
-        this.meterLabel.textContent = `PRISM ${Math.round(this.charge)}%`;
+        this.meterLabel.textContent = `VAULT ${Math.round(this.charge)}%`;
       }
     }
   }
@@ -160,7 +160,7 @@ export class RoyalSlotBar {
     this.spinning = true;
     this.charge = 0;
     this._updateUI();
-    this.setBanner('ILLUMINATING THE PRISM CHAMBER...', true);
+    this.setBanner('DRAWING FROM THE ARCHIVE...', true);
 
     const outcome = this._rollOutcome();
 

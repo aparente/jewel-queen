@@ -16,7 +16,7 @@ import {
 import { audio } from './audio.js';
 import { ParticleFX } from './particles.js';
 import { RoyalSlotBar } from './slot.js';
-import { AmbientSalon } from './ambient.js';
+import { WebGLGallery } from './webgl-gallery.js';
 import {
   MUSEUM_DOSSIERS,
   COLLECTOR_TIERS,
@@ -126,8 +126,8 @@ class JewelQueenGame {
     this.hintTimer = null;
     this.hintCoords = [];
 
-    // FX, Ambient Salon & Slot systems
-    this.ambient = new AmbientSalon(document.getElementById('ambientCanvas'));
+    // GPU WebGL Gallery Light-Field, FX & Vault Draw systems
+    this.ambient = new WebGLGallery(document.getElementById('ambientCanvas'));
     this.fx = new ParticleFX(document.getElementById('fxCanvas'));
     this.loupeState = { list: [], index: 0, zoom: 1, panX: 0, panY: 0, dragging: false };
     this.longPressTimer = null;
@@ -360,7 +360,7 @@ class JewelQueenGame {
     // Fresh Royal Spin ready on every exhibition stage (using this era's curated jewels!)
     this.slot.setEraJewels(this._activeJewelPool());
     this.slot.setCharge(100);
-    this.slot.setBanner(`${this.stageCfg.decade.toUpperCase()} · PRISM DRAW READY`, true);
+    this.slot.setBanner(`${this.stageCfg.decade.toUpperCase()} · VAULT DRAW READY`, true);
 
     this._updateFeverUI();
     this._updateHUD();
@@ -995,7 +995,6 @@ class JewelQueenGame {
     if (count === 0) return;
 
     audio.playMatch(cascadeStep, count);
-    this.ambient.pulse(0.28 + cascadeStep * 0.18 + (count >= 4 ? 0.22 : 0));
     if (count >= 4 || cascadeStep >= 2) vibrate(16);
 
     // Points & Slot Charge
@@ -1050,6 +1049,17 @@ class JewelQueenGame {
 
     const cx = sumX / Math.max(1, ptCount);
     const cy = sumY / Math.max(1, ptCount);
+
+    // Fire a GPU WebGL chromatic-dispersion shockwave directly from the exact match centroid!
+    const stageRect = this.boardStage.getBoundingClientRect();
+    const normX = (stageRect.left + cx) / Math.max(1, window.innerWidth);
+    const normY = (stageRect.top + cy) / Math.max(1, window.innerHeight);
+    const sampleKey = Array.from(finalKeys)[0];
+    const [sr, sc] = sampleKey.split(',').map(Number);
+    const sampleTile = this.grid[sr]?.[sc];
+    const sampleColor = sampleTile ? JEWEL_MAP[sampleTile.type]?.color : '#c8f3ff';
+    this.ambient.triggerWave(normX, normY, sampleColor, 0.55 + cascadeStep * 0.25 + (count >= 4 ? 0.3 : 0));
+
     const multTag = this.feverMoves > 0 ? ' (3×)' : '';
     this.fx.popup(cx, cy, `+${earned.toLocaleString()}${multTag}`, {
       color: this.feverMoves > 0 ? '#d6f4ff' : '#f5f2ed',
@@ -1208,8 +1218,9 @@ class JewelQueenGame {
 
   async _applySlotReward(outcome) {
     vibrate([20, 30, 40]);
-    this.ambient.pulse(1.1);
-    this.fx.coinShower(outcome.tier === 'grand' ? 38 : 22);
+    this.ambient.triggerWave(0.35, 0.28, '#c6f7f2', 1.15);
+    setTimeout(() => this.ambient.triggerWave(0.65, 0.34, '#e4d4ff', 1.1), 160);
+    this.fx.coinShower(outcome.tier === 'grand' ? 38 : 24);
     this.fx.popup(this.fx.w / 2, this.fx.h * 0.36, outcome.title, {
       color: '#ffe588',
       big: true
