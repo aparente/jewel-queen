@@ -1,24 +1,19 @@
 /**
- * Living, breathing emotional salon atmosphere behind the Jewel Queen cabinet:
- * silky crystal-chandelier aurora waves, luminous bokeh orbs, and rising golden stardust
- * that swells and blooms with radiance on cascades and Royal Spins.
+ * teamLab Borderless × Museum Gallery Light-Field Canvas.
+ * Pure gallery-black darkness animated with delicate drifting bioluminescent light filaments,
+ * gossamer floating stardust, and expanding liquid-light aura ripples that bloom emotionally
+ * whenever the player matches jewels, chains cascades, or illuminates the Prism Spin.
  */
 
-const GALLERY_GOLD_PALETTE = {
-  orbs: ['rgba(255, 218, 120, 0.08)', 'rgba(255, 244, 200, 0.05)', 'rgba(218, 165, 62, 0.07)'],
-  motes: ['#fff7d6', '#ffe082', '#ffffff'],
-  ray: 'rgba(255, 234, 174, 0.06)'
-};
-
-const ERA_PALETTES = {
-  'art-nouveau': GALLERY_GOLD_PALETTE,
-  chinoiserie: GALLERY_GOLD_PALETTE,
-  'mayan-egyptian': GALLERY_GOLD_PALETTE,
-  bakelite: GALLERY_GOLD_PALETTE,
-  'golden-age': GALLERY_GOLD_PALETTE,
-  'mid-century': GALLERY_GOLD_PALETTE,
-  'paris-runway': GALLERY_GOLD_PALETTE,
-  'power-80s': GALLERY_GOLD_PALETTE
+const ERA_LIGHT_HUES = {
+  'art-nouveau': [186, 268, 42],
+  chinoiserie: [158, 192, 352],
+  'mayan-egyptian': [184, 34, 214],
+  bakelite: [332, 276, 40],
+  'golden-age': [214, 290, 44],
+  'mid-century': [178, 206, 326],
+  'paris-runway': [346, 38, 274],
+  'power-80s': [316, 184, 268]
 };
 
 export class AmbientSalon {
@@ -27,13 +22,15 @@ export class AmbientSalon {
     this.ctx = canvas.getContext('2d');
     this.dpr = Math.min(window.devicePixelRatio || 1, 2);
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    this.palette = ERA_PALETTES['art-nouveau'];
-    this.bloom = 0; // Swells emotionally on cascades & Royal Spins!
-    this.orbs = [];
-    this.motes = [];
+    this.hues = ERA_LIGHT_HUES['art-nouveau'];
+    this.bloom = 0;
     this.time = 0;
+    this.filaments = [];
+    this.motes = [];
+    this.ripples = [];
     this.resize();
     this._seed();
+
     if (!this.reducedMotion) {
       this._start();
     } else {
@@ -43,19 +40,24 @@ export class AmbientSalon {
   }
 
   setEra(eraId) {
-    this.palette = ERA_PALETTES[eraId] || ERA_PALETTES['bakelite'];
-    this.orbs.forEach((o, i) => {
-      o.color = this.palette.orbs[i % this.palette.orbs.length];
-    });
-    this.motes.forEach((m, i) => {
-      m.color = this.palette.motes[i % this.palette.motes.length];
-    });
-    this.pulse(0.7);
-    if (this.reducedMotion) this._drawFrame(0);
+    this.hues = ERA_LIGHT_HUES[eraId] || ERA_LIGHT_HUES['art-nouveau'];
+    this.pulse(0.6);
   }
 
   pulse(strength = 0.65) {
-    this.bloom = Math.min(1.4, this.bloom + strength);
+    this.bloom = Math.min(1.5, this.bloom + strength);
+    if (!this.reducedMotion) {
+      const hue = this.hues[Math.floor(Math.random() * this.hues.length)];
+      this.ripples.push({
+        x: this.w * (0.28 + Math.random() * 0.44),
+        y: this.h * (0.34 + Math.random() * 0.36),
+        r: 24,
+        maxR: Math.max(this.w, this.h) * (0.45 + strength * 0.2),
+        hue,
+        life: 0,
+        maxLife: 1.55
+      });
+    }
   }
 
   resize() {
@@ -67,26 +69,26 @@ export class AmbientSalon {
   }
 
   _seed() {
-    this.orbs = Array.from({ length: 9 }, (_, i) => ({
-      x: Math.random() * this.w,
-      y: Math.random() * this.h,
-      r: 70 + Math.random() * 130,
-      vx: (Math.random() - 0.5) * 14,
-      vy: -6 - Math.random() * 10,
-      phase: Math.random() * Math.PI * 2,
-      color: this.palette.orbs[i % this.palette.orbs.length]
+    // Flowing teamLab-style bioluminescent light streams drifting slowly in deep space
+    this.filaments = Array.from({ length: 5 }, (_, i) => ({
+      yRatio: 0.14 + i * 0.19,
+      amp: 28 + (i % 3) * 18,
+      freq: 0.0045 + i * 0.001,
+      speed: 0.22 + i * 0.07,
+      phase: i * 1.4,
+      hueIdx: i % 3
     }));
 
-    this.motes = Array.from({ length: 34 }, (_, i) => ({
+    // Gossamer rising light particles
+    this.motes = Array.from({ length: 38 }, (_, i) => ({
       x: Math.random() * this.w,
       y: Math.random() * this.h,
-      size: 1.8 + Math.random() * 4.4,
-      vy: -10 - Math.random() * 20,
-      drift: (Math.random() - 0.5) * 12,
+      size: 1.1 + Math.random() * 2.4,
+      vy: -7 - Math.random() * 16,
+      drift: (Math.random() - 0.5) * 14,
       phase: Math.random() * Math.PI * 2,
-      twinkleSpeed: 1.6 + Math.random() * 2.8,
-      isStar: i % 3 === 0,
-      color: this.palette.motes[i % this.palette.motes.length]
+      twinkle: 1.2 + Math.random() * 2.4,
+      hueIdx: i % 3
     }));
   }
 
@@ -96,7 +98,7 @@ export class AmbientSalon {
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
       this.time += dt;
-      this.bloom = Math.max(0, this.bloom - dt * 1.15);
+      this.bloom = Math.max(0, this.bloom - dt * 0.95);
       this._drawFrame(dt);
       requestAnimationFrame(loop);
     };
@@ -107,84 +109,69 @@ export class AmbientSalon {
     const ctx = this.ctx;
     ctx.clearRect(0, 0, this.w, this.h);
 
-    // 1. Soft chandelier diagonal light rays drifting across the velvet salon
     ctx.save();
-    ctx.globalCompositeOperation = 'screen';
-    const rayAlpha = 0.65 + this.bloom * 0.55;
-    for (let i = 0; i < 3; i++) {
-      const sway = Math.sin(this.time * (0.28 + i * 0.11) + i * 2.1) * 48;
-      const rx = this.w * (0.2 + i * 0.32) + sway;
-      const grad = ctx.createLinearGradient(rx - 90, 0, rx + 130, this.h);
-      grad.addColorStop(0, this.palette.ray);
-      grad.addColorStop(0.55, 'rgba(255, 245, 220, 0.04)');
-      grad.addColorStop(1, 'rgba(255, 245, 220, 0)');
-      ctx.globalAlpha = rayAlpha;
-      ctx.fillStyle = grad;
+    ctx.globalCompositeOperation = 'lighter';
+
+    // 1. Ethereal drifting light filaments (whisper-subtle at rest, glowing on combos)
+    const baseOpacity = 0.045 + this.bloom * 0.075;
+    for (const f of this.filaments) {
+      const hue = (this.hues[f.hueIdx] + Math.sin(this.time * 0.2 + f.phase) * 18 + 360) % 360;
       ctx.beginPath();
-      ctx.moveTo(rx - 55, 0);
-      ctx.lineTo(rx + 65, 0);
-      ctx.lineTo(rx + 210, this.h);
-      ctx.lineTo(rx + 30, this.h);
-      ctx.closePath();
-      ctx.fill();
+      const step = 28;
+      for (let x = -step; x <= this.w + step; x += step) {
+        const y =
+          f.yRatio * this.h +
+          Math.sin(x * f.freq + this.time * f.speed + f.phase) * f.amp +
+          Math.cos(x * f.freq * 0.5 - this.time * 0.35) * 14;
+        if (x === -step) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = `hsla(${hue}, 82%, 78%, ${baseOpacity})`;
+      ctx.lineWidth = 1.4 + this.bloom * 1.4;
+      ctx.stroke();
     }
 
-    // 2. Dreamy prismatic silk bokeh orbs
-    for (const o of this.orbs) {
-      o.x += o.vx * dt;
-      o.y += o.vy * dt * (1 + this.bloom * 1.2);
-      o.phase += dt * 0.8;
-      if (o.y < -o.r) {
-        o.y = this.h + o.r;
-        o.x = Math.random() * this.w;
+    // 2. Expanding teamLab liquid-light ripples triggered by matches & spins
+    for (let i = this.ripples.length - 1; i >= 0; i--) {
+      const rp = this.ripples[i];
+      rp.life += dt;
+      if (rp.life >= rp.maxLife) {
+        this.ripples.splice(i, 1);
+        continue;
       }
-      if (o.x < -o.r) o.x = this.w + o.r;
-      if (o.x > this.w + o.r) o.x = -o.r;
-
-      const rad = o.r * (0.92 + 0.1 * Math.sin(o.phase) + this.bloom * 0.14);
-      const g = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, rad);
-      g.addColorStop(0, o.color);
-      g.addColorStop(1, 'rgba(255,255,255,0)');
-      ctx.globalAlpha = 0.72 + this.bloom * 0.28;
+      const p = rp.life / rp.maxLife;
+      const ease = 1 - Math.pow(1 - p, 3);
+      const rad = rp.r + (rp.maxR - rp.r) * ease;
+      const alpha = (1 - p) * 0.22;
+      const g = ctx.createRadialGradient(rp.x, rp.y, rad * 0.68, rp.x, rp.y, rad);
+      g.addColorStop(0, 'rgba(0,0,0,0)');
+      g.addColorStop(0.82, `hsla(${rp.hue}, 88%, 76%, ${alpha})`);
+      g.addColorStop(1, 'rgba(0,0,0,0)');
       ctx.fillStyle = g;
       ctx.beginPath();
-      ctx.arc(o.x, o.y, rad, 0, Math.PI * 2);
+      ctx.arc(rp.x, rp.y, rad, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    // 3. Twinkling floating golden chandelier stardust motes
+    // 3. Gossamer twinkling light motes drifting upward through the gallery darkness
     for (const m of this.motes) {
-      m.y += m.vy * dt * (1 + this.bloom * 1.8);
-      m.x += Math.sin(this.time * 0.9 + m.phase) * m.drift * dt;
-      if (m.y < -12) {
-        m.y = this.h + 12;
+      m.y += m.vy * dt * (1 + this.bloom * 2.2);
+      m.x += Math.sin(this.time * 0.7 + m.phase) * m.drift * dt;
+      if (m.y < -10) {
+        m.y = this.h + 10;
         m.x = Math.random() * this.w;
       }
-      const tw = 0.25 + 0.75 * Math.pow(0.5 + 0.5 * Math.sin(this.time * m.twinkleSpeed + m.phase), 2);
-      const alpha = Math.min(1, tw * (0.78 + this.bloom * 0.45));
-      const sz = m.size * (0.85 + tw * 0.45 + this.bloom * 0.25);
+      const tw = Math.pow(0.5 + 0.5 * Math.sin(this.time * m.twinkle + m.phase), 2);
+      const hue = this.hues[m.hueIdx];
+      const alpha = Math.min(0.85, (0.14 + tw * 0.42) * (1 + this.bloom * 0.9));
+      const sz = m.size * (0.85 + tw * 0.4 + this.bloom * 0.25);
 
-      ctx.globalAlpha = alpha;
-      ctx.fillStyle = m.color;
-      if (m.isStar) {
-        ctx.save();
-        ctx.translate(m.x, m.y);
-        ctx.beginPath();
-        for (let k = 0; k < 8; k++) {
-          const r = k % 2 === 0 ? sz * 1.8 : sz * 0.36;
-          const a = (k * Math.PI) / 4;
-          if (k === 0) ctx.moveTo(Math.cos(a) * r, Math.sin(a) * r);
-          else ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r);
-        }
-        ctx.closePath();
-        ctx.fill();
-        ctx.restore();
-      } else {
-        ctx.beginPath();
-        ctx.arc(m.x, m.y, sz * 0.65, 0, Math.PI * 2);
-        ctx.fill();
-      }
+      ctx.fillStyle = `hsla(${hue}, 65%, 88%, ${alpha})`;
+      ctx.beginPath();
+      ctx.arc(m.x, m.y, sz, 0, Math.PI * 2);
+      ctx.fill();
     }
+
     ctx.restore();
   }
 }

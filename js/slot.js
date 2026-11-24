@@ -85,11 +85,11 @@ export class RoyalSlotBar {
     }
     if (this.meterLabel) {
       if (this.spinning) {
-        this.meterLabel.textContent = 'SPINNING...';
+        this.meterLabel.textContent = 'DRAWING...';
       } else if (ready) {
-        this.meterLabel.textContent = 'ROYAL SPIN!';
+        this.meterLabel.textContent = 'PRISM SPIN';
       } else {
-        this.meterLabel.textContent = `SPIN ${Math.round(this.charge)}%`;
+        this.meterLabel.textContent = `PRISM ${Math.round(this.charge)}%`;
       }
     }
   }
@@ -97,12 +97,12 @@ export class RoyalSlotBar {
   _rollOutcome() {
     const r = Math.random();
     if (r < 0.22) {
-      // Grand Jackpot: Triple Queen Tiara!
+      // Grand Tiara Sovereign Draw!
       return {
         tier: 'grand',
         symbols: ['tiara', 'tiara', 'tiara'],
-        title: 'GRAND TIARA JACKPOT!',
-        subtitle: '+1,200 PTS · SOVEREIGN TIARA SPAWNED',
+        title: 'Sovereign Crown Draw',
+        subtitle: '+1,200 PTS · ROYAL TIARA SPAWNED',
         points: 1200,
         extraMoves: 1,
         spawnTiara: true,
@@ -111,13 +111,13 @@ export class RoyalSlotBar {
       };
     }
     if (r < 0.50) {
-      // Triple Gem Couture Jackpot
+      // Triple Museum Match
       const gem = this.activeJewels[Math.floor(Math.random() * this.activeJewels.length)];
       return {
         tier: 'triple',
         symbols: [gem.id, gem.id, gem.id],
-        title: `TRIPLE ${gem.shortName.toUpperCase()} COUTURE!`,
-        subtitle: '+650 PTS · 2 POWER JEWELS GIFTED',
+        title: `Triple ${gem.shortName}`,
+        subtitle: '+650 PTS · 2 POWER JEWELS ILLUMINATED',
         points: 650,
         extraMoves: 0,
         spawnTiara: false,
@@ -126,12 +126,12 @@ export class RoyalSlotBar {
       };
     }
     if (r < 0.78) {
-      // 3x Fever Mode
+      // 3x Luminous Aura
       const gem = this.activeJewels[Math.floor(Math.random() * this.activeJewels.length)];
       return {
         tier: 'fever',
         symbols: [gem.id, 'tiara', gem.id],
-        title: '3× GLAMOUR FEVER!',
+        title: '3× Luminous Aura',
         subtitle: '3× SCORE FOR 4 MOVES · +2 MOVES',
         points: 400,
         extraMoves: 2,
@@ -140,13 +140,13 @@ export class RoyalSlotBar {
         feverMoves: 4
       };
     }
-    // Velvet Encore: extra moves + line blaster
+    // Curator's Encore
     const pool = [...this.activeJewels].sort(() => Math.random() - 0.5);
     return {
       tier: 'encore',
       symbols: [pool[0].id, (pool[1] || pool[0]).id, 'tiara'],
-      title: 'VELVET ENCORE BONUS!',
-      subtitle: '+3 MOVES · +350 PTS · FILIGREE BLASTER',
+      title: "Curator's Encore",
+      subtitle: '+3 MOVES · +350 PTS · AURA BURST',
       points: 350,
       extraMoves: 3,
       spawnTiara: false,
@@ -160,7 +160,7 @@ export class RoyalSlotBar {
     this.spinning = true;
     this.charge = 0;
     this._updateUI();
-    this.setBanner('SPINNING THE ROYAL VAULT...', true);
+    this.setBanner('ILLUMINATING THE PRISM CHAMBER...', true);
 
     const outcome = this._rollOutcome();
 

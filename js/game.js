@@ -360,7 +360,7 @@ class JewelQueenGame {
     // Fresh Royal Spin ready on every exhibition stage (using this era's curated jewels!)
     this.slot.setEraJewels(this._activeJewelPool());
     this.slot.setCharge(100);
-    this.slot.setBanner(`${this.stageCfg.decade.toUpperCase()} VAULT · FREE ROYAL SPIN READY!`, true);
+    this.slot.setBanner(`${this.stageCfg.decade.toUpperCase()} · PRISM DRAW READY`, true);
 
     this._updateFeverUI();
     this._updateHUD();
@@ -1050,9 +1050,9 @@ class JewelQueenGame {
 
     const cx = sumX / Math.max(1, ptCount);
     const cy = sumY / Math.max(1, ptCount);
-    const multTag = this.feverMoves > 0 ? ' (3×!)' : '';
+    const multTag = this.feverMoves > 0 ? ' (3×)' : '';
     this.fx.popup(cx, cy, `+${earned.toLocaleString()}${multTag}`, {
-      color: this.feverMoves > 0 ? '#ff9ec8' : '#fff3b8',
+      color: this.feverMoves > 0 ? '#d6f4ff' : '#f5f2ed',
       scale: count >= 5 ? 1.15 : 1
     });
 
@@ -1060,11 +1060,11 @@ class JewelQueenGame {
       const phrase =
         GLAMOUR_CALLOUTS[Math.min(GLAMOUR_CALLOUTS.length - 1, cascadeStep + (count >= 5 ? 2 : -1))];
       this.fx.popup(this.fx.w / 2, Math.max(54, cy - 30), phrase, {
-        color: '#ffe48a',
+        color: '#e8f6ff',
         big: true
       });
       if (cascadeStep >= 3 || count >= 6) {
-        this.fx.coinShower(16);
+        this.fx.coinShower(18);
       }
     }
 

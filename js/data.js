@@ -646,12 +646,12 @@ export function getStageConfig(stageNum) {
 }
 
 export const GLAMOUR_CALLOUTS = [
-  'DIVINE!',
-  'RADIANT!',
-  'FABULOUS!',
-  'HAUTE COUTURE!',
-  'MATERIAL GIRL!',
-  'PURE GLAMOUR!',
-  'CROWN JEWEL!',
-  'JEWEL QUEEN!'
+  'Luminous',
+  'Radiant',
+  'Exquisite',
+  'Sublime',
+  'Rare Find',
+  'Museum Grade',
+  'Sovereign',
+  'Transcendent'
 ];

@@ -6,16 +6,16 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
     />
-    <meta name="theme-color" content="#1a0616" />
+    <meta name="theme-color" content="#030305" />
     <meta
       name="description"
-      content="Jewel Queen — A maximalist Hollywood vintage jewelry Match-3 & Royal Slot cascade game inspired by Connie Parente's couture collection."
+      content="Jewel Queen — An interactive museum gallery & vintage jewelry cascade experience inspired by Connie Parente's collection."
     />
-    <title>Jewel Queen — Haute Couture Vault</title>
+    <title>JEWEL QUEEN — Gallery Archive</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=DM+Sans:wght@500;700;800&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
@@ -23,25 +23,20 @@
   <body>
     <div class="velvet-backdrop" aria-hidden="true"></div>
     <canvas class="ambient-canvas" id="ambientCanvas" aria-hidden="true"></canvas>
+
+    <!-- Floating Museum Acquisition Notice -->
     <div class="acquire-toast" id="acquireToast" hidden role="status" aria-live="polite">
       <img id="acquireToastImg" src="" alt="" />
       <div class="acquire-toast-text">
-        <span class="acquire-kicker" id="acquireToastKicker">✦ NEW ACQUISITION</span>
+        <span class="acquire-kicker" id="acquireToastKicker">NEW ACQUISITION</span>
         <strong id="acquireToastTitle">Paul Flato Gold Feet</strong>
       </div>
     </div>
 
     <main class="cabinet" id="cabinet">
-      <!-- Top Header Marquee -->
+      <!-- Minimal Museum Exhibition Header -->
       <header class="cabinet-header">
         <div class="brand-lockup">
-          <img
-            src="assets/museum_jewels/lavabre-tiara.png"
-            alt=""
-            class="brand-crown"
-            width="36"
-            height="36"
-          />
           <div class="brand-text">
             <h1 class="brand-title">JEWEL QUEEN</h1>
             <button
@@ -49,12 +44,12 @@
               class="era-picker-btn"
               id="eraPickerBtn"
               aria-label="Choose Jewelry Era and Designers"
-              title="Tour Eras & Designers"
+              title="Tour Eras & Styles"
             >
-              <span class="era-line" id="stageSubtitle">1920s–30s · Art Deco Silver Screen</span>
+              <span class="era-line" id="stageSubtitle">1895–1910 · Art Nouveau</span>
               <span class="era-chevron" aria-hidden="true">▾</span>
             </button>
-            <p class="designer-line" id="designerLine">Eisenberg · Trifari · Marcel Boucher</p>
+            <p class="designer-line" id="designerLine">René Lalique · Marcus &amp; Co. · Child &amp; Child</p>
           </div>
         </div>
 
@@ -63,10 +58,10 @@
             type="button"
             class="icon-btn"
             id="erasBtn"
-            aria-label="Open Eras and Designers Exhibition Map"
-            title="Eras & Designers"
+            aria-label="Tour Eras and Styles"
+            title="Eras & Styles"
           >
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <circle cx="12" cy="12" r="9" />
               <polyline points="12 7 12 12 15.5 14" />
             </svg>
@@ -75,10 +70,10 @@
             type="button"
             class="icon-btn"
             id="lookbookBtn"
-            aria-label="Open Couture Vault Lookbook"
-            title="Couture Vault & Guide"
+            aria-label="Open My Collection"
+            title="My Collection"
           >
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M6 3h12l4 6-10 13L2 9z" />
               <path d="M2 9h20" />
               <path d="M12 22L8 9l4-6 4 6-4 13z" />
@@ -88,13 +83,13 @@
             type="button"
             class="icon-btn"
             id="helpBtn"
-            aria-label="How to Play Jewel Queen"
+            aria-label="How to Play"
             title="How to Play"
           >
-            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="10" />
-              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-              <line x1="12" y1="17" x2="12.01" y2="17" />
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="9.5" />
+              <path d="M9.4 9.2a2.8 2.8 0 0 1 5.3 1c0 1.8-2.7 2.6-2.7 2.6" />
+              <circle cx="12" cy="16.8" r="0.6" fill="currentColor" stroke="none" />
             </svg>
           </button>
           <button
@@ -104,22 +99,22 @@
             aria-label="Toggle Sound"
             title="Toggle Sound"
           >
-            <svg id="soundOnIcon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg id="soundOnIcon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
               <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
               <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
             </svg>
-            <svg id="soundOffIcon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden>
+            <svg id="soundOffIcon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden>
               <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-              <line x1="23" y1="9" x2="17" y2="15" />
-              <line x1="17" y1="9" x2="23" y2="15" />
+              <line x1="22" y1="9" x2="16" y2="15" />
+              <line x1="16" y1="9" x2="22" y2="15" />
             </svg>
           </button>
         </div>
       </header>
 
-      <!-- Score / Goal / Moves Plaques -->
-      <section class="hud-strip" aria-label="Game status">
+      <!-- Borderless Floating Museum Placard Metrics -->
+      <section class="hud-strip" aria-label="Exhibition progress">
         <div class="hud-plaque hud-score">
           <span class="hud-label">SCORE</span>
           <span class="hud-value" id="scoreVal">0</span>
@@ -128,12 +123,16 @@
           </div>
         </div>
 
+        <div class="hud-divider" aria-hidden="true"></div>
+
         <div class="hud-plaque hud-goal">
-          <span class="hud-label">EXHIBITION GOAL</span>
+          <span class="hud-label">GOAL</span>
           <div class="goal-display" id="goalDisplay">
             <span class="hud-value" id="goalText">2,200</span>
           </div>
         </div>
+
+        <div class="hud-divider" aria-hidden="true"></div>
 
         <div class="hud-plaque hud-moves" id="movesPlaque">
           <span class="hud-label">MOVES</span>
@@ -141,73 +140,75 @@
         </div>
       </section>
 
-      <!-- Maximalist 3-Reel Royal Bonus Slot Machine Bar -->
-      <section class="slot-marquee" aria-label="Royal Bonus Slot Machine">
+      <!-- Smoked-Glass Optical Prism Chamber (3-Reel Bonus Draw) -->
+      <section class="slot-marquee" aria-label="Curator Prism Draw">
         <div class="slot-body">
           <div class="reels-window">
             <div class="payline-bar" aria-hidden="true"></div>
-            <div class="reel" id="reel0" aria-label="Slot reel 1"></div>
-            <div class="reel" id="reel1" aria-label="Slot reel 2"></div>
-            <div class="reel" id="reel2" aria-label="Slot reel 3"></div>
+            <div class="reel" id="reel0" aria-label="Prism chamber 1"></div>
+            <div class="reel" id="reel1" aria-label="Prism chamber 2"></div>
+            <div class="reel" id="reel2" aria-label="Prism chamber 3"></div>
           </div>
 
           <button type="button" class="spin-btn is-ready" id="spinBtn">
             <span class="spin-btn-sheen" aria-hidden="true"></span>
-            <span class="spin-btn-label" id="spinBtnLabel">ROYAL SPIN!</span>
+            <span class="spin-btn-label" id="spinBtnLabel">PRISM SPIN</span>
             <span class="spin-meter" aria-hidden="true">
               <span class="spin-meter-fill" id="spinMeterFill"></span>
             </span>
           </button>
         </div>
         <div class="slot-ticker" id="slotBanner" role="status" aria-live="polite">
-          FREE ROYAL SPIN READY! TAP TO PULL
+          PRISM DRAW READY · TAP TO ILLUMINATE
         </div>
       </section>
 
-      <!-- Main 7x7 Velvet Jewelry Tray with Era-Matched Velvet / Crystal Bezel -->
-      <section class="board-area" aria-label="Jewelry Match-3 Board">
+      <!-- Tactile Pure Black Velvet Collector's Tray (Default) -->
+      <section class="board-area" aria-label="Jewelry Gallery Tray">
         <div class="board-shell" id="boardShell">
           <div class="tray-rim-shimmer" aria-hidden="true"></div>
-          <div class="fever-ribbon" id="feverRibbon" hidden>3× GLAMOUR FEVER · <span id="feverCount">0</span></div>
+          <div class="fever-ribbon" id="feverRibbon" hidden>3× LUMINOUS AURA · <span id="feverCount">0</span></div>
 
           <div class="board-stage" id="boardStage">
             <div class="board-cells" id="boardCells" aria-hidden="true"></div>
-            <div class="board-tiles" id="boardTiles" role="grid" aria-label="7 by 7 jewelry grid"></div>
+            <div class="board-tiles" id="boardTiles" role="grid" aria-label="7 by 7 jewelry tray"></div>
             <canvas class="fx-canvas" id="fxCanvas" aria-hidden="true"></canvas>
           </div>
         </div>
       </section>
 
-      <!-- Sleek Power-Jewel Legend -->
-      <section class="power-legend" aria-label="Special jewel combinations">
-        <div class="power-chip"><strong>MATCH 4</strong><span>Line Blaster</span></div>
-        <div class="power-chip"><strong>L / T SHAPE</strong><span>Starburst Bomb</span></div>
-        <div class="power-chip"><strong>MATCH 5</strong><span>Queen Tiara Wild</span></div>
-      </section>
+      <!-- Whisper-Clean Borderless Gallery Legend -->
+      <div class="power-legend-inline" aria-label="Special combinations">
+        <span><em>4</em> Light Beam</span>
+        <span class="legend-dot" aria-hidden="true">·</span>
+        <span><em>L/T</em> Aura Burst</span>
+        <span class="legend-dot" aria-hidden="true">·</span>
+        <span><em>5</em> Royal Tiara</span>
+      </div>
 
-      <!-- Subtle Gilded Footer -->
+      <!-- Elevated Minimal Footer -->
       <footer class="cabinet-footer">
         <span class="footer-stat">BEST <strong id="bestScoreVal">0</strong></span>
         <button type="button" class="footer-loupe-btn" id="footerLoupeBtn" title="Zoom in & read jewelry history">
-          🔍 Hold jewel or tap for Loupe ✦
+          Hold jewel or tap for Loupe ↗
         </button>
       </footer>
     </main>
 
-    <!-- Stage Complete / Curtain Call Modal -->
+    <!-- Exhibition Complete / Curtain Call Modal -->
     <dialog class="velvet-dialog" id="resultDialog">
       <div class="dialog-card">
-        <img src="assets/museum_jewels/lavabre-tiara.png" alt="" class="dialog-tiara" width="74" height="74" />
+        <img src="assets/museum_jewels/lavabre-tiara.png" alt="" class="dialog-tiara" width="76" height="76" />
         <p class="dialog-kicker" id="resultKicker">EXHIBITION COMPLETE</p>
-        <h2 class="dialog-title" id="resultTitle">CROWN JEWEL!</h2>
+        <h2 class="dialog-title" id="resultTitle">SUBLIME</h2>
         <div class="dialog-stars" id="resultStars" aria-label="Star rating">★★★</div>
         <p class="dialog-summary" id="resultSummary">
-          You dazzled the Hancock Park Salon with pure Hollywood glamour.
+          You curated this exhibition with timeless brilliance.
         </p>
 
         <div class="dialog-stats">
           <div class="stat-box">
-            <span>STAGE SCORE</span>
+            <span>EXHIBITION SCORE</span>
             <strong id="resultScore">0</strong>
           </div>
           <div class="stat-box">
@@ -218,17 +219,17 @@
 
         <div class="dialog-actions">
           <button type="button" class="gold-cta" id="resultPrimaryBtn">NEXT EXHIBITION →</button>
-          <button type="button" class="velvet-secondary" id="resultSecondaryBtn">REPLAY STAGE</button>
+          <button type="button" class="velvet-secondary" id="resultSecondaryBtn">REPLAY THIS ERA</button>
         </div>
       </div>
     </dialog>
 
-    <!-- Virtual Estate Collection Vault (Pokédex + Signature Showcase Lineup) -->
+    <!-- Virtual Estate Collection Vault (Pokédex + Signature Lineup) -->
     <dialog class="velvet-dialog lookbook-dialog" id="lookbookDialog">
       <div class="dialog-card lookbook-card vault-card">
         <div class="lookbook-header">
           <div>
-            <p class="dialog-kicker">MY VIRTUAL ESTATE</p>
+            <p class="dialog-kicker">PRIVATE ARCHIVE</p>
             <h2 class="dialog-title">MY COLLECTION</h2>
           </div>
           <button type="button" class="icon-btn" id="closeLookbookBtn" aria-label="Close My Collection">✕</button>
@@ -250,8 +251,8 @@
 
         <section class="showcase-section" aria-label="My Signature Lineup">
           <div class="showcase-head">
-            <span class="showcase-label">★ SIGNATURE LINEUP (TOP 5)</span>
-            <span class="showcase-sub">Pin favorites in the 3× Loupe</span>
+            <span class="showcase-label">SIGNATURE LINEUP</span>
+            <span class="showcase-sub">Pin up to 5 in the 3× Loupe</span>
           </div>
           <div class="showcase-slots" id="showcaseSlots"></div>
         </section>
@@ -267,19 +268,20 @@
       </div>
     </dialog>
 
-    <!-- Curated Eras & Designers Exhibition Selector Modal -->
+    <!-- Curated Historical Jewelry Tour Modal -->
     <dialog class="velvet-dialog lookbook-dialog" id="erasDialog">
       <div class="dialog-card lookbook-card">
         <div class="lookbook-header">
           <div>
-            <p class="dialog-kicker">HISTORICAL JEWELRY TOUR</p>
+            <p class="dialog-kicker">HISTORICAL TOUR</p>
             <h2 class="dialog-title">ERAS &amp; STYLES</h2>
           </div>
           <button type="button" class="icon-btn" id="closeErasBtn" aria-label="Close Eras Guide">✕</button>
         </div>
 
         <p class="lookbook-intro">
-          Journey through eight iconic eras &amp; movements of antique and vintage jewelry — each with its own curated pieces, designers, and salon aesthetic.
+          Walk through eight iconic eras &amp; movements of antique and vintage jewelry—each featuring authentic museum pieces curated in the spirit of
+          <a href="https://www.instagram.com/parenteconnie/?hl=en" target="_blank" rel="noopener noreferrer" class="gold-link">@parenteconnie</a>.
         </p>
 
         <div class="eras-grid" id="erasGrid"></div>
@@ -289,39 +291,39 @@
     <!-- Quick How-to-Play Guide Modal -->
     <dialog class="velvet-dialog" id="helpDialog">
       <div class="dialog-card help-card">
-        <p class="dialog-kicker">30-SECOND GUIDE</p>
+        <p class="dialog-kicker">GALLERY GUIDE</p>
         <h2 class="dialog-title">HOW TO PLAY</h2>
         <div class="help-steps">
           <div class="help-step">
             <span class="help-badge">1</span>
             <div>
               <strong>Swipe or Tap to Match 3+</strong>
-              <p>Swap any two neighboring jewels to line up 3 or more matching pieces. Cascades multiply your points!</p>
+              <p>Swap neighboring jewels in the black velvet tray to line up 3 or more matching pieces. Cascades weave rising light blooms and higher multipliers.</p>
             </div>
           </div>
           <div class="help-step">
             <span class="help-badge">2</span>
             <div>
               <strong>Complete the Exhibition Goal</strong>
-              <p>Check the middle plaque: hit the score target, collect featured jewels, or match <em>on top of</em> glowing Gold Tiles before Moves run out.</p>
+              <p>Reach the score target, collect featured jewels, or match on top of luminous showcase tiles before your moves run out.</p>
             </div>
           </div>
           <div class="help-step">
             <span class="help-badge">3</span>
             <div>
-              <strong>Pull the Royal Spin!</strong>
-              <p>Matches charge the 3-reel slot bar. Tap <strong>ROYAL SPIN!</strong> whenever it glows for 3× Fever, Extra Moves, Jackpot Points, &amp; Power Jewels.</p>
+              <strong>Illuminate the Prism Spin</strong>
+              <p>Matches charge the optical prism bar. Tap <strong>PRISM SPIN</strong> when lit for 3× Luminous Aura, extra moves, bonus points, and power jewels.</p>
             </div>
           </div>
           <div class="help-step">
             <span class="help-badge">4</span>
             <div>
-              <strong>Summon Power Jewels</strong>
-              <p><strong>4 in a row</strong> = Line Blaster · <strong>L / T shape</strong> = 3×3 Bomb · <strong>5 in a row</strong> = Queen Tiara (swap with any jewel to clear all of it!).</p>
+              <strong>Collect &amp; Inspect at 3× Zoom</strong>
+              <p>Every new piece unlocks in <strong>My Collection</strong>. Hold any jewel on the tray (or tap any card) to zoom 3× and read its museum history.</p>
             </div>
           </div>
         </div>
-        <button type="button" class="gold-cta" id="closeHelpBtn">LET'S PLAY ✦</button>
+        <button type="button" class="gold-cta" id="closeHelpBtn">ENTER GALLERY</button>
       </div>
     </dialog>
 
@@ -366,7 +368,7 @@
             <button type="button" class="velvet-secondary loupe-nav-btn" id="loupeNextBtn">Next ›</button>
           </div>
           <a id="loupeArchiveLink" class="gold-link loupe-archive-link" href="#" target="_blank" rel="noopener noreferrer">
-            Museum Archive ↗
+            Museum Record ↗
           </a>
         </div>
       </div>
