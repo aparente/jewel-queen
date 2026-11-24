@@ -357,8 +357,10 @@ class JewelQueenGame {
     // Show a faster first-move hint on Turn 1 so players immediately feel the swap mechanic!
     this.isFirstMove = this.stageNum === 1;
 
-    // Fresh Royal Spin ready on every exhibition stage (using this era's curated jewels!)
-    this.slot.setEraJewels(this._activeJewelPool());
+    // Fresh Vault Draw ready on every exhibition stage (using this era's curated jewels!)
+    const activePool = this._activeJewelPool();
+    this.slot.setEraJewels(activePool);
+    this.fx.setRainJewels([...activePool.map((j) => j.img), TIARA_PIECE.img]);
     this.slot.setCharge(100);
     this.slot.setBanner(`${this.stageCfg.decade.toUpperCase()} · VAULT DRAW READY`, true);
 
@@ -1066,16 +1068,14 @@ class JewelQueenGame {
       scale: count >= 5 ? 1.15 : 1
     });
 
-    if (cascadeStep >= 2 || count >= 5) {
+    if (cascadeStep >= 2 || count >= 4) {
       const phrase =
         GLAMOUR_CALLOUTS[Math.min(GLAMOUR_CALLOUTS.length - 1, cascadeStep + (count >= 5 ? 2 : -1))];
       this.fx.popup(this.fx.w / 2, Math.max(54, cy - 30), phrase, {
         color: '#e8f6ff',
         big: true
       });
-      if (cascadeStep >= 3 || count >= 6) {
-        this.fx.coinShower(18);
-      }
+      this.fx.coinShower(cascadeStep >= 3 || count >= 5 ? 18 : 8);
     }
 
     this._saveProgress();

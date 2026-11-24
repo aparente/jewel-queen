@@ -16,6 +16,8 @@ export class ParticleFX {
     this.rings = [];
     this.ribbons = [];
     this.popups = [];
+    this.jewelCache = new Map();
+    this.activeRainImgs = [];
     this.running = false;
     this.lastTime = 0;
     this.dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -91,23 +93,41 @@ export class ParticleFX {
     this._ensureLoop();
   }
 
-  /* Drifting iridescent crystal prisms & light petals on jackpots & big combos */
-  coinShower(count = 32) {
-    const n = this.reducedMotion ? 8 : count;
-    const prismColors = ['#d6faf6', '#e6d8ff', '#ffe2ec', '#ffffff', '#cde8ff'];
+  setRainJewels(imgUrls = []) {
+    this.activeRainImgs = imgUrls.map((url) => {
+      if (this.jewelCache.has(url)) return this.jewelCache.get(url);
+      const img = new Image();
+      img.decoding = 'async';
+      img.src = url;
+      this.jewelCache.set(url, img);
+      return img;
+    });
+  }
+
+  /* Rain real tumbling museum jewels with depth sizing, gentle rotation & soft starlight glints */
+  coinShower(count = 24) {
+    const n = this.reducedMotion ? 6 : count;
+    const readyImgs = this.activeRainImgs.filter((im) => im.complete && im.naturalWidth > 0);
+    const pool = readyImgs.length ? readyImgs : this.activeRainImgs;
+
     for (let i = 0; i < n; i++) {
+      const depth = 0.65 + Math.random() * 0.7; // Parallax depth (smaller far, larger close)
+      const img = pool.length ? pool[i % pool.length] : null;
       this.particles.push({
-        kind: 'prism',
+        kind: 'jewel',
+        img,
         x: this.w * (0.06 + Math.random() * 0.88),
-        y: -14 - Math.random() * 95,
-        vx: (Math.random() - 0.5) * 70,
-        vy: 82 + Math.random() * 145,
-        size: 5 + Math.random() * 6.5,
+        y: -26 - Math.random() * 140,
+        vx: (Math.random() - 0.5) * 65,
+        vy: (95 + Math.random() * 140) * depth,
+        size: 32 * depth,
+        rot: (Math.random() - 0.5) * 0.9,
+        vrot: (Math.random() - 0.5) * 2.6,
         phase: Math.random() * Math.PI * 2,
-        vphase: 4.5 + Math.random() * 5.5,
-        color: prismColors[i % prismColors.length],
+        vphase: 2.2 + Math.random() * 2.4,
+        depth,
         life: 0,
-        maxLife: 1.65 + Math.random() * 0.85
+        maxLife: 1.75 + Math.random() * 0.95
       });
     }
     this._ensureLoop();
@@ -299,27 +319,28 @@ export class ParticleFX {
       }
       const p = pt.life / pt.maxLife;
 
-      if (pt.kind === 'prism') {
-        pt.vy += 155 * dt;
-        pt.x += pt.vx * dt + Math.sin(pt.phase) * 22 * dt;
+      if (pt.kind === 'jewel') {
+        pt.vy += 185 * pt.depth * dt;
+        pt.x += pt.vx * dt + Math.sin(pt.phase) * 24 * dt;
         pt.y += pt.vy * dt;
+        pt.rot += pt.vrot * dt;
         pt.phase += pt.vphase * dt;
-        const spinW = Math.max(0.2, Math.abs(Math.cos(pt.phase)));
-        const alpha = p > 0.72 ? (1 - p) / 0.28 : 0.92;
+
+        const fadeIn = Math.min(1, pt.life / 0.14);
+        const fadeOut = p > 0.72 ? (1 - p) / 0.28 : 1;
+        const alpha = fadeIn * fadeOut * (0.72 + pt.depth * 0.24);
+
         ctx.save();
-        ctx.globalCompositeOperation = 'lighter';
-        ctx.globalAlpha = alpha;
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
         ctx.translate(pt.x, pt.y);
-        ctx.rotate(Math.sin(pt.phase * 0.5) * 0.45);
-        ctx.scale(spinW, 1);
-        ctx.fillStyle = pt.color;
-        ctx.beginPath();
-        ctx.moveTo(0, -pt.size);
-        ctx.lineTo(pt.size * 0.62, 0);
-        ctx.lineTo(0, pt.size);
-        ctx.lineTo(-pt.size * 0.62, 0);
-        ctx.closePath();
-        ctx.fill();
+        ctx.rotate(pt.rot);
+
+        if (pt.img && pt.img.complete && pt.img.naturalWidth > 0) {
+          ctx.shadowColor = 'rgba(218, 240, 255, 0.35)';
+          ctx.shadowBlur = 10 * pt.depth;
+          ctx.drawImage(pt.img, -pt.size * 0.5, -pt.size * 0.5, pt.size, pt.size);
+        }
         ctx.restore();
       } else {
         // Silky fluid deceleration like particles suspended in dark gallery air
