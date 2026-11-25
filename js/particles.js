@@ -16,8 +16,7 @@ export class ParticleFX {
     this.rings = [];
     this.ribbons = [];
     this.popups = [];
-    this.jewelCache = new Map();
-    this.activeRainImgs = [];
+    this.gemSprites = this._buildGemSprites();
     this.running = false;
     this.lastTime = 0;
     this.dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -93,41 +92,187 @@ export class ParticleFX {
     this._ensureLoop();
   }
 
-  setRainJewels(imgUrls = []) {
-    this.activeRainImgs = imgUrls.map((url) => {
-      if (this.jewelCache.has(url)) return this.jewelCache.get(url);
-      const img = new Image();
-      img.decoding = 'async';
-      img.src = url;
-      this.jewelCache.set(url, img);
-      return img;
+  /**
+   * Pre-render 6 museum-grade faceted precious gemstones onto crisp 96x96 offscreen canvases:
+   * Brilliant Diamond, Step-Cut Emerald, Faceted Ruby, Cushion Sapphire, Pear Amethyst & Baroque Pearl.
+   */
+  _buildGemSprites() {
+    const makeCanvas = (drawFn) => {
+      const s = 96;
+      const c = document.createElement('canvas');
+      c.width = s;
+      c.height = s;
+      const g = c.getContext('2d');
+      g.translate(s / 2, s / 2);
+      drawFn(g, s * 0.4);
+      return c;
+    };
+
+    const drawFacetedPoly = (g, pts, innerScale, colors) => {
+      const [deep, mid, bright, spec] = colors;
+      // Outer pavilion silhouette
+      g.beginPath();
+      pts.forEach(([x, y], i) => (i === 0 ? g.moveTo(x, y) : g.lineTo(x, y)));
+      g.closePath();
+      const bg = g.createLinearGradient(-34, -34, 34, 34);
+      bg.addColorStop(0, bright);
+      bg.addColorStop(0.45, mid);
+      bg.addColorStop(1, deep);
+      g.fillStyle = bg;
+      g.fill();
+
+      // Individual crown bevel facets catching studio light at alternating angles
+      const inner = pts.map(([x, y]) => [x * innerScale, y * innerScale]);
+      for (let i = 0; i < pts.length; i++) {
+        const j = (i + 1) % pts.length;
+        g.beginPath();
+        g.moveTo(pts[i][0], pts[i][1]);
+        g.lineTo(pts[j][0], pts[j][1]);
+        g.lineTo(inner[j][0], inner[j][1]);
+        g.lineTo(inner[i][0], inner[i][1]);
+        g.closePath();
+        const shade = (i % 3 === 0) ? 0.34 : (i % 3 === 1) ? 0.12 : -0.22;
+        g.fillStyle = shade > 0 ? `rgba(255,255,255,${shade})` : `rgba(0,0,0,${-shade})`;
+        g.fill();
+        g.strokeStyle = 'rgba(255,255,255,0.28)';
+        g.lineWidth = 0.9;
+        g.stroke();
+      }
+
+      // Luminous center table facet
+      g.beginPath();
+      inner.forEach(([x, y], i) => (i === 0 ? g.moveTo(x, y) : g.lineTo(x, y)));
+      g.closePath();
+      const tg = g.createLinearGradient(-22, -26, 22, 26);
+      tg.addColorStop(0, spec);
+      tg.addColorStop(0.45, bright);
+      tg.addColorStop(1, mid);
+      g.fillStyle = tg;
+      g.fill();
+      g.strokeStyle = 'rgba(255,255,255,0.55)';
+      g.lineWidth = 1.1;
+      g.stroke();
+
+      // Crisp specular highlight slash across upper-left table
+      g.beginPath();
+      g.moveTo(inner[0][0] * 0.72, inner[0][1] * 0.72);
+      g.lineTo(inner[1][0] * 0.72, inner[1][1] * 0.72);
+      g.lineTo(0, 0);
+      g.closePath();
+      g.fillStyle = 'rgba(255, 255, 255, 0.42)';
+      g.fill();
+    };
+
+    const octPts = (r, rx = 1, ry = 1) =>
+      Array.from({ length: 8 }, (_, i) => {
+        const a = (i * Math.PI) / 4 - Math.PI / 8;
+        return [Math.cos(a) * r * rx, Math.sin(a) * r * ry];
+      });
+
+    // 1. Brilliant-Cut White Diamond (with subtle icy blue-violet fire)
+    const diamond = makeCanvas((g, r) => {
+      drawFacetedPoly(g, octPts(r), 0.54, ['#7a96b8', '#cbe4ff', '#f4fbff', '#ffffff']);
+      // Internal prismatic fire flecks
+      g.fillStyle = 'rgba(140, 238, 255, 0.45)';
+      g.beginPath();
+      g.moveTo(0, -r * 0.5);
+      g.lineTo(r * 0.25, -r * 0.1);
+      g.lineTo(-r * 0.12, r * 0.18);
+      g.closePath();
+      g.fill();
     });
+
+    // 2. Emerald-Cut Colombian Emerald (classic chamfered step-cut rectangle)
+    const emerald = makeCanvas((g, r) => {
+      const w = r * 0.76;
+      const h = r * 1.04;
+      const ch = r * 0.24;
+      const pts = [
+        [-w + ch, -h], [w - ch, -h], [w, -h + ch], [w, h - ch],
+        [w - ch, h], [-w + ch, h], [-w, h - ch], [-w, -h + ch]
+      ];
+      drawFacetedPoly(g, pts, 0.58, ['#023a20', '#0a9c58', '#38e896', '#d8fff0']);
+    });
+
+    // 3. Faceted Pigeon-Blood Ruby (elongated oval-octagonal cut)
+    const ruby = makeCanvas((g, r) => {
+      drawFacetedPoly(g, octPts(r, 0.84, 1.06), 0.55, ['#4c0416', '#cf103c', '#ff4778', '#ffd6e2']);
+    });
+
+    // 4. Cushion-Cut Royal Ceylon Sapphire
+    const sapphire = makeCanvas((g, r) => {
+      drawFacetedPoly(g, octPts(r, 0.96, 0.96), 0.56, ['#061654', '#1d56d8', '#5fa4ff', '#dceeff']);
+    });
+
+    // 5. Pear-Cut Imperial Amethyst
+    const amethyst = makeCanvas((g, r) => {
+      const pts = [
+        [0, -r * 1.1],
+        [r * 0.52, -r * 0.34],
+        [r * 0.78, r * 0.28],
+        [r * 0.48, r * 0.86],
+        [0, r * 1.04],
+        [-r * 0.48, r * 0.86],
+        [-r * 0.78, r * 0.28],
+        [-r * 0.52, -r * 0.34]
+      ];
+      drawFacetedPoly(g, pts, 0.52, ['#2b085e', '#8628de', '#c978ff', '#f5e4ff']);
+    });
+
+    // 6. Luminous Opalescent Pearl
+    const pearl = makeCanvas((g, r) => {
+      const rad = r * 0.84;
+      const grad = g.createRadialGradient(-rad * 0.32, -rad * 0.34, rad * 0.08, 0, 0, rad);
+      grad.addColorStop(0, '#ffffff');
+      grad.addColorStop(0.28, '#fdf6ee');
+      grad.addColorStop(0.68, '#dfd2d8');
+      grad.addColorStop(0.92, '#a89cb0');
+      grad.addColorStop(1, '#7a7086');
+      g.fillStyle = grad;
+      g.beginPath();
+      g.arc(0, 0, rad, 0, Math.PI * 2);
+      g.fill();
+      // Subtle iridescent rose-aqua overtone
+      const sheen = g.createRadialGradient(rad * 0.28, rad * 0.32, 1, rad * 0.2, rad * 0.2, rad * 0.8);
+      sheen.addColorStop(0, 'rgba(182, 245, 240, 0.32)');
+      sheen.addColorStop(1, 'rgba(255, 196, 224, 0)');
+      g.fillStyle = sheen;
+      g.beginPath();
+      g.arc(0, 0, rad, 0, Math.PI * 2);
+      g.fill();
+    });
+
+    return [
+      { img: diamond, glow: 'rgba(220, 245, 255, 0.75)', glint: '#ffffff' },
+      { img: emerald, glow: 'rgba(42, 232, 146, 0.65)', glint: '#baffdf' },
+      { img: ruby, glow: 'rgba(255, 68, 118, 0.68)', glint: '#ffd4e0' },
+      { img: sapphire, glow: 'rgba(82, 156, 255, 0.68)', glint: '#d6eaff' },
+      { img: amethyst, glow: 'rgba(196, 118, 255, 0.65)', glint: '#f0dcff' },
+      { img: pearl, glow: 'rgba(255, 248, 238, 0.58)', glint: '#ffffff' }
+    ];
   }
 
-  /* Rain real tumbling museum jewels with depth sizing, gentle rotation & soft starlight glints */
-  coinShower(count = 24) {
-    const n = this.reducedMotion ? 6 : count;
-    const readyImgs = this.activeRainImgs.filter((im) => im.complete && im.naturalWidth > 0);
-    const pool = readyImgs.length ? readyImgs : this.activeRainImgs;
-
+  /* Rain sparkling cut precious gemstones (diamonds, emeralds, rubies, sapphires, amethysts, pearls) */
+  coinShower(count = 26) {
+    const n = this.reducedMotion ? 7 : count;
     for (let i = 0; i < n; i++) {
-      const depth = 0.65 + Math.random() * 0.7; // Parallax depth (smaller far, larger close)
-      const img = pool.length ? pool[i % pool.length] : null;
+      const depth = 0.6 + Math.random() * 0.72;
+      const gem = this.gemSprites[Math.floor(Math.random() * this.gemSprites.length)];
       this.particles.push({
-        kind: 'jewel',
-        img,
-        x: this.w * (0.06 + Math.random() * 0.88),
-        y: -26 - Math.random() * 140,
-        vx: (Math.random() - 0.5) * 65,
-        vy: (95 + Math.random() * 140) * depth,
-        size: 32 * depth,
-        rot: (Math.random() - 0.5) * 0.9,
-        vrot: (Math.random() - 0.5) * 2.6,
+        kind: 'gem',
+        gem,
+        x: this.w * (0.05 + Math.random() * 0.90),
+        y: -22 - Math.random() * 140,
+        vx: (Math.random() - 0.5) * 62,
+        vy: (88 + Math.random() * 135) * depth,
+        size: 24 * depth,
+        rot: Math.random() * Math.PI * 2,
+        vrot: (Math.random() - 0.5) * 3.8,
         phase: Math.random() * Math.PI * 2,
-        vphase: 2.2 + Math.random() * 2.4,
+        vphase: 3.0 + Math.random() * 3.5,
         depth,
         life: 0,
-        maxLife: 1.75 + Math.random() * 0.95
+        maxLife: 1.85 + Math.random() * 0.95
       });
     }
     this._ensureLoop();
@@ -319,29 +464,51 @@ export class ParticleFX {
       }
       const p = pt.life / pt.maxLife;
 
-      if (pt.kind === 'jewel') {
-        pt.vy += 185 * pt.depth * dt;
-        pt.x += pt.vx * dt + Math.sin(pt.phase) * 24 * dt;
+      if (pt.kind === 'gem') {
+        pt.vy += 175 * pt.depth * dt;
+        pt.x += pt.vx * dt + Math.sin(pt.phase) * 20 * dt;
         pt.y += pt.vy * dt;
         pt.rot += pt.vrot * dt;
         pt.phase += pt.vphase * dt;
 
         const fadeIn = Math.min(1, pt.life / 0.14);
         const fadeOut = p > 0.72 ? (1 - p) / 0.28 : 1;
-        const alpha = fadeIn * fadeOut * (0.72 + pt.depth * 0.24);
+        const alpha = fadeIn * fadeOut * (0.76 + pt.depth * 0.22);
+
+        // Subtle 3D tumbling foreshortening + mid-air crown-facet sparkle flash!
+        const tilt = 0.62 + 0.38 * Math.abs(Math.cos(pt.phase * 0.65));
+        const flash = Math.pow(Math.max(0, Math.cos(pt.rot * 2.0 + pt.phase)), 10);
 
         ctx.save();
         ctx.globalCompositeOperation = 'source-over';
         ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
         ctx.translate(pt.x, pt.y);
         ctx.rotate(pt.rot);
-
-        if (pt.img && pt.img.complete && pt.img.naturalWidth > 0) {
-          ctx.shadowColor = 'rgba(218, 240, 255, 0.35)';
-          ctx.shadowBlur = 10 * pt.depth;
-          ctx.drawImage(pt.img, -pt.size * 0.5, -pt.size * 0.5, pt.size, pt.size);
-        }
+        ctx.scale(tilt, 1);
+        ctx.shadowColor = pt.gem.glow;
+        ctx.shadowBlur = (8 + flash * 12) * pt.depth;
+        ctx.drawImage(pt.gem.img, -pt.size * 0.5, -pt.size * 0.5, pt.size, pt.size);
         ctx.restore();
+
+        // Crisp 4-point diamond lens-flare glint when facet catches overhead light!
+        if (flash > 0.25) {
+          const gSz = pt.size * (0.38 + flash * 0.45);
+          ctx.save();
+          ctx.globalCompositeOperation = 'lighter';
+          ctx.globalAlpha = Math.min(1, alpha * flash * 1.15);
+          ctx.translate(pt.x - pt.size * 0.14, pt.y - pt.size * 0.14);
+          ctx.fillStyle = pt.gem.glint;
+          ctx.beginPath();
+          for (let k = 0; k < 8; k++) {
+            const rad = k % 2 === 0 ? gSz : gSz * 0.16;
+            const ang = (k * Math.PI) / 4;
+            if (k === 0) ctx.moveTo(Math.cos(ang) * rad, Math.sin(ang) * rad);
+            else ctx.lineTo(Math.cos(ang) * rad, Math.sin(ang) * rad);
+          }
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+        }
       } else {
         // Silky fluid deceleration like particles suspended in dark gallery air
         pt.vy += 140 * dt;

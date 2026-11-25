@@ -360,7 +360,6 @@ class JewelQueenGame {
     // Fresh Vault Draw ready on every exhibition stage (using this era's curated jewels!)
     const activePool = this._activeJewelPool();
     this.slot.setEraJewels(activePool);
-    this.fx.setRainJewels([...activePool.map((j) => j.img), TIARA_PIECE.img]);
     this.slot.setCharge(100);
     this.slot.setBanner(`${this.stageCfg.decade.toUpperCase()} · VAULT DRAW READY`, true);
 
