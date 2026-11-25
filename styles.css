@@ -849,13 +849,31 @@ body {
 /* Minimal Footer */
 .cabinet-footer {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 3px;
   padding: 2px 2px 0;
   font-size: 0.64rem;
   letter-spacing: 0.08em;
   color: var(--silver-muted);
   flex-shrink: 0;
+}
+
+.footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.family-note {
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: rgba(245, 242, 237, 0.42);
+  line-height: 1.2;
 }
 
 .footer-stat strong {
@@ -1580,6 +1598,16 @@ body {
   font-size: 0.7rem;
   line-height: 1.42;
   color: var(--silver-muted);
+}
+
+.help-family-note {
+  margin: 0 0 12px;
+  text-align: center;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  color: var(--pearl-soft);
 }
 
 /* Interactive 3x Jeweler's Loupe Modal */
