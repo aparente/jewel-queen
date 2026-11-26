@@ -5,6 +5,7 @@
 create table if not exists public.collector_profiles (
   id uuid primary key references auth.users (id) on delete cascade,
   display_name text not null default 'Private Collector' check (char_length(display_name) <= 40),
+  whatnot_handle text check (whatnot_handle is null or char_length(whatnot_handle) <= 32),
   avatar_url text,
   best_score integer not null default 0 check (best_score >= 0),
   estate_value bigint not null default 0 check (estate_value >= 0),

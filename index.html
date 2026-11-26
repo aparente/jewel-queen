@@ -17,7 +17,7 @@
     <meta property="og:title" content="JEWEL QUEEN — Collect 45 Real V&amp;A Museum Jewels" />
     <meta
       property="og:description"
-      content="Match real Art Nouveau, Art Deco, Dior &amp; contemporary haute joaillerie masterpieces. Inspired by Connie Parente (@parenteconnie)."
+      content="Match real Art Nouveau, Art Deco, Dior &amp; contemporary haute joaillerie masterpieces. Inspired by Connie Parente (IG @parenteconnie · Whatnot @jewelqueen)."
     />
     <meta property="og:url" content="https://aparente.github.io/jewel-queen/" />
     <meta property="og:image" content="https://aparente.github.io/jewel-queen/assets/og-card.jpg" />
@@ -27,7 +27,7 @@
     <meta name="twitter:title" content="JEWEL QUEEN — Collect 45 Real V&amp;A Museum Jewels" />
     <meta
       name="twitter:description"
-      content="Collect 45 authentic V&amp;A Museum antique, Art Deco &amp; haute joaillerie treasures — inspired by @parenteconnie."
+      content="Collect 45 authentic V&amp;A Museum antique, Art Deco &amp; haute joaillerie treasures — IG @parenteconnie · Whatnot @jewelqueen."
     />
     <meta name="twitter:image" content="https://aparente.github.io/jewel-queen/assets/og-card.jpg" />
     <title>JEWEL QUEEN — Gallery Archive</title>
@@ -346,7 +346,9 @@
 
         <p class="lookbook-intro">
           Made by &amp; for family — walk through eight iconic eras &amp; movements of antique and vintage jewelry, each featuring authentic museum pieces curated in the spirit of
-          <a href="https://www.instagram.com/parenteconnie/?hl=en" target="_blank" rel="noopener noreferrer" class="gold-link">@parenteconnie</a>.
+          <a href="https://www.instagram.com/parenteconnie/?hl=en" target="_blank" rel="noopener noreferrer" class="gold-link">@parenteconnie</a>
+          &amp;
+          <a href="https://www.whatnot.com/user/jewelqueen" target="_blank" rel="noopener noreferrer" class="gold-link">Whatnot @jewelqueen</a>.
         </p>
 
         <div class="eras-grid" id="erasGrid"></div>
@@ -445,20 +447,31 @@
 
         <p class="sso-notice" id="ssoNotice" hidden></p>
 
-        <!-- Collector Display Name (works immediately for Share Cards even before cloud SSO!) -->
+        <!-- Collector Display Name & Optional Whatnot Handle (printed on Share Card & Leaderboard) -->
         <div class="collector-name-box">
-          <label for="collectorNameInput" class="collector-name-label">NAME ON YOUR SHAREABLE VAULT CARD</label>
-          <div class="collector-name-row">
+          <label for="collectorNameInput" class="collector-name-label">COLLECTOR NAME &amp; WHATNOT HANDLE (OPTIONAL)</label>
+          <div class="collector-fields-grid">
             <input
               type="text"
               id="collectorNameInput"
               class="collector-name-input"
               maxlength="28"
-              placeholder="e.g. Connie Parente"
+              placeholder="Your name (e.g. Connie)"
               autocomplete="name"
             />
-            <button type="button" class="save-name-btn" id="saveCollectorNameBtn">Save</button>
+            <div class="whatnot-input-wrap">
+              <span class="whatnot-at" aria-hidden="true">@</span>
+              <input
+                type="text"
+                id="collectorWhatnotInput"
+                class="collector-name-input whatnot-input"
+                maxlength="28"
+                placeholder="whatnot handle"
+                autocomplete="username"
+              />
+            </div>
           </div>
+          <button type="button" class="save-name-btn save-profile-full" id="saveCollectorNameBtn">Save Collector Profile</button>
         </div>
 
         <button type="button" class="gold-cta" id="accountShareVaultBtn">SHARE MY VAULT CARD ↗</button>
@@ -474,10 +487,17 @@
           </div>
         </section>
 
-        <p class="connie-credit-line">
-          Curated in the spirit of
-          <a href="https://www.instagram.com/parenteconnie/?hl=en" target="_blank" rel="noopener noreferrer" class="gold-link">Connie Parente · @parenteconnie</a>
-        </p>
+        <div class="connie-social-card">
+          <span class="connie-social-kicker">FOLLOW CONNIE PARENTE</span>
+          <div class="connie-social-links">
+            <a href="https://www.whatnot.com/user/jewelqueen" target="_blank" rel="noopener noreferrer" class="social-pill">
+              Whatnot <strong>@jewelqueen</strong> ↗
+            </a>
+            <a href="https://www.instagram.com/parenteconnie/?hl=en" target="_blank" rel="noopener noreferrer" class="social-pill">
+              Instagram <strong>@parenteconnie</strong> ↗
+            </a>
+          </div>
+        </div>
       </div>
     </dialog>
 

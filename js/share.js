@@ -109,12 +109,13 @@ export function computeVaultStats(collectionCounts = {}, showcaseIds = []) {
   };
 }
 
-export function buildChallengeUrl({ collectorName, totalEstate, ownedCount, bestScore }) {
+export function buildChallengeUrl({ collectorName, whatnotHandle, totalEstate, ownedCount, bestScore }) {
   const base = window.location.origin.startsWith('http') && !window.location.origin.includes('localhost')
     ? `${window.location.origin}${window.location.pathname}`
     : LIVE_URL;
   const u = new URL(base);
   if (collectorName) u.searchParams.set('invite', collectorName.slice(0, 28));
+  if (whatnotHandle) u.searchParams.set('wn', whatnotHandle.replace(/^@+/, '').slice(0, 28));
   if (totalEstate > 0) u.searchParams.set('estate', String(totalEstate));
   if (ownedCount > 0) u.searchParams.set('owned', String(ownedCount));
   if (bestScore > 0) u.searchParams.set('score', String(bestScore));
@@ -123,6 +124,7 @@ export function buildChallengeUrl({ collectorName, totalEstate, ownedCount, best
 
 export async function renderVaultShareCard({
   collectorName = 'PRIVATE COLLECTOR',
+  whatnotHandle = '',
   bestScore = 0,
   collectionCounts = {},
   showcaseIds = []
@@ -136,6 +138,7 @@ export async function renderVaultShareCard({
 
   const stats = computeVaultStats(collectionCounts, showcaseIds);
   const displayName = (collectorName || 'Private Collector').trim().slice(0, 26);
+  const cleanWn = (whatnotHandle || '').trim().replace(/^@+/, '').slice(0, 26);
 
   // 1. Deep Museum Gallery Black + Subtle teamLab Iridescent Light Veil
   ctx.fillStyle = '#030306';
@@ -171,9 +174,12 @@ export async function renderVaultShareCard({
   ctx.font = '300 78px "Cormorant Garamond", Georgia, serif';
   ctx.fillText('J E W E L   Q U E E N', W / 2, 202);
 
-  ctx.fillStyle = 'rgba(245, 242, 237, 0.72)';
+  ctx.fillStyle = 'rgba(245, 242, 237, 0.76)';
   ctx.font = 'italic 400 34px "Cormorant Garamond", Georgia, serif';
-  ctx.fillText(`${displayName}’s Private Vault`, W / 2, 256);
+  const subtitleLine = cleanWn
+    ? `${displayName}’s Private Vault  ·  Whatnot @${cleanWn}`
+    : `${displayName}’s Private Vault`;
+  ctx.fillText(subtitleLine, W / 2, 256);
 
   // 3. Borderless Hairline Metrics Placard
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.11)';
@@ -279,9 +285,9 @@ export async function renderVaultShareCard({
   });
 
   // 5. Connie Parente Brand Colophon & Viral Invite Footer
-  ctx.fillStyle = 'rgba(245, 242, 237, 0.78)';
-  ctx.font = 'italic 400 30px "Cormorant Garamond", Georgia, serif';
-  ctx.fillText('Inspired by Connie Parente · @parenteconnie', W / 2, 1170);
+  ctx.fillStyle = 'rgba(245, 242, 237, 0.8)';
+  ctx.font = 'italic 400 29px "Cormorant Garamond", Georgia, serif';
+  ctx.fillText('Connie Parente · IG @parenteconnie · Whatnot @jewelqueen', W / 2, 1170);
 
   ctx.fillStyle = 'rgba(214, 212, 224, 0.52)';
   ctx.font = '400 20px Inter, -apple-system, sans-serif';
@@ -303,6 +309,7 @@ export async function renderVaultShareCard({
   const dataUrl = canvas.toDataURL('image/png');
   const shareUrl = buildChallengeUrl({
     collectorName: displayName,
+    whatnotHandle: cleanWn,
     totalEstate: stats.totalEstate,
     ownedCount: stats.ownedCount,
     bestScore
@@ -310,8 +317,8 @@ export async function renderVaultShareCard({
 
   const shareText =
     stats.ownedCount > 0
-      ? `My Jewel Queen Estate Vault is valued at ${formatEstateMoney(stats.totalEstate)} (${stats.ownedCount}/${stats.totalCount} real V&A museum jewels)! Inspired by @parenteconnie — see if you can top my vault:`
-      : `Discover 45 real V&A Museum vintage jewels in Jewel Queen — inspired by Connie Parente (@parenteconnie):`;
+      ? `My Jewel Queen Estate Vault is valued at ${formatEstateMoney(stats.totalEstate)} (${stats.ownedCount}/${stats.totalCount} real V&A museum jewels)! Inspired by Connie Parente (IG @parenteconnie · Whatnot @jewelqueen) — see if you can top my vault:`
+      : `Discover 45 real V&A Museum vintage jewels in Jewel Queen — inspired by Connie Parente (IG @parenteconnie · Whatnot @jewelqueen):`;
 
   return { blob, dataUrl, shareUrl, shareText, stats };
 }

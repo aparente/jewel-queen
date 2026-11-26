@@ -2225,6 +2225,92 @@ body {
   gap: 6px;
 }
 
+.collector-fields-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.whatnot-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.whatnot-at {
+  position: absolute;
+  left: 10px;
+  font-size: 0.76rem;
+  color: var(--silver-muted);
+  pointer-events: none;
+}
+
+.whatnot-input {
+  width: 100%;
+  padding-left: 24px !important;
+}
+
+.save-profile-full {
+  width: 100%;
+  padding: 8px 12px;
+}
+
+.leaderboard-wn {
+  margin-left: 5px;
+  font-size: 0.64rem;
+  color: #b6e8dc;
+  text-decoration: none;
+}
+
+.leaderboard-wn:hover {
+  text-decoration: underline;
+}
+
+.connie-social-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding-top: 4px;
+  border-top: 1px solid var(--hairline-soft);
+}
+
+.connie-social-kicker {
+  font-size: 0.54rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--silver-muted);
+}
+
+.connie-social-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.social-pill {
+  padding: 5px 10px;
+  border-radius: 99px;
+  border: 1px solid var(--hairline);
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--pearl-soft);
+  font-size: 0.66rem;
+  text-decoration: none;
+  transition: border-color 150ms ease, background 150ms ease, color 150ms ease;
+}
+
+.social-pill strong {
+  color: #d4f4ef;
+  font-weight: 500;
+}
+
+.social-pill:hover {
+  border-color: rgba(212, 244, 239, 0.5);
+  background: rgba(212, 244, 239, 0.08);
+  color: #ffffff;
+}
+
 .collector-name-input {
   flex: 1;
   min-width: 0;

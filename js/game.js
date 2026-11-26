@@ -1503,11 +1503,13 @@ class JewelQueenGame {
     if (!banner || !text) return;
     const estate = Number(params.get('estate') || 0);
     const owned = Number(params.get('owned') || 0);
+    const wn = (params.get('wn') || '').replace(/[^a-zA-Z0-9._-]/g, '').slice(0, 24);
     const cleanName = inviter.slice(0, 24);
+    const who = wn ? `${cleanName} (@${wn})` : cleanName;
     text.textContent =
       estate > 0
-        ? `✦ ${cleanName} invited you · Top ${formatEstateMoney(estate)} (${owned}/45 jewels)!`
-        : `✦ ${cleanName} invited you to collect 45 V&A Museum jewels!`;
+        ? `✦ ${who} invited you · Top ${formatEstateMoney(estate)} (${owned}/45 jewels)!`
+        : `✦ ${who} invited you to collect 45 V&A Museum jewels!`;
     banner.hidden = false;
     closeBtn?.addEventListener('click', () => {
       banner.hidden = true;
@@ -1520,6 +1522,7 @@ class JewelQueenGame {
     this.sharePreviewImg = document.getElementById('sharePreviewImg');
     this.shareStatus = document.getElementById('shareStatus');
     this.collectorNameInput = document.getElementById('collectorNameInput');
+    this.collectorWhatnotInput = document.getElementById('collectorWhatnotInput');
     this.ssoNotice = document.getElementById('ssoNotice');
 
     // Replay guided tutorial from How-to-Play modal
@@ -1560,14 +1563,20 @@ class JewelQueenGame {
       await this.auth.signOut();
     });
 
-    // Collector Display Name save
+    // Collector Display Name & Whatnot Handle save
     document.getElementById('saveCollectorNameBtn')?.addEventListener('click', () => {
       audio.playSelect();
-      this.auth.setCollectorName(this.collectorNameInput.value);
+      this.auth.setCollectorProfile(
+        this.collectorNameInput.value,
+        this.collectorWhatnotInput?.value || ''
+      );
       this._saveProgress();
       if (this.ssoNotice) {
         this.ssoNotice.hidden = false;
-        this.ssoNotice.textContent = `Saved! Your Share Card will read “${this.auth.getDisplayName()}’s Private Vault”.`;
+        const wn = this.auth.getWhatnotHandle();
+        this.ssoNotice.textContent = wn
+          ? `Saved! Your Vault Card will feature “${this.auth.getDisplayName()}” & Whatnot @${wn}.`
+          : `Saved! Your Share Card will read “${this.auth.getDisplayName()}’s Private Vault”.`;
       }
     });
 
@@ -1655,6 +1664,9 @@ class JewelQueenGame {
     if (this.collectorNameInput && !document.activeElement?.isSameNode(this.collectorNameInput)) {
       this.collectorNameInput.value = st.displayName === 'Private Collector' ? '' : st.displayName;
     }
+    if (this.collectorWhatnotInput && !document.activeElement?.isSameNode(this.collectorWhatnotInput)) {
+      this.collectorWhatnotInput.value = st.whatnotHandle || '';
+    }
 
     const signedIn = Boolean(st.user);
     if (signedInPanel) signedInPanel.hidden = !signedIn;
@@ -1683,6 +1695,7 @@ class JewelQueenGame {
       configured: this.auth.configured,
       user: this.auth.user,
       displayName: this.auth.getDisplayName(),
+      whatnotHandle: this.auth.getWhatnotHandle(),
       avatarUrl: this.auth.getAvatarUrl(),
       syncStatus: this.auth.syncStatus
     });
@@ -1694,14 +1707,19 @@ class JewelQueenGame {
       const rows = await this.auth.fetchLeaderboard(10);
       if (rows.length) {
         listEl.innerHTML = rows
-          .map(
-            (r, idx) => `
-            <div class="leaderboard-row">
-              <span class="leaderboard-rank">${idx + 1}</span>
-              <span class="leaderboard-name">${(r.display_name || 'Collector').replace(/</g, '&lt;')} · ${r.owned_count || 0}/45</span>
-              <span class="leaderboard-val">${formatEstateMoney(r.estate_value || 0)}</span>
-            </div>`
-          )
+          .map((r, idx) => {
+            const safeName = (r.display_name || 'Collector').replace(/</g, '&lt;');
+            const safeWn = (r.whatnot_handle || '').replace(/[^a-zA-Z0-9._-]/g, '');
+            const wnTag = safeWn
+              ? `<a class="leaderboard-wn" href="https://www.whatnot.com/user/${safeWn}" target="_blank" rel="noopener noreferrer">@${safeWn}</a>`
+              : '';
+            return `
+              <div class="leaderboard-row">
+                <span class="leaderboard-rank">${idx + 1}</span>
+                <span class="leaderboard-name">${safeName}${wnTag} · ${r.owned_count || 0}/45</span>
+                <span class="leaderboard-val">${formatEstateMoney(r.estate_value || 0)}</span>
+              </div>`;
+          })
           .join('');
       } else {
         listEl.innerHTML = '<p class="leaderboard-empty">Be the first signed-in collector on the leaderboard!</p>';
@@ -1714,6 +1732,7 @@ class JewelQueenGame {
     this.shareDialog.showModal();
     this.lastShareData = await renderVaultShareCard({
       collectorName: this.auth?.getDisplayName() || 'Private Collector',
+      whatnotHandle: this.auth?.getWhatnotHandle() || '',
       bestScore: Math.max(this.bestScore, this.score),
       collectionCounts: this.collectionCounts,
       showcaseIds: this.showcaseIds

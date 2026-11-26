@@ -9,6 +9,15 @@ import { SUPABASE_CONFIG, isSupabaseConfigured } from './supabase-config.js';
 
 const SUPABASE_CDN = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm';
 const NAME_STORAGE_KEY = 'jq_collector_name';
+const WHATNOT_STORAGE_KEY = 'jq_whatnot_handle';
+
+export function sanitizeHandle(raw) {
+  return (raw || '')
+    .trim()
+    .replace(/^@+/, '')
+    .replace(/[^a-zA-Z0-9._-]/g, '')
+    .slice(0, 28);
+}
 
 export class CollectorAuth {
   constructor({ onStateChange, onCloudMerged }) {
@@ -18,6 +27,7 @@ export class CollectorAuth {
     this.client = null;
     this.user = null;
     this.collectorName = localStorage.getItem(NAME_STORAGE_KEY) || '';
+    this.whatnotHandle = sanitizeHandle(localStorage.getItem(WHATNOT_STORAGE_KEY) || '');
     this.syncStatus = this.configured ? 'connecting' : 'local';
     this._syncTimer = null;
   }
@@ -84,10 +94,20 @@ export class CollectorAuth {
     return this.user?.user_metadata?.avatar_url || this.user?.user_metadata?.picture || '';
   }
 
-  setCollectorName(name) {
+  getWhatnotHandle() {
+    return this.whatnotHandle || '';
+  }
+
+  setCollectorProfile(name, whatnotHandle) {
     this.collectorName = (name || '').trim().slice(0, 28);
+    this.whatnotHandle = sanitizeHandle(whatnotHandle);
     localStorage.setItem(NAME_STORAGE_KEY, this.collectorName);
+    localStorage.setItem(WHATNOT_STORAGE_KEY, this.whatnotHandle);
     this._emit();
+  }
+
+  setCollectorName(name) {
+    this.setCollectorProfile(name, this.whatnotHandle);
   }
 
   async signInWithProvider(provider) {
@@ -119,7 +139,7 @@ export class CollectorAuth {
     try {
       const { data, error } = await this.client
         .from('collector_profiles')
-        .select('display_name, best_score, estate_value, owned_count, collection_counts, stage_stars, showcase_ids')
+        .select('display_name, whatnot_handle, best_score, estate_value, owned_count, collection_counts, stage_stars, showcase_ids')
         .eq('id', this.user.id)
         .maybeSingle();
 
@@ -131,6 +151,10 @@ export class CollectorAuth {
         if (data.display_name && !this.collectorName) {
           this.collectorName = data.display_name;
           localStorage.setItem(NAME_STORAGE_KEY, this.collectorName);
+        }
+        if (data.whatnot_handle && !this.whatnotHandle) {
+          this.whatnotHandle = sanitizeHandle(data.whatnot_handle);
+          localStorage.setItem(WHATNOT_STORAGE_KEY, this.whatnotHandle);
         }
         this.onCloudMerged(data);
       }
@@ -154,6 +178,7 @@ export class CollectorAuth {
         {
           id: this.user.id,
           display_name: this.getDisplayName(),
+          whatnot_handle: this.getWhatnotHandle() || null,
           avatar_url: this.getAvatarUrl() || null,
           best_score: payload.bestScore || 0,
           estate_value: payload.estateValue || 0,
@@ -178,7 +203,7 @@ export class CollectorAuth {
     try {
       const { data, error } = await this.client
         .from('collector_profiles')
-        .select('id, display_name, avatar_url, estate_value, owned_count, best_score')
+        .select('id, display_name, whatnot_handle, avatar_url, estate_value, owned_count, best_score')
         .order('estate_value', { ascending: false })
         .limit(limit);
       if (error) return [];
@@ -194,6 +219,7 @@ export class CollectorAuth {
         configured: this.configured,
         user: this.user,
         displayName: this.getDisplayName(),
+        whatnotHandle: this.getWhatnotHandle(),
         avatarUrl: this.getAvatarUrl(),
         syncStatus: this.syncStatus
       });
