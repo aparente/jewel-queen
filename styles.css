@@ -94,9 +94,9 @@ body {
 .brand-title {
   margin: 0;
   font-family: var(--font-serif);
-  font-size: clamp(1.36rem, 5.4vw, 1.62rem);
+  font-size: clamp(1.16rem, 4.5vw, 1.44rem);
   font-weight: 300;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.2em;
   line-height: 1.05;
   white-space: nowrap;
   color: var(--pearl);
@@ -164,14 +164,15 @@ body {
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   flex-shrink: 0;
   padding-top: 2px;
 }
 
 .icon-btn {
-  width: 33px;
-  height: 33px;
+  position: relative;
+  width: 29px;
+  height: 29px;
   border-radius: 50%;
   border: 1px solid var(--hairline);
   background: rgba(255, 255, 255, 0.03);
@@ -182,6 +183,25 @@ body {
   place-items: center;
   cursor: pointer;
   transition: border-color 180ms ease, color 180ms ease, background 180ms ease, transform 140ms ease;
+}
+
+.account-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.account-sync-dot {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #6ee7b7;
+  border: 1.5px solid #040407;
+  box-shadow: 0 0 6px rgba(110, 231, 183, 0.8);
 }
 
 .icon-btn:hover {
@@ -1881,8 +1901,451 @@ body {
   .spin-btn.is-ready .spin-btn-sheen,
   .fever-ribbon,
   .jewel-tile.is-hint .jewel-inner,
+  .jewel-tile.is-tutorial-focus .jewel-inner,
+  .is-tutorial-ring,
   .jewel-tile[data-special='bomb'] .jewel-inner::before,
   .jewel-tile[data-special='tiara'] .jewel-inner::before {
     animation: none !important;
   }
+}
+
+/* =========================================================================
+   Interactive 4-Step Guided Tutorial Strip & Luminous Spotlights
+   ========================================================================= */
+.tutorial-bar {
+  flex-shrink: 0;
+  padding: 9px 11px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(22, 24, 34, 0.94), rgba(11, 11, 16, 0.96));
+  border: 1px solid rgba(198, 247, 242, 0.36);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.7), 0 0 22px rgba(198, 247, 242, 0.12);
+}
+
+.tutorial-bar-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.tutorial-kicker {
+  font-size: 0.56rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: #c8f3ee;
+}
+
+.tutorial-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tutorial-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.tut-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  transition: background 200ms ease, transform 200ms ease;
+}
+
+.tut-dot.is-done {
+  background: rgba(198, 247, 242, 0.55);
+}
+
+.tut-dot.is-active {
+  background: #ffffff;
+  transform: scale(1.25);
+  box-shadow: 0 0 8px rgba(198, 247, 242, 0.9);
+}
+
+.tutorial-skip-btn {
+  border: none;
+  background: none;
+  padding: 0 2px;
+  color: var(--silver-muted);
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+
+.tutorial-skip-btn:hover {
+  color: #ffffff;
+}
+
+.tutorial-bar-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.tutorial-text {
+  margin: 0;
+  font-size: 0.72rem;
+  line-height: 1.38;
+  color: var(--pearl);
+}
+
+.tutorial-action-btn {
+  flex-shrink: 0;
+  padding: 6px 11px;
+  border-radius: 99px;
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  background: var(--prism-grad);
+  color: #0b0a12;
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.jewel-tile.is-tutorial-focus {
+  z-index: 9;
+}
+
+.jewel-tile.is-tutorial-focus .jewel-inner {
+  box-shadow:
+    0 0 0 2px rgba(212, 248, 244, 0.92),
+    0 0 18px rgba(168, 242, 236, 0.65);
+  border-radius: 11px;
+  animation: tutorialPulse 1.15s ease-in-out infinite;
+}
+
+.is-tutorial-ring {
+  box-shadow:
+    0 0 0 2px rgba(212, 248, 244, 0.92),
+    0 0 22px rgba(168, 242, 236, 0.65) !important;
+  animation: tutorialPulse 1.15s ease-in-out infinite;
+}
+
+@keyframes tutorialPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.07); }
+}
+
+/* Viral Invite Banner */
+.invite-banner {
+  position: fixed;
+  top: max(10px, env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 38;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 12px;
+  border-radius: 99px;
+  background: rgba(14, 15, 22, 0.94);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(210, 246, 244, 0.34);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.8);
+  max-width: min(92vw, 390px);
+}
+
+.invite-banner-text {
+  font-size: 0.68rem;
+  color: #e4faf7;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.invite-close-btn {
+  border: none;
+  background: none;
+  color: var(--silver-muted);
+  font-size: 0.72rem;
+  cursor: pointer;
+  padding: 0 2px;
+}
+
+/* Vault Share Pill Button */
+.lookbook-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.share-pill-btn {
+  padding: 6px 11px;
+  border-radius: 99px;
+  border: 1px solid rgba(210, 246, 244, 0.45);
+  background: linear-gradient(125deg, rgba(198, 247, 242, 0.14), rgba(228, 212, 255, 0.14));
+  color: #e8fcfa;
+  font-family: var(--font-sans);
+  font-size: 0.64rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.share-pill-btn:hover {
+  background: linear-gradient(125deg, rgba(198, 247, 242, 0.24), rgba(228, 212, 255, 0.24));
+}
+
+/* Collector Account / SSO / Leaderboard Modal */
+.account-card,
+.share-card {
+  text-align: left;
+  padding: 16px;
+  max-height: 88dvh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.account-intro {
+  margin: 0;
+  font-size: 0.74rem;
+  line-height: 1.48;
+  color: var(--pearl-soft);
+}
+
+.signed-in-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(110, 231, 183, 0.08);
+  border: 1px solid rgba(110, 231, 183, 0.28);
+}
+
+.signed-in-user {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.signed-in-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.signed-in-user strong {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--pearl);
+}
+
+.sync-badge {
+  display: block;
+  font-size: 0.62rem;
+  color: #86efac;
+}
+
+.sign-out-btn {
+  width: auto;
+  padding: 6px 10px;
+  font-size: 0.64rem;
+}
+
+.sso-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sso-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 11px 14px;
+  border-radius: 11px;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: transform 120ms ease, filter 150ms ease;
+}
+
+.sso-btn:active {
+  transform: scale(0.985);
+}
+
+.sso-facebook {
+  background: #1877f2;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+}
+
+.sso-google {
+  background: #f8f9fa;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #141418;
+}
+
+.sso-notice {
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--hairline-soft);
+  font-size: 0.68rem;
+  line-height: 1.45;
+  color: #d4f4ef;
+}
+
+.collector-name-box {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.collector-name-label {
+  font-size: 0.56rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--silver-muted);
+}
+
+.collector-name-row {
+  display: flex;
+  gap: 6px;
+}
+
+.collector-name-input {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 11px;
+  border-radius: 10px;
+  border: 1px solid var(--hairline);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--pearl);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+}
+
+.collector-name-input:focus {
+  outline: none;
+  border-color: rgba(198, 247, 242, 0.6);
+}
+
+.save-name-btn {
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid var(--hairline);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--pearl);
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.leaderboard-section {
+  padding: 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--hairline-soft);
+}
+
+.leaderboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.leaderboard-row {
+  display: grid;
+  grid-template-columns: 22px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.72rem;
+  padding: 4px 2px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.leaderboard-rank {
+  color: var(--silver-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.leaderboard-name {
+  color: var(--pearl);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.leaderboard-val {
+  color: #c8f3ee;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+
+.leaderboard-empty {
+  margin: 0;
+  font-size: 0.68rem;
+  line-height: 1.45;
+  color: var(--silver-muted);
+}
+
+.connie-credit-line {
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.84rem;
+  color: var(--pearl-soft);
+}
+
+/* Share Vault Card Preview Modal */
+.share-preview-frame {
+  width: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #040407;
+  border: 1px solid var(--hairline);
+  display: grid;
+  place-items: center;
+  max-height: 46dvh;
+}
+
+.share-preview-img {
+  width: 100%;
+  height: auto;
+  max-height: 46dvh;
+  object-fit: contain;
+  display: block;
+}
+
+.share-quick-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.share-quick-row .velvet-secondary {
+  padding: 9px 6px;
+  font-size: 0.66rem;
+}
+
+.share-status {
+  margin: 0;
+  min-height: 1em;
+  text-align: center;
+  font-size: 0.68rem;
+  color: #c8f3ee;
 }

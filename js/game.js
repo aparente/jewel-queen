@@ -17,6 +17,9 @@ import { audio } from './audio.js';
 import { ParticleFX } from './particles.js';
 import { RoyalSlotBar } from './slot.js';
 import { WebGLGallery } from './webgl-gallery.js';
+import { GalleryTutorial } from './tutorial.js';
+import { renderVaultShareCard, computeVaultStats } from './share.js';
+import { CollectorAuth } from './auth.js';
 import {
   MUSEUM_DOSSIERS,
   COLLECTOR_TIERS,
@@ -147,10 +150,25 @@ class JewelQueenGame {
 
     this._buildCellWells();
     this._bindEvents();
+    this._bindAccountAndShareEvents();
     this._syncMuteIcon();
     this.bestScoreVal.textContent = this.bestScore.toLocaleString();
 
-    this.startStage(1);
+    this.tutorial = new GalleryTutorial(this);
+    this.lastShareData = null;
+
+    this.auth = new CollectorAuth({
+      onStateChange: (st) => this._syncAccountUI(st),
+      onCloudMerged: (cloud) => this._mergeCloudProgress(cloud)
+    });
+    this.auth.init();
+
+    this._checkViralInviteBanner();
+    this.startStage(1, { skipTutorialCheck: true });
+
+    if (this.tutorial.shouldAutoStart()) {
+      this.tutorial.start(false);
+    }
   }
 
   _buildMarqueeBulbs() {
@@ -248,6 +266,7 @@ class JewelQueenGame {
 
     const openLookbook = () => {
       audio.playSelect();
+      this.tutorial?.onLoupeOrCollectionOpened();
       this._renderLookbook();
       this.lookbookDialog.showModal();
     };
@@ -321,7 +340,10 @@ class JewelQueenGame {
     this.soundOffIcon.hidden = !audio.muted;
   }
 
-  startStage(stageNum) {
+  startStage(stageNum, opts = {}) {
+    if (!opts.skipTutorialCheck && this.tutorial?.active) {
+      this.tutorial.finish(false);
+    }
     this.stageNum = stageNum;
     this.stageCfg = getStageConfig(stageNum);
     this.score = 0;
@@ -426,6 +448,23 @@ class JewelQueenGame {
         this._positionTileEl(tile.el, r, c, true);
       }
     }
+  }
+
+  _loadFixedBoard(layout) {
+    this.boardTiles.innerHTML = '';
+    this.grid = Array.from({ length: BOARD_SIZE }, () => Array(BOARD_SIZE).fill(null));
+    const frag = document.createDocumentFragment();
+    for (let r = 0; r < BOARD_SIZE; r++) {
+      for (let c = 0; c < BOARD_SIZE; c++) {
+        const tile = this._createTileObj(layout[r][c], r, c, null);
+        this.grid[r][c] = tile;
+        const el = this._createTileElement(tile);
+        tile.el = el;
+        this._positionTileEl(el, r, c, false);
+        frag.appendChild(el);
+      }
+    }
+    this.boardTiles.appendChild(frag);
   }
 
   _createTileObj(type, r, c, special = null) {
@@ -1188,7 +1227,11 @@ class JewelQueenGame {
     }
 
     this.isBusy = false;
-    this._scheduleHint();
+    if (this.tutorial?.active) {
+      this.tutorial.onMatchResolved(true);
+    } else {
+      this._scheduleHint();
+    }
   }
 
   _isStageGoalMet() {
@@ -1212,7 +1255,11 @@ class JewelQueenGame {
       return;
     }
     this.isBusy = false;
-    this._scheduleHint();
+    if (this.tutorial?.active) {
+      this.tutorial.onVaultDrawComplete();
+    } else {
+      this._scheduleHint();
+    }
   }
 
   async _applySlotReward(outcome) {
@@ -1405,10 +1452,285 @@ class JewelQueenGame {
   }
 
   _saveProgress() {
-    localStorage.setItem('jq_best_score', String(Math.max(this.bestScore, this.score)));
+    const best = Math.max(this.bestScore, this.score);
+    localStorage.setItem('jq_best_score', String(best));
     localStorage.setItem('jq_collection', JSON.stringify(this.collectionCounts));
     localStorage.setItem('jq_stage_stars', JSON.stringify(this.stageStars));
     localStorage.setItem('jq_showcase', JSON.stringify(this.showcaseIds));
+
+    if (this.auth) {
+      const stats = computeVaultStats(this.collectionCounts, this.showcaseIds);
+      this.auth.scheduleCloudSave({
+        bestScore: best,
+        estateValue: stats.totalEstate,
+        ownedCount: stats.ownedCount,
+        collectionCounts: this.collectionCounts,
+        stageStars: this.stageStars,
+        showcaseIds: this.showcaseIds
+      });
+    }
+  }
+
+  _mergeCloudProgress(cloud) {
+    if (!cloud) return;
+    if (Number(cloud.best_score) > this.bestScore) {
+      this.bestScore = Number(cloud.best_score);
+      this.bestScoreVal.textContent = this.bestScore.toLocaleString();
+    }
+    if (cloud.collection_counts && typeof cloud.collection_counts === 'object') {
+      for (const [id, cnt] of Object.entries(cloud.collection_counts)) {
+        this.collectionCounts[id] = Math.max(this.collectionCounts[id] || 0, Number(cnt) || 0);
+      }
+    }
+    if (cloud.stage_stars && typeof cloud.stage_stars === 'object') {
+      for (const [st, stars] of Object.entries(cloud.stage_stars)) {
+        this.stageStars[st] = Math.max(this.stageStars[st] || 0, Number(stars) || 0);
+      }
+    }
+    if (Array.isArray(cloud.showcase_ids) && cloud.showcase_ids.length && !this.showcaseIds.length) {
+      this.showcaseIds = cloud.showcase_ids.slice(0, 5);
+    }
+    this._saveProgress();
+  }
+
+  _checkViralInviteBanner() {
+    const params = new URLSearchParams(window.location.search);
+    const inviter = params.get('invite');
+    if (!inviter) return;
+    const banner = document.getElementById('inviteBanner');
+    const text = document.getElementById('inviteBannerText');
+    const closeBtn = document.getElementById('closeInviteBtn');
+    if (!banner || !text) return;
+    const estate = Number(params.get('estate') || 0);
+    const owned = Number(params.get('owned') || 0);
+    const cleanName = inviter.slice(0, 24);
+    text.textContent =
+      estate > 0
+        ? `✦ ${cleanName} invited you · Top ${formatEstateMoney(estate)} (${owned}/45 jewels)!`
+        : `✦ ${cleanName} invited you to collect 45 V&A Museum jewels!`;
+    banner.hidden = false;
+    closeBtn?.addEventListener('click', () => {
+      banner.hidden = true;
+    });
+  }
+
+  _bindAccountAndShareEvents() {
+    this.accountDialog = document.getElementById('accountDialog');
+    this.shareDialog = document.getElementById('shareDialog');
+    this.sharePreviewImg = document.getElementById('sharePreviewImg');
+    this.shareStatus = document.getElementById('shareStatus');
+    this.collectorNameInput = document.getElementById('collectorNameInput');
+    this.ssoNotice = document.getElementById('ssoNotice');
+
+    // Replay guided tutorial from How-to-Play modal
+    document.getElementById('replayTutorialBtn')?.addEventListener('click', () => {
+      audio.playSelect();
+      this.helpDialog.close();
+      this.tutorial.start(true);
+    });
+
+    // Account modal triggers
+    document.getElementById('accountBtn')?.addEventListener('click', () => {
+      audio.playSelect();
+      this._openAccountModal();
+    });
+    document.getElementById('closeAccountBtn')?.addEventListener('click', () => {
+      this.accountDialog.close();
+    });
+    this.accountDialog?.addEventListener('click', (e) => {
+      if (e.target === this.accountDialog) this.accountDialog.close();
+    });
+
+    // Facebook & Google SSO buttons
+    const handleSSO = async (provider) => {
+      audio.playSelect();
+      const res = await this.auth.signInWithProvider(provider);
+      if (!res.ok && this.ssoNotice) {
+        this.ssoNotice.hidden = false;
+        this.ssoNotice.textContent =
+          res.reason === 'not-configured'
+            ? 'Facebook & Google SSO is ready — add your free Supabase URL & Publishable Key in js/supabase-config.js to turn on live Cloud Sync. You can still set your name & share your Vault Card below right now!'
+            : `Sign-in paused: ${res.reason}`;
+      }
+    };
+    document.getElementById('facebookSignInBtn')?.addEventListener('click', () => handleSSO('facebook'));
+    document.getElementById('googleSignInBtn')?.addEventListener('click', () => handleSSO('google'));
+    document.getElementById('signOutBtn')?.addEventListener('click', async () => {
+      audio.playSelect();
+      await this.auth.signOut();
+    });
+
+    // Collector Display Name save
+    document.getElementById('saveCollectorNameBtn')?.addEventListener('click', () => {
+      audio.playSelect();
+      this.auth.setCollectorName(this.collectorNameInput.value);
+      this._saveProgress();
+      if (this.ssoNotice) {
+        this.ssoNotice.hidden = false;
+        this.ssoNotice.textContent = `Saved! Your Share Card will read “${this.auth.getDisplayName()}’s Private Vault”.`;
+      }
+    });
+
+    // Share Vault Card triggers (from My Collection, Account modal, and Stage Complete modal)
+    document.getElementById('openShareFromVaultBtn')?.addEventListener('click', () => {
+      audio.playSelect();
+      this.lookbookDialog.close();
+      this.openShareCardModal();
+    });
+    document.getElementById('accountShareVaultBtn')?.addEventListener('click', () => {
+      audio.playSelect();
+      this.accountDialog.close();
+      this.openShareCardModal();
+    });
+    document.getElementById('resultShareBtn')?.addEventListener('click', () => {
+      audio.playSelect();
+      this.resultDialog.close();
+      this.openShareCardModal();
+    });
+
+    // Share modal controls
+    document.getElementById('closeShareBtn')?.addEventListener('click', () => {
+      this.shareDialog.close();
+    });
+    this.shareDialog?.addEventListener('click', (e) => {
+      if (e.target === this.shareDialog) this.shareDialog.close();
+    });
+
+    document.getElementById('nativeShareBtn')?.addEventListener('click', async () => {
+      audio.playSelect();
+      if (!this.lastShareData) return;
+      const { blob, shareText, shareUrl } = this.lastShareData;
+      try {
+        const file = blob ? new File([blob], 'jewel-queen-vault.png', { type: 'image/png' }) : null;
+        if (navigator.share) {
+          if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({ title: 'JEWEL QUEEN — My Estate Vault', text: shareText, url: shareUrl, files: [file] });
+            this.shareStatus.textContent = 'Shared!';
+            return;
+          }
+          await navigator.share({ title: 'JEWEL QUEEN — My Estate Vault', text: shareText, url: shareUrl });
+          this.shareStatus.textContent = 'Shared!';
+          return;
+        }
+      } catch (err) {
+        if (err?.name === 'AbortError') return;
+      }
+      this._downloadShareCard();
+    });
+
+    document.getElementById('downloadCardBtn')?.addEventListener('click', () => {
+      audio.playSelect();
+      this._downloadShareCard();
+    });
+
+    document.getElementById('shareFacebookLinkBtn')?.addEventListener('click', () => {
+      audio.playSelect();
+      if (!this.lastShareData) return;
+      const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(this.lastShareData.shareUrl)}`;
+      window.open(fbUrl, '_blank', 'noopener,noreferrer');
+    });
+
+    document.getElementById('copyChallengeLinkBtn')?.addEventListener('click', async () => {
+      audio.playSelect();
+      if (!this.lastShareData) return;
+      try {
+        await navigator.clipboard.writeText(`${this.lastShareData.shareText} ${this.lastShareData.shareUrl}`);
+        this.shareStatus.textContent = 'Challenge link copied — paste in IG Story, Facebook or text!';
+      } catch {
+        this.shareStatus.textContent = this.lastShareData.shareUrl;
+      }
+    });
+  }
+
+  _syncAccountUI(st) {
+    const avatarImg = document.getElementById('accountAvatarImg');
+    const defaultIcon = document.getElementById('accountDefaultIcon');
+    const syncDot = document.getElementById('accountSyncDot');
+    const signedInPanel = document.getElementById('signedInPanel');
+    const ssoButtons = document.getElementById('ssoButtons');
+    const signedInName = document.getElementById('signedInName');
+    const signedInAvatar = document.getElementById('signedInAvatar');
+    const syncStatusText = document.getElementById('syncStatusText');
+
+    if (this.collectorNameInput && !document.activeElement?.isSameNode(this.collectorNameInput)) {
+      this.collectorNameInput.value = st.displayName === 'Private Collector' ? '' : st.displayName;
+    }
+
+    const signedIn = Boolean(st.user);
+    if (signedInPanel) signedInPanel.hidden = !signedIn;
+    if (ssoButtons) ssoButtons.hidden = signedIn;
+    if (syncDot) syncDot.hidden = !signedIn;
+
+    if (signedIn && st.avatarUrl) {
+      if (avatarImg) { avatarImg.src = st.avatarUrl; avatarImg.hidden = false; }
+      if (defaultIcon) defaultIcon.hidden = true;
+      if (signedInAvatar) { signedInAvatar.src = st.avatarUrl; signedInAvatar.hidden = false; }
+    } else {
+      if (avatarImg) avatarImg.hidden = true;
+      if (defaultIcon) defaultIcon.hidden = false;
+      if (signedInAvatar) signedInAvatar.hidden = true;
+    }
+    if (signedInName) signedInName.textContent = st.displayName;
+    if (syncStatusText) {
+      syncStatusText.textContent =
+        st.syncStatus === 'syncing' ? 'Syncing Estate Vault…' : 'Cloud Vault Synced';
+    }
+  }
+
+  async _openAccountModal() {
+    if (this.ssoNotice) this.ssoNotice.hidden = true;
+    this._syncAccountUI({
+      configured: this.auth.configured,
+      user: this.auth.user,
+      displayName: this.auth.getDisplayName(),
+      avatarUrl: this.auth.getAvatarUrl(),
+      syncStatus: this.auth.syncStatus
+    });
+    this.accountDialog.showModal();
+
+    const listEl = document.getElementById('leaderboardList');
+    if (listEl && this.auth.configured) {
+      listEl.innerHTML = '<p class="leaderboard-empty">Loading collectors…</p>';
+      const rows = await this.auth.fetchLeaderboard(10);
+      if (rows.length) {
+        listEl.innerHTML = rows
+          .map(
+            (r, idx) => `
+            <div class="leaderboard-row">
+              <span class="leaderboard-rank">${idx + 1}</span>
+              <span class="leaderboard-name">${(r.display_name || 'Collector').replace(/</g, '&lt;')} · ${r.owned_count || 0}/45</span>
+              <span class="leaderboard-val">${formatEstateMoney(r.estate_value || 0)}</span>
+            </div>`
+          )
+          .join('');
+      } else {
+        listEl.innerHTML = '<p class="leaderboard-empty">Be the first signed-in collector on the leaderboard!</p>';
+      }
+    }
+  }
+
+  async openShareCardModal() {
+    this.shareStatus.textContent = 'Composing museum card…';
+    this.shareDialog.showModal();
+    this.lastShareData = await renderVaultShareCard({
+      collectorName: this.auth?.getDisplayName() || 'Private Collector',
+      bestScore: Math.max(this.bestScore, this.score),
+      collectionCounts: this.collectionCounts,
+      showcaseIds: this.showcaseIds
+    });
+    this.sharePreviewImg.src = this.lastShareData.dataUrl;
+    this.shareStatus.textContent = 'Ready for Instagram Stories, Facebook & Messages.';
+  }
+
+  _downloadShareCard() {
+    if (!this.lastShareData?.dataUrl) return;
+    const a = document.createElement('a');
+    a.href = this.lastShareData.dataUrl;
+    a.download = 'jewel-queen-vault.png';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    this.shareStatus.textContent = 'Saved jewel-queen-vault.png — ready to post!';
   }
 
   async _handleStageWin() {
@@ -1720,6 +2042,7 @@ class JewelQueenGame {
   }
 
   openLoupe(jewelId, list = null) {
+    this.tutorial?.onLoupeOrCollectionOpened();
     const browseList = list && list.length ? list : [TIARA_PIECE.id, ...JEWELS.map((j) => j.id)];
     const idx = Math.max(0, browseList.indexOf(jewelId));
     this.loupeState.list = browseList;

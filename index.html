@@ -11,6 +11,25 @@
       name="description"
       content="Jewel Queen — A museum gallery & vintage jewelry cascade game made by and for family, inspired by Connie Parente's collection."
     />
+    <!-- Rich Social Preview for Facebook, Instagram, Messenger & iMessage -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="JEWEL QUEEN" />
+    <meta property="og:title" content="JEWEL QUEEN — Collect 45 Real V&amp;A Museum Jewels" />
+    <meta
+      property="og:description"
+      content="Match real Art Nouveau, Art Deco, Dior &amp; contemporary haute joaillerie masterpieces. Inspired by Connie Parente (@parenteconnie)."
+    />
+    <meta property="og:url" content="https://aparente.github.io/jewel-queen/" />
+    <meta property="og:image" content="https://aparente.github.io/jewel-queen/assets/og-card.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="JEWEL QUEEN — Collect 45 Real V&amp;A Museum Jewels" />
+    <meta
+      name="twitter:description"
+      content="Collect 45 authentic V&amp;A Museum antique, Art Deco &amp; haute joaillerie treasures — inspired by @parenteconnie."
+    />
+    <meta name="twitter:image" content="https://aparente.github.io/jewel-queen/assets/og-card.jpg" />
     <title>JEWEL QUEEN — Gallery Archive</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -31,6 +50,12 @@
         <span class="acquire-kicker" id="acquireToastKicker">NEW ACQUISITION</span>
         <strong id="acquireToastTitle">Paul Flato Gold Feet</strong>
       </div>
+    </div>
+
+    <!-- Viral Collector Challenge Banner (shown when opening a friend's invite link) -->
+    <div class="invite-banner" id="inviteBanner" hidden role="status">
+      <span class="invite-banner-text" id="inviteBannerText">Invited by a fellow collector</span>
+      <button type="button" class="invite-close-btn" id="closeInviteBtn" aria-label="Dismiss challenge">✕</button>
     </div>
 
     <main class="cabinet" id="cabinet">
@@ -110,6 +135,20 @@
               <line x1="16" y1="9" x2="22" y2="15" />
             </svg>
           </button>
+          <button
+            type="button"
+            class="icon-btn account-btn"
+            id="accountBtn"
+            aria-label="Collector Sign In & Share"
+            title="Collector Account & Share"
+          >
+            <svg id="accountDefaultIcon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="8.2" r="3.6" />
+              <path d="M5.2 19.2c1.4-3.2 4-4.7 6.8-4.7s5.4 1.5 6.8 4.7" />
+            </svg>
+            <img id="accountAvatarImg" class="account-avatar-img" src="" alt="" hidden />
+            <span class="account-sync-dot" id="accountSyncDot" hidden></span>
+          </button>
         </div>
       </header>
 
@@ -162,6 +201,25 @@
           CURATOR'S VAULT DRAW READY · TAP TO PULL
         </div>
       </section>
+
+      <!-- Interactive 4-Step Guided Gallery Tutorial Strip -->
+      <aside class="tutorial-bar" id="tutorialBar" hidden aria-live="polite">
+        <div class="tutorial-bar-top">
+          <span class="tutorial-kicker" id="tutorialKicker">STEP 1 OF 4 · ALIGN THREE</span>
+          <div class="tutorial-bar-right">
+            <div class="tutorial-dots" id="tutorialDots" aria-hidden="true"></div>
+            <button type="button" class="tutorial-skip-btn" id="tutorialSkipBtn">Skip</button>
+          </div>
+        </div>
+        <div class="tutorial-bar-body">
+          <p class="tutorial-text" id="tutorialText">
+            Swipe or tap the two glowing jewels to align 3 in a row.
+          </p>
+          <button type="button" class="tutorial-action-btn" id="tutorialActionBtn" hidden>
+            BEGIN EXHIBITION
+          </button>
+        </div>
+      </aside>
 
       <!-- Tactile Pure Black Velvet Collector's Tray (Default) -->
       <section class="board-area" aria-label="Jewelry Gallery Tray">
@@ -222,6 +280,7 @@
 
         <div class="dialog-actions">
           <button type="button" class="gold-cta" id="resultPrimaryBtn">NEXT EXHIBITION →</button>
+          <button type="button" class="velvet-secondary" id="resultShareBtn">SHARE MY VAULT CARD ↗</button>
           <button type="button" class="velvet-secondary" id="resultSecondaryBtn">REPLAY THIS ERA</button>
         </div>
       </div>
@@ -235,7 +294,10 @@
             <p class="dialog-kicker">PRIVATE ARCHIVE</p>
             <h2 class="dialog-title">MY COLLECTION</h2>
           </div>
-          <button type="button" class="icon-btn" id="closeLookbookBtn" aria-label="Close My Collection">✕</button>
+          <div class="lookbook-header-actions">
+            <button type="button" class="share-pill-btn" id="openShareFromVaultBtn">Share Vault ↗</button>
+            <button type="button" class="icon-btn" id="closeLookbookBtn" aria-label="Close My Collection">✕</button>
+          </div>
         </div>
 
         <div class="vault-summary-bar">
@@ -327,7 +389,122 @@
           </div>
         </div>
         <p class="help-family-note">A private gallery game made by &amp; for family.</p>
-        <button type="button" class="gold-cta" id="closeHelpBtn">ENTER GALLERY</button>
+        <div class="dialog-actions">
+          <button type="button" class="gold-cta" id="closeHelpBtn">ENTER GALLERY</button>
+          <button type="button" class="velvet-secondary" id="replayTutorialBtn">REPLAY GUIDED TUTORIAL</button>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- Collector Profile, Facebook & Google SSO, and Leaderboard Modal -->
+    <dialog class="velvet-dialog account-dialog" id="accountDialog">
+      <div class="dialog-card account-card">
+        <div class="lookbook-header">
+          <div>
+            <p class="dialog-kicker">COLLECTOR PASSPORT</p>
+            <h2 class="dialog-title">SIGN IN &amp; SYNC</h2>
+          </div>
+          <button type="button" class="icon-btn" id="closeAccountBtn" aria-label="Close Collector Account">✕</button>
+        </div>
+
+        <p class="account-intro">
+          Sign in to sync your 45-piece Estate Vault across Facebook, Instagram &amp; Safari—and appear on the Collectors' Leaderboard.
+        </p>
+
+        <!-- Signed-In Banner (shown when authenticated via Facebook or Google) -->
+        <div class="signed-in-panel" id="signedInPanel" hidden>
+          <div class="signed-in-user">
+            <img id="signedInAvatar" class="signed-in-avatar" src="" alt="" hidden />
+            <div>
+              <strong id="signedInName">Collector</strong>
+              <span class="sync-badge" id="syncStatusText">Cloud Vault Synced</span>
+            </div>
+          </div>
+          <button type="button" class="velvet-secondary sign-out-btn" id="signOutBtn">Sign Out</button>
+        </div>
+
+        <!-- Facebook & Google SSO Buttons -->
+        <div class="sso-buttons" id="ssoButtons">
+          <button type="button" class="sso-btn sso-facebook" id="facebookSignInBtn">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true">
+              <path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.52 1.49-3.91 3.78-3.91 1.09 0 2.24.2 2.24.2v2.47h-1.26c-1.24 0-1.63.78-1.63 1.57v1.88h2.78l-.44 2.91h-2.34V22c4.78-.76 8.43-4.92 8.43-9.94z" />
+            </svg>
+            <span>Continue with Facebook</span>
+          </button>
+
+          <button type="button" class="sso-btn sso-google" id="googleSignInBtn">
+            <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true">
+              <path fill="#EA4335" d="M12 10.2v3.9h5.5c-.24 1.26-.96 2.33-2.04 3.05l3.3 2.56C20.68 17.94 21.8 15.2 21.8 12c0-.72-.06-1.41-.19-2.07H12z"/>
+              <path fill="#34A853" d="M12 22c2.75 0 5.06-.91 6.75-2.47l-3.3-2.56c-.91.61-2.08.98-3.45.98-2.66 0-4.91-1.8-5.71-4.21H2.88v2.64C4.56 19.72 8.01 22 12 22z"/>
+              <path fill="#FBBC05" d="M6.29 13.74A5.98 5.98 0 0 1 5.97 12c0-.61.11-1.2.32-1.74V7.62H2.88A9.96 9.96 0 0 0 2 12c0 1.61.39 3.13 1.08 4.38l3.21-2.64z"/>
+              <path fill="#4285F4" d="M12 6.05c1.5 0 2.84.52 3.9 1.53l2.92-2.92C17.05 3.01 14.74 2 12 2 8.01 2 4.56 4.28 2.88 7.62l3.41 2.64C7.09 7.85 9.34 6.05 12 6.05z"/>
+            </svg>
+            <span>Continue with Google</span>
+          </button>
+        </div>
+
+        <p class="sso-notice" id="ssoNotice" hidden></p>
+
+        <!-- Collector Display Name (works immediately for Share Cards even before cloud SSO!) -->
+        <div class="collector-name-box">
+          <label for="collectorNameInput" class="collector-name-label">NAME ON YOUR SHAREABLE VAULT CARD</label>
+          <div class="collector-name-row">
+            <input
+              type="text"
+              id="collectorNameInput"
+              class="collector-name-input"
+              maxlength="28"
+              placeholder="e.g. Connie Parente"
+              autocomplete="name"
+            />
+            <button type="button" class="save-name-btn" id="saveCollectorNameBtn">Save</button>
+          </div>
+        </div>
+
+        <button type="button" class="gold-cta" id="accountShareVaultBtn">SHARE MY VAULT CARD ↗</button>
+
+        <!-- Collectors' Leaderboard -->
+        <section class="leaderboard-section" id="leaderboardSection">
+          <div class="showcase-head">
+            <span class="showcase-label">COLLECTORS' LEADERBOARD</span>
+            <span class="showcase-sub">Ranked by Estate Value</span>
+          </div>
+          <div class="leaderboard-list" id="leaderboardList">
+            <p class="leaderboard-empty">Connect Facebook or Google Cloud Sync to join the live collectors' leaderboard.</p>
+          </div>
+        </section>
+
+        <p class="connie-credit-line">
+          Curated in the spirit of
+          <a href="https://www.instagram.com/parenteconnie/?hl=en" target="_blank" rel="noopener noreferrer" class="gold-link">Connie Parente · @parenteconnie</a>
+        </p>
+      </div>
+    </dialog>
+
+    <!-- Viral Shareable Vault Card Preview Modal -->
+    <dialog class="velvet-dialog share-dialog" id="shareDialog">
+      <div class="dialog-card share-card">
+        <div class="lookbook-header">
+          <div>
+            <p class="dialog-kicker">READY FOR INSTAGRAM &amp; FACEBOOK</p>
+            <h2 class="dialog-title">YOUR VAULT CARD</h2>
+          </div>
+          <button type="button" class="icon-btn" id="closeShareBtn" aria-label="Close Share Card">✕</button>
+        </div>
+
+        <div class="share-preview-frame">
+          <img id="sharePreviewImg" class="share-preview-img" src="" alt="Your Jewel Queen Vault Share Card" />
+        </div>
+
+        <div class="dialog-actions">
+          <button type="button" class="gold-cta" id="nativeShareBtn">SHARE CARD TO IG / FB / MESSAGES</button>
+          <div class="share-quick-row">
+            <button type="button" class="velvet-secondary" id="downloadCardBtn">Save PNG</button>
+            <button type="button" class="velvet-secondary" id="shareFacebookLinkBtn">Facebook</button>
+            <button type="button" class="velvet-secondary" id="copyChallengeLinkBtn">Copy Link</button>
+          </div>
+        </div>
+        <p class="share-status" id="shareStatus" role="status" aria-live="polite"></p>
       </div>
     </dialog>
 
