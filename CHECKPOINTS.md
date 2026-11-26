@@ -1,10 +1,10 @@
 # Jewel Queen — Game Dynamics & Checkpoints
 
-Every game prototype in **Jewel Queen** shares the same **38-piece Real Museum Jewelry Core** (sourced from the Victoria & Albert Museum and Cleveland Museum of Art, inspired by Connie Parente's archive):
+Every game prototype in **Jewel Queen** shares the same **45-piece Real V&A Museum Jewelry Core** (inspired by Connie Parente's archive):
 
-- `assets/museum_jewels/` — 38 transparent 320×320 museum cutouts
-- `assets/museum_hires/` — 38 full-resolution photographs for the 3× Jeweler's Loupe
-- `js/data.js` — 38 museum jewels + 8 Historical Era & Style exhibitions
+- `assets/museum_jewels/` — 45 transparent 320×320 museum cutouts
+- `assets/museum_hires/` — 45 full-resolution photographs for the 3× Jeweler's Loupe
+- `js/data.js` — 45 unique V&A museum jewels across 8 historically & stylistically cohesive gallery rooms (zero cross-era filler or duplicates)
 - `js/history.js` — Curatorial stories, materials, rarity tiers, estate valuations, and official museum links
 - `js/audio.js` & `js/ambient.js` — Synthesized Web Audio chimes & pure gallery-black golden stardust canvas
 
@@ -20,6 +20,7 @@ Every game prototype in **Jewel Queen** shares the same **38-piece Real Museum J
 | `checkpoint/v1.3-living-opal-tray` | `tray/living-opal` (`042b4ec`) | **Ethereal Living Black Opal + Live Velvet/Opal Switcher** | Real-time 60fps canvas play-of-color Black Opal engine (`js/opal-tray.js`) with shifting cyan/emerald/sapphire/violet/rose/gold silica fire, pinfire micro-glints, pointer-tilt refraction, and match surges — plus a 1-tap `Velvet | Living Opal` switcher in the footer. |
 | `checkpoint/v2-gallery-borderless` | `main` (`0869a50`) | **teamLab Borderless × Museum Gallery Redesign** | Strips all yellow borders, casino boxes, and decorative logo; wide-tracked pearl `Cormorant Garamond` wordmark, borderless HUD, smoked-glass chambers, Pure Black Velvet Tray default. |
 | `checkpoint/v2.1-webgl-borderless` | `main`, `game/candy-crush-pokedex` | **SOTA WebGL GLSL Shader + Vault Draw + Curved Light-Art FX** | Zero-dependency custom GPU GLSL fragment shader (`js/webgl-gallery.js`) with domain-warped FBM liquid-light silk, 4 simultaneous R/G/B chromatic-dispersion optical shockwaves fired from exact match coordinates, interactive pointer spotlight, dual-core chromatic Match-4 beams, curved teamLab Bezier Tiara ribbons, and renamed **VAULT DRAW**. |
+| `checkpoint/v2.2-cohesive-exhibitions` | `main` | **45 Cohesive V&A Museum Pieces Across 8 Stylistic Rooms** | Removed every cross-era anachronism (including the 3,000-year-old jade ring), added 13 newly curated V&A jewels (Raymond Templier, Georges Fouquet, Ostertag, Elisabeth Treskow, Tiffany & Co., Arthur King, Boucheron, Stephen Webster, Giovanni Corvaja, Jane Short), split Art Deco into *Geometric Contrast* & *Tutti Frutti & Florals*, added cut-gemstone rain & family colophon note. |
 
 ---
 

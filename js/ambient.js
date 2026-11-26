@@ -7,13 +7,13 @@
 
 const ERA_LIGHT_HUES = {
   'art-nouveau': [186, 268, 42],
-  chinoiserie: [158, 192, 352],
-  'mayan-egyptian': [184, 34, 214],
-  bakelite: [332, 276, 40],
-  'golden-age': [214, 290, 44],
+  'deco-geometric': [214, 192, 24],
+  'deco-tutti-frutti': [156, 348, 224],
+  'surrealist-figural': [342, 44, 192],
+  'golden-age': [214, 286, 44],
   'mid-century': [178, 206, 326],
-  'paris-runway': [346, 38, 274],
-  'power-80s': [316, 184, 268]
+  'victorian-revival': [346, 38, 274],
+  'contemporary-haute': [316, 184, 268]
 };
 
 export class AmbientSalon {

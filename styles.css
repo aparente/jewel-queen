@@ -1,4 +1,5 @@
 :root {
+  color-scheme: dark;
   --gallery-black: #030305;
   --gallery-surface: rgba(14, 14, 19, 0.86);
   --gallery-glass: rgba(255, 255, 255, 0.035);

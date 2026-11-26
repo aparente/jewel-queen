@@ -1,13 +1,15 @@
 /**
- * Jewel Queen — 100% Real Museum-Photographed Antique & Vintage Jewelry
- * Curated from the Victoria & Albert Museum (V&A) and Cleveland Museum of Art (CC0)
- * across 8 Historical Era + Style Exhibitions inspired by Connie Parente's taste.
+ * Jewel Queen — 100% Real Museum-Photographed Antique, Vintage & Contemporary Jewelry
+ * Curated exclusively from the Victoria & Albert Museum (V&A) across 8 historically &
+ * stylistically cohesive gallery rooms (45 unique museum masterpieces, zero cross-era filler).
  */
 
 export const BOARD_SIZE = 7;
 
 export const JEWELS = [
-  // Stage 1: Art Nouveau & Belle Époque (1900s–1915)
+  // =========================================================================
+  // Room 1: 1895–1910 · Art Nouveau — Enamel & Opal
+  // =========================================================================
   {
     id: 'lalique-medusa',
     name: 'Blue Enamel Medusa Pendant',
@@ -69,19 +71,9 @@ export const JEWELS = [
     provenance: 'Rich imperial oval amethyst framed in vivid translucent emerald-green enamel with a dangling baroque pearl.'
   },
 
-  // Stage 2: 1920s–30s Art Deco · Chinoiserie & Flower Basket
-  {
-    id: 'chinese-jade',
-    name: 'Carved Chinese Jade Dragon Ring',
-    shortName: 'Jade Dragon',
-    img: 'assets/museum_jewels/chinese-jade.png',
-    color: '#86efac',
-    glow: 'rgba(134, 239, 172, 0.8)',
-    spark: '#dcfce7',
-    era: 'Antique China · Chinoiserie Muse',
-    designers: 'Chinese Jade Archive · V&A Museum',
-    provenance: 'Archaic coiled jade dragon bi-ring — the exact ancient Chinese motif that sparked 1920s Parisian Art Deco Chinoiserie.'
-  },
+  // =========================================================================
+  // Room 2: 1920s–30s · Art Deco — Geometric Modernism
+  // =========================================================================
   {
     id: 'cartier-lapis',
     name: 'Carved Lapis & Diamond Fan Brooch',
@@ -90,110 +82,126 @@ export const JEWELS = [
     color: '#2563eb',
     glow: 'rgba(59, 130, 246, 0.86)',
     spark: '#93c5fd',
-    era: '1920–1930 · Art Deco',
+    era: '1920–1930 · Art Deco Geometric',
     designers: 'Cartier · V&A Museum',
-    provenance: 'Dazzling fluted royal-cobalt carved lapis lazuli fan accented with black onyx and sparkling platinum diamonds.'
+    provenance: 'Fluted royal-cobalt carved lapis lazuli fan accented with crisp black onyx and sparkling platinum diamonds.'
   },
+  {
+    id: 'deco-stepped',
+    name: 'Stepped Coral & Moonstone Plaque',
+    shortName: 'Stepped Plaque',
+    img: 'assets/museum_jewels/deco-stepped.png',
+    color: '#fb923c',
+    glow: 'rgba(251, 146, 60, 0.84)',
+    spark: '#ffedd5',
+    era: '1920–1930 · Art Deco Geometric',
+    designers: 'Parisian Deco Atelier · V&A Museum',
+    provenance: 'Architectural stepped coral-orange and onyx fretwork framed in diamonds and frosted moonstone cylinders.'
+  },
+  {
+    id: 'templier-coral',
+    name: 'Black Enamel & Coral Bar Brooch',
+    shortName: 'Templier Coral',
+    img: 'assets/museum_jewels/templier-coral.png',
+    color: '#f97316',
+    glow: 'rgba(251, 146, 60, 0.86)',
+    spark: '#fed7aa',
+    era: 'ca. 1930 · Machine-Age Art Deco',
+    designers: 'Raymond Templier · V&A Museum',
+    provenance: 'Streamlined Parisian modernist bar brooch by Raymond Templier pairing glossy black enamel, diamonds, and glowing coral cabochons.'
+  },
+  {
+    id: 'fouquet-turquoise',
+    name: 'Turquoise & Black Onyx Drop Pendant',
+    shortName: 'Fouquet Turquoise',
+    img: 'assets/museum_jewels/fouquet-turquoise.png',
+    color: '#06b6d4',
+    glow: 'rgba(34, 211, 238, 0.86)',
+    spark: '#a5f3fc',
+    era: 'ca. 1920 · Parisian Art Deco',
+    designers: 'Georges Fouquet · V&A Museum',
+    provenance: 'Graphic sky-blue matrix turquoise framed in white gold, diamonds, and a sleek black chalcedony drop by Georges Fouquet.'
+  },
+  {
+    id: 'deco-bow',
+    name: 'Baguette Diamond & Onyx Bow Brooch',
+    shortName: 'Deco Bow',
+    img: 'assets/museum_jewels/deco-bow.png',
+    color: '#e2e8f0',
+    glow: 'rgba(226, 232, 240, 0.86)',
+    spark: '#ffffff',
+    era: '1930–1940 · High Art Deco',
+    designers: 'Art Deco Haute Joaillerie · V&A Museum',
+    provenance: 'Architectural platinum bow-tie brooch paved with crisp brilliant- and baguette-cut diamonds and hairline black onyx.'
+  },
+
+  // =========================================================================
+  // Room 3: 1920s–30s · Art Deco — Tutti Frutti & Flower Baskets
+  // =========================================================================
   {
     id: 'deco-coral-basket',
     name: 'Carved Coral Flower Basket Brooch',
     shortName: 'Coral Basket',
     img: 'assets/museum_jewels/deco-coral-basket.png',
-    color: '#f97316',
-    glow: 'rgba(251, 146, 60, 0.84)',
-    spark: '#fed7aa',
-    era: 'ca. 1925 · Art Deco Chinoiserie',
+    color: '#ef4444',
+    glow: 'rgba(248, 113, 113, 0.86)',
+    spark: '#fecaca',
+    era: 'ca. 1925 · Art Deco Floral',
     designers: 'Parisian Deco Atelier · V&A Museum',
-    provenance: 'Charming carved coral poppies and nephrite leaves blooming from a sparkling platinum-and-diamond basket.'
+    provenance: 'Carved crimson-coral poppies and nephrite jade leaves blooming from a sparkling platinum-and-diamond basket.'
   },
   {
-    id: 'cartier-lozenge',
-    name: 'Diamond & Onyx Lozenge Brooch',
-    shortName: 'Cartier Lozenge',
-    img: 'assets/museum_jewels/cartier-lozenge.png',
-    color: '#e2e8f0',
-    glow: 'rgba(226, 232, 240, 0.84)',
-    spark: '#ffffff',
-    era: '1913–1925 · Early Art Deco',
-    designers: 'Cartier · V&A Museum',
-    provenance: 'Crisp geometric platinum filigree lozenge pierced with razor-sharp black onyx and old-cut diamonds.'
+    id: 'deco-fruit-basket',
+    name: 'Jade & Chalcedony Fruit Basket',
+    shortName: 'Fruit Basket',
+    img: 'assets/museum_jewels/deco-fruit-basket.png',
+    color: '#22c55e',
+    glow: 'rgba(74, 222, 128, 0.84)',
+    spark: '#bbf7d0',
+    era: '1928 · Art Deco Floral',
+    designers: 'Art Deco Atelier · V&A Museum',
+    provenance: 'Lively 1928 diamond basket overflowing with carved nephrite jade foliage, citrus-gold fruit, and white & terracotta blossoms.'
+  },
+  {
+    id: 'ostertag-tutti-frutti',
+    name: 'Tutti Frutti Gem-Tree Urn Brooch',
+    shortName: 'Ostertag Urn',
+    img: 'assets/museum_jewels/ostertag-tutti-frutti.png',
+    color: '#3b82f6',
+    glow: 'rgba(96, 165, 250, 0.86)',
+    spark: '#bfdbfe',
+    era: '1927–1940 · Art Deco Tutti Frutti',
+    designers: 'Ostertag Paris · V&A Museum',
+    provenance: 'Parisian Tutti Frutti tree of carved sapphires, rubies, and a glowing central emerald rising from a platinum-diamond urn.'
+  },
+  {
+    id: 'deco-tutti-arch',
+    name: 'Emerald, Ruby & Sapphire Arch Brooch',
+    shortName: 'Tutti Arch',
+    img: 'assets/museum_jewels/deco-tutti-arch.png',
+    color: '#10b981',
+    glow: 'rgba(52, 211, 153, 0.86)',
+    spark: '#a7f3d0',
+    era: 'ca. 1930 · Art Deco Tutti Frutti',
+    designers: 'French Deco Joaillier · V&A Museum',
+    provenance: 'Sculpted platinum horseshoe arch crowned and tipped with vibrant clusters of carved emeralds, rubies, and blue sapphires.'
   },
   {
     id: 'deco-tutti-frutti',
-    name: 'Art Deco Pearl & Gem Floral Brooch',
-    shortName: 'Deco Floral',
+    name: 'Baroque Pearl & Gem Botanical Brooch',
+    shortName: 'Deco Botanical',
     img: 'assets/museum_jewels/deco-tutti-frutti.png',
     color: '#f43f5e',
     glow: 'rgba(251, 113, 133, 0.82)',
     spark: '#fecdd3',
-    era: '1920–1930 · Art Deco',
+    era: '1920–1930 · Art Deco Botanical',
     designers: 'Art Deco Joaillier · V&A Museum',
-    provenance: 'Sculptural baroque pearl blossom paired with stepped emerald, sapphire, ruby, and diamond Deco foliage.'
+    provenance: 'Lustrous baroque pearl drop poised above stepped diamond geometry, carved flowers, and baguette emerald, ruby, and sapphire accents.'
   },
 
-  // Stage 3: Global Revival (Pre-Columbian, Mayan Deco, Egyptian, Berber)
-  {
-    id: 'precolumbian-gold',
-    name: 'Pre-Columbian Gold Figure Pendant',
-    shortName: 'Mayan Gold',
-    img: 'assets/museum_jewels/precolumbian-gold.png',
-    color: '#eab308',
-    glow: 'rgba(250, 204, 21, 0.82)',
-    spark: '#fef08a',
-    era: 'c. 1000–1550 · Pre-Columbian Muse',
-    designers: 'Veraguas Gold · Cleveland Museum CC0',
-    provenance: 'Ancient cast-gold Mesoamerican & Isthmian figure pendant — the direct inspiration for 1920s–30s Mayan Revival jewelry.'
-  },
-  {
-    id: 'deco-stepped',
-    name: 'Stepped Coral & Onyx Deco Plaque',
-    shortName: 'Mayan Plaque',
-    img: 'assets/museum_jewels/deco-stepped.png',
-    color: '#fb923c',
-    glow: 'rgba(251, 146, 60, 0.84)',
-    spark: '#ffedd5',
-    era: '1920–1930 · Mayan Revival Deco',
-    designers: 'Art Deco Atelier · V&A Museum',
-    provenance: 'Geometric stepped coral-orange and black-onyx fretwork framed in diamonds and frosted moonstone endcaps.'
-  },
-  {
-    id: 'castellani-scarab',
-    name: 'Teal Egyptian Scarab Gold Brooch',
-    shortName: 'Teal Scarab',
-    img: 'assets/museum_jewels/castellani-scarab.png',
-    color: '#0d9488',
-    glow: 'rgba(45, 212, 191, 0.82)',
-    spark: '#99f6e4',
-    era: 'ca. 1858 · Archaeological Revival',
-    designers: 'Castellani · V&A Museum',
-    provenance: 'Carved deep teal-jade Egyptian scarab mounted in granulated antique Etruscan-revival gold by Castellani.'
-  },
-  {
-    id: 'berber-coral',
-    name: 'Enamel & Coral Talisman Fibula',
-    shortName: 'Coral Talisman',
-    img: 'assets/museum_jewels/berber-coral.png',
-    color: '#ef4444',
-    glow: 'rgba(248, 113, 113, 0.82)',
-    spark: '#fecaca',
-    era: '19th Century · Maghreb Silver',
-    designers: 'North African Silver · V&A Museum',
-    provenance: 'Opulent silver brooch inlaid with coral cabochons, cobalt & emerald cloisonné enamel, and dangling petal drops.'
-  },
-  {
-    id: 'beetle-scarab',
-    name: 'Egyptian Revival Giant Beetle Brooch',
-    shortName: 'Obsidian Beetle',
-    img: 'assets/museum_jewels/beetle-scarab.png',
-    color: '#94a3b8',
-    glow: 'rgba(203, 213, 225, 0.78)',
-    spark: '#f1f5f9',
-    era: 'ca. 1880 · Egyptian Revival',
-    designers: 'Victorian Revival · V&A Museum',
-    provenance: 'Bold, edgy sculptural stag-beetle scarab brooch celebrating Victorian and Deco fascination with ancient Egypt.'
-  },
-
-  // Stage 4: Surrealist, Bakelite & Hollywood Whimsy
+  // =========================================================================
+  // Room 4: 1930s–50s · Surrealist & Figural Couture
+  // =========================================================================
   {
     id: 'cartier-hand',
     name: 'Coral Hand Holding Black Rose',
@@ -204,7 +212,7 @@ export const JEWELS = [
     spark: '#fecdd3',
     era: '1930–1940 · Surrealist Couture',
     designers: 'Cartier · V&A Museum',
-    provenance: 'Iconic weird-chic surrealist brooch: a carved pink coral hand with jeweled cuffs clutching a glossy black onyx & diamond rose.'
+    provenance: 'Iconic surrealist brooch: a carved pink coral hand with jeweled cuffs clutching a glossy black onyx & diamond rose.'
   },
   {
     id: 'flato-feet',
@@ -216,19 +224,7 @@ export const JEWELS = [
     spark: '#fef08a',
     era: '1940–1950 · Hollywood Whimsy',
     designers: 'Paul Flato · V&A Museum',
-    provenance: 'Playful, witty pair of gleaming yellow-gold bare-feet dress clips manicured with ten pigeon-blood ruby toenails.'
-  },
-  {
-    id: 'bakelite-oval',
-    name: 'Tortoiseshell Bakelite Nested Oval',
-    shortName: 'Bakelite Oval',
-    img: 'assets/museum_jewels/bakelite-oval.png',
-    color: '#d97706',
-    glow: 'rgba(245, 158, 11, 0.82)',
-    spark: '#fde68a',
-    era: '1930s · Bakelite & Catalin Pop',
-    designers: '1930s Plastics Atelier · V&A Museum',
-    provenance: 'Glossy carved dark tortoiseshell and translucent honey-amber Bakelite rings linked in sculptural Machine-Age curves.'
+    provenance: 'Playful pair of gleaming yellow-gold bare-feet dress clips manicured with ten pigeon-blood ruby toenails.'
   },
   {
     id: 'cartier-owl',
@@ -238,10 +234,38 @@ export const JEWELS = [
     color: '#f8fafc',
     glow: 'rgba(248, 250, 252, 0.86)',
     spark: '#ffffff',
-    era: 'ca. 1950 · Adorable Couture',
+    era: 'ca. 1950 · Figural Couture',
     designers: 'Cartier · V&A Museum',
-    provenance: 'Endearing carved translucent white quartz & moonstone owl perched on a gold branch with glowing cabochon turquoise eyes.'
+    provenance: 'Endearing carved translucent quartz & moonstone owl perched on a gold branch with glowing cabochon turquoise eyes.'
   },
+  {
+    id: 'cartier-guard',
+    name: 'Enameled Royal Guard Brooch',
+    shortName: 'Cartier Guard',
+    img: 'assets/museum_jewels/cartier-guard.png',
+    color: '#dc2626',
+    glow: 'rgba(248, 113, 113, 0.84)',
+    spark: '#fecaca',
+    era: '1953 · Coronation Figural',
+    designers: 'Cartier · V&A Museum',
+    provenance: 'Witty miniature Yeoman Warder figural brooch in glossy scarlet champlevé enamel, black onyx, and gold.'
+  },
+  {
+    id: 'treskow-fish',
+    name: 'Granulated Gold & Sapphire Fish',
+    shortName: 'Treskow Fish',
+    img: 'assets/museum_jewels/treskow-fish.png',
+    color: '#eab308',
+    glow: 'rgba(250, 204, 21, 0.84)',
+    spark: '#fef08a',
+    era: '1953 · Mid-Century Figural',
+    designers: 'Elisabeth Treskow · V&A Museum',
+    provenance: 'Charming granulated 18k gold fish brooch winking with a deep cabochon sapphire eye, twinkling diamonds, and a luminous baroque pearl tail.'
+  },
+
+  // =========================================================================
+  // Room 5: 1940s–50s · Golden Age Hollywood & Dior Couture
+  // =========================================================================
   {
     id: 'dior-unicorn',
     name: 'Pavé Rhinestone Unicorn Head',
@@ -252,10 +276,8 @@ export const JEWELS = [
     spark: '#ffffff',
     era: 'c. 1952 · Christian Dior Couture',
     designers: 'Christian Dior by Mitchel Maer · V&A Museum',
-    provenance: 'Magical, sculptural white-rhinestone pavé unicorn head with antique gold mane — peak adorable Hollywood glamour.'
+    provenance: 'Sculptural white-rhinestone pavé unicorn head with antique gold mane — peak fairytale runway glamour.'
   },
-
-  // Stage 5: 1940s–50s Golden Age Hollywood & Dior Couture
   {
     id: 'dior-amethyst',
     name: 'Cherubs & Amethyst Baroque Brooch',
@@ -269,16 +291,28 @@ export const JEWELS = [
     provenance: 'Theatrical silvered cherubs hoisting a deep royal-purple cabochon amethyst framed in antique rhinestones.'
   },
   {
-    id: 'peacock-1940s',
-    name: 'Jeweled Sapphire & Gold Peacock',
-    shortName: 'Gold Peacock',
-    img: 'assets/museum_jewels/peacock-1940s.png',
-    color: '#3b82f6',
-    glow: 'rgba(96, 165, 250, 0.84)',
-    spark: '#bfdbfe',
-    era: '1940–1950 · Retro Hollywood',
-    designers: '1940s Haute Joaillerie · V&A Museum',
-    provenance: 'Sweeping gold-plume peacock encrusted with sapphires, emeralds, rubies, and a tiny diamond crown.'
+    id: 'dior-snowflake',
+    name: 'Powder-Blue & Pearl Snowflake',
+    shortName: 'Dior Snowflake',
+    img: 'assets/museum_jewels/dior-snowflake.png',
+    color: '#7dd3fc',
+    glow: 'rgba(125, 211, 252, 0.86)',
+    spark: '#e0f2fe',
+    era: 'c. 1952 · Christian Dior Couture',
+    designers: 'Christian Dior by Mitchel Maer · V&A Museum',
+    provenance: 'Luminous ice-blue crystal star-burst accented with creamy faux pearls in warm gilt prongs.'
+  },
+  {
+    id: 'tiffany-shells',
+    name: 'Fluted Gold & Sapphire Shell Clips',
+    shortName: 'Tiffany Shells',
+    img: 'assets/museum_jewels/tiffany-shells.png',
+    color: '#f59e0b',
+    glow: 'rgba(251, 191, 36, 0.86)',
+    spark: '#fef3c7',
+    era: '1940–1950 · Retro Hollywood Gold',
+    designers: 'Tiffany & Co. · V&A Museum',
+    provenance: 'Gleaming sculpted 18k yellow-gold seashell clips centered with clusters of deep blue sapphires and bright diamonds.'
   },
   {
     id: 'trifari-plume',
@@ -293,31 +327,21 @@ export const JEWELS = [
     provenance: 'Sweeping sculpted gold-tone and pavé rhinestone feather plume from Trifari’s golden mid-century atelier.'
   },
   {
-    id: 'cartier-guard',
-    name: 'Enameled Royal Guard Brooch',
-    shortName: 'Cartier Guard',
-    img: 'assets/museum_jewels/cartier-guard.png',
-    color: '#dc2626',
-    glow: 'rgba(248, 113, 113, 0.84)',
-    spark: '#fecaca',
-    era: '1953 · Coronation Figural',
-    designers: 'Cartier · V&A Museum',
-    provenance: 'Quirky, ultra-collectible enameled Yeoman Warder figural brooch in glossy scarlet, black onyx, and gold.'
-  },
-  {
-    id: 'dior-snowflake',
-    name: 'Powder-Blue & Pearl Snowflake',
-    shortName: 'Dior Snowflake',
-    img: 'assets/museum_jewels/dior-snowflake.png',
-    color: '#7dd3fc',
-    glow: 'rgba(125, 211, 252, 0.86)',
-    spark: '#e0f2fe',
-    era: 'c. 1952 · Christian Dior Couture',
-    designers: 'Christian Dior by Mitchel Maer · V&A Museum',
-    provenance: 'Luminous ice-blue crystal star-burst accented with creamy faux pearls in warm gilt prongs.'
+    id: 'peacock-1940s',
+    name: 'Jeweled Sapphire & Gold Peacock',
+    shortName: 'Gold Peacock',
+    img: 'assets/museum_jewels/peacock-1940s.png',
+    color: '#3b82f6',
+    glow: 'rgba(96, 165, 250, 0.84)',
+    spark: '#bfdbfe',
+    era: '1940–1950 · Retro Hollywood',
+    designers: '1940s Haute Joaillerie · V&A Museum',
+    provenance: 'Sweeping gold-plume peacock encrusted with sapphires, emeralds, rubies, and a tiny diamond crown.'
   },
 
-  // Stage 6: 1950s–60s Mid-Century Cocktail & Modernist Gold
+  // =========================================================================
+  // Room 6: 1960s · Swinging 60s Sculptural Gold
+  // =========================================================================
   {
     id: 'grima-turquoise',
     name: 'Turquoise, Lapis & Gold Starburst',
@@ -352,7 +376,7 @@ export const JEWELS = [
     spark: '#a7f3d0',
     era: 'ca. 1960 · Mid-Century Couture',
     designers: 'Jean Schlumberger · V&A Museum',
-    provenance: 'Whimsical lush emerald-and-sapphire pavé twin pinecones crowned with sparkling diamond leaves.'
+    provenance: 'Lush emerald-and-sapphire pavé twin pinecones crowned with sparkling diamond leaves.'
   },
   {
     id: 'donald-amethyst',
@@ -364,11 +388,23 @@ export const JEWELS = [
     spark: '#fde68a',
     era: '1963 · British Modernist',
     designers: 'John Donald · V&A Museum',
-    provenance: 'Edgy sculpted brutalist gold petals radiating around a raw-cut imperial purple amethyst crystal.'
+    provenance: 'Sculpted brutalist gold petals radiating around a raw-cut imperial purple amethyst crystal.'
+  },
+  {
+    id: 'king-tourmaline',
+    name: 'Molten Gold & Watermelon Tourmaline',
+    shortName: 'King Tourmaline',
+    img: 'assets/museum_jewels/king-tourmaline.png',
+    color: '#ec4899',
+    glow: 'rgba(244, 114, 182, 0.86)',
+    spark: '#fbcfe8',
+    era: 'ca. 1970 · Sculptural Modernist',
+    designers: 'Arthur King · V&A Museum',
+    provenance: 'Organic molten 18k gold sculpture cradling bold uncut slices of vivid pink-and-green watermelon tourmaline.'
   },
   {
     id: 'kjl-coral',
-    name: 'Coral & Turquoise Nautilus Earrings',
+    name: 'Coral & Turquoise Nautilus Clips',
     shortName: 'KJL Coral',
     img: 'assets/museum_jewels/kjl-coral.png',
     color: '#fb7185',
@@ -379,7 +415,9 @@ export const JEWELS = [
     provenance: 'Playful peach-coral enamel shells swirled with rhinestones and bright turquoise cabochons by KJL.'
   },
 
-  // Stage 7: Renaissance & Victorian Baroque Revival
+  // =========================================================================
+  // Room 7: 1850–1900 · Victorian Archaeological & Baroque Revival
+  // =========================================================================
   {
     id: 'canning-merman',
     name: 'The Canning Jewel Pearl Merman',
@@ -417,6 +455,18 @@ export const JEWELS = [
     provenance: 'Triple-row 24k granulated gold cuff set with glowing carved carnelian scarab intaglios.'
   },
   {
+    id: 'castellani-scarab',
+    name: 'Teal Egyptian Scarab Gold Brooch',
+    shortName: 'Teal Scarab',
+    img: 'assets/museum_jewels/castellani-scarab.png',
+    color: '#0d9488',
+    glow: 'rgba(45, 212, 191, 0.82)',
+    spark: '#99f6e4',
+    era: 'ca. 1858 · Archaeological Revival',
+    designers: 'Castellani · V&A Museum',
+    provenance: 'Carved deep teal-jade scarab mounted in granulated antique Etruscan-revival gold by Castellani.'
+  },
+  {
     id: 'victorian-turquoise',
     name: 'Turquoise & Pearl Crescent Brooch',
     shortName: 'Crescent Pin',
@@ -441,7 +491,9 @@ export const JEWELS = [
     provenance: 'Luminous lace-like scalloped cloud of hand-strung seed pearls framing a vivid faceted amethyst.'
   },
 
-  // Stage 8: Maximalist Modern & Haute Joaillerie Finale
+  // =========================================================================
+  // Room 8: 2000–2022 · Contemporary Haute Joaillerie
+  // =========================================================================
   {
     id: 'wallace-butterfly',
     name: 'Iridescent Titanium Butterfly',
@@ -465,6 +517,54 @@ export const JEWELS = [
     era: '2018 · Contemporary Haute Joaillerie',
     designers: 'Cindy Chao · V&A Museum',
     provenance: 'Lush, undulating sculptural petals completely blanketed in pigeon-blood rubies with golden stamen sparks.'
+  },
+  {
+    id: 'faisceaux-prism',
+    name: 'Faisceaux Holographic Crystal Brooch',
+    shortName: 'Boucheron Prism',
+    img: 'assets/museum_jewels/faisceaux-prism.png',
+    color: '#a5f3fc',
+    glow: 'rgba(165, 243, 252, 0.88)',
+    spark: '#ffffff',
+    era: '2020 · Contemporary Haute Joaillerie',
+    designers: 'Boucheron Paris · V&A Museum',
+    provenance: 'Futuristic faceted rock-crystal prism treated with optical holographic iridescence and banded in gold and diamonds.'
+  },
+  {
+    id: 'webster-fish',
+    name: 'Jewels Verne Fighting Fish Cuff',
+    shortName: 'Fighting Fish',
+    img: 'assets/museum_jewels/webster-fish.png',
+    color: '#3b82f6',
+    glow: 'rgba(96, 165, 250, 0.86)',
+    spark: '#bfdbfe',
+    era: '2009 · Contemporary Haute Joaillerie',
+    designers: 'Stephen Webster · V&A Museum',
+    provenance: 'Sculptural midnight titanium fighting fish gleaming with 229 blue sapphires, 189 black spinels, and 24 white diamonds.'
+  },
+  {
+    id: 'corvaja-gold',
+    name: 'Hexagonal Gold & Platinum Stardust',
+    shortName: 'Corvaja Hex',
+    img: 'assets/museum_jewels/corvaja-gold.png',
+    color: '#facc15',
+    glow: 'rgba(250, 204, 21, 0.86)',
+    spark: '#fef08a',
+    era: '2000 · Contemporary Goldsmithing',
+    designers: 'Giovanni Corvaja · V&A Museum',
+    provenance: 'Architectural 18k gold polyhedron filled with a gossamer nebula of microscopic platinum filaments and golden stardust granules.'
+  },
+  {
+    id: 'short-enamel',
+    name: 'Crimson & Cobalt Enamel Ribbon',
+    shortName: 'Enamel Ribbon',
+    img: 'assets/museum_jewels/short-enamel.png',
+    color: '#f43f5e',
+    glow: 'rgba(251, 113, 133, 0.86)',
+    spark: '#fecdd3',
+    era: '2007 · Contemporary Enamel Art',
+    designers: 'Jane Short MBE · V&A Museum',
+    provenance: 'Sweeping contemporary sculpted silver ribbon glowing with molten ruby-crimson, gold, and midnight-blue champlevé enamel.'
   }
 ];
 
@@ -488,10 +588,10 @@ export const STAGES = [
     stage: 1,
     eraId: 'art-nouveau',
     decade: '1895–1910',
-    style: 'Art Nouveau & Enamel',
-    title: 'Art Nouveau & Belle Époque',
+    style: 'Art Nouveau · Enamel & Opal',
+    title: 'Art Nouveau: Enamel & Opal',
     designers: ['René Lalique', 'Marcus & Co.', 'Child & Child'],
-    curatorNote: 'Real V&A museum masterpieces: René Lalique’s blue enamel Medusa, Marcus & Co.’s fiery opal, and fluid gold-and-pearl filigree.',
+    curatorNote: 'Turn-of-the-century plique-à-jour enamels, fiery Australian black opal, and sinuous baroque pearls from the V&A’s Art Nouveau vitrine.',
     signatureJewel: 'marcus-opal',
     jewels: ['lalique-medusa', 'marcus-opal', 'lalique-gold', 'nouveau-pearl', 'child-amethyst'],
     swatch: 'linear-gradient(135deg, #eee5ff, #bfa2ee)',
@@ -502,48 +602,48 @@ export const STAGES = [
   },
   {
     stage: 2,
-    eraId: 'chinoiserie',
+    eraId: 'deco-geometric',
     decade: '1920s–30s',
-    style: 'Art Deco · Chinoiserie',
-    title: 'Deco Chinoiserie & Jade',
-    designers: ['Cartier', 'Paris Deco', 'Chinese Jade Archive'],
-    curatorNote: 'Carved antique Chinese jade dragons, Cartier’s fluted lapis fan & onyx lozenge, and a 1925 carved coral flower basket.',
-    signatureJewel: 'deco-coral-basket',
-    jewels: ['chinese-jade', 'cartier-lapis', 'deco-coral-basket', 'cartier-lozenge', 'deco-tutti-frutti'],
-    swatch: 'linear-gradient(135deg, #d7f2e3, #8ccfb1)',
+    style: 'Art Deco · Geometric Modernism',
+    title: 'Art Deco: Geometric Contrast',
+    designers: ['Cartier', 'Raymond Templier', 'Georges Fouquet'],
+    curatorNote: 'Pure Jazz Age architecture: Cartier’s fluted lapis fan, Raymond Templier’s black-enamel & coral bar, Georges Fouquet’s turquoise onyx drop, and crisp baguette diamonds.',
+    signatureJewel: 'cartier-lapis',
+    jewels: ['cartier-lapis', 'deco-stepped', 'templier-coral', 'fouquet-turquoise', 'deco-bow'],
+    swatch: 'linear-gradient(135deg, #b8dcff, #5085e8)',
     moves: 20,
     targetScore: 3600,
-    goal: { type: 'collect', jewelId: 'deco-coral-basket', count: 14, label: '14 Coral Baskets' },
+    goal: { type: 'collect', jewelId: 'cartier-lapis', count: 14, label: '14 Cartier Lapis' },
     gildedTiles: []
   },
   {
     stage: 3,
-    eraId: 'mayan-egyptian',
-    decade: '1858–1930',
-    style: 'Mayan, Egyptian & Berber',
-    title: 'Global Revival Treasures',
-    designers: ['Pre-Columbian Gold', 'Castellani', 'Art Deco Revival'],
-    curatorNote: 'Pre-Columbian Veraguas gold, stepped Mayan-Deco coral plaques, Castellani teal scarabs, giant obsidian beetles & Berber coral silver.',
-    signatureJewel: 'precolumbian-gold',
-    jewels: ['precolumbian-gold', 'deco-stepped', 'castellani-scarab', 'berber-coral', 'beetle-scarab'],
-    swatch: 'linear-gradient(135deg, #f8d8be, #d98c64)',
+    eraId: 'deco-tutti-frutti',
+    decade: '1920s–30s',
+    style: 'Art Deco · Tutti Frutti & Baskets',
+    title: 'Art Deco: Tutti Frutti & Florals',
+    designers: ['Ostertag Paris', 'Parisian Deco', 'French Joailliers'],
+    curatorNote: 'The exuberant color side of 1920s–30s Parisian Art Deco: carved coral & jade flower baskets alongside Ostertag’s emerald, ruby, and sapphire Tutti Frutti creations.',
+    signatureJewel: 'deco-coral-basket',
+    jewels: ['deco-coral-basket', 'deco-fruit-basket', 'ostertag-tutti-frutti', 'deco-tutti-arch', 'deco-tutti-frutti'],
+    swatch: 'linear-gradient(135deg, #ffd1c1, #e86b7a)',
     moves: 20,
     targetScore: 4800,
-    goal: { type: 'gilded', count: 4, label: 'Polish 4 Gold Tiles' },
+    goal: { type: 'gilded', count: 4, label: 'Polish 4 Showcase Tiles' },
     gildedTiles: [
       [2, 2], [2, 4], [4, 2], [4, 4]
     ]
   },
   {
     stage: 4,
-    eraId: 'bakelite',
+    eraId: 'surrealist-figural',
     decade: '1930s–50s',
-    style: 'Surrealist, Bakelite & Whimsy',
-    title: 'Weird, Adorable & Chic',
-    designers: ['Cartier', 'Paul Flato', 'Christian Dior', '1930s Bakelite'],
-    curatorNote: 'Connie’s playful spirit: Paul Flato’s gold feet with ruby toenails, Cartier’s coral hand & moonstone owl, 1930s Bakelite, and Dior’s diamond unicorn!',
+    style: 'Surrealist & Figural Couture',
+    title: 'Surrealist & Figural Menagerie',
+    designers: ['Cartier', 'Paul Flato', 'Elisabeth Treskow'],
+    curatorNote: 'Witty mid-century sculptural couture: Cartier’s surreal coral hand, moonstone owl & Royal Guard, Paul Flato’s ruby-toenail gold feet, and Treskow’s sapphire gold fish.',
     signatureJewel: 'cartier-hand',
-    jewels: ['cartier-hand', 'flato-feet', 'bakelite-oval', 'cartier-owl', 'dior-unicorn'],
+    jewels: ['cartier-hand', 'flato-feet', 'cartier-owl', 'cartier-guard', 'treskow-fish'],
     swatch: 'linear-gradient(135deg, #fff1c9, #f9b27a)',
     moves: 21,
     targetScore: 6000,
@@ -556,10 +656,10 @@ export const STAGES = [
     decade: '1940s–50s',
     style: 'Hollywood & Dior Couture',
     title: 'Golden Age & Christian Dior',
-    designers: ['Christian Dior', 'Trifari', 'Cartier', 'Mitchel Maer'],
-    curatorNote: '1952 Christian Dior rhinestone unicorns, snowflakes & cherub amethysts paired with Trifari gold plumes and jeweled Hollywood peacocks.',
+    designers: ['Christian Dior', 'Tiffany & Co.', 'Trifari'],
+    curatorNote: '1940s–50s evening radiance: Christian Dior by Mitchel Maer unicorns, snowflakes & cherubs paired with Tiffany’s fluted gold shells, Trifari plumes, and jeweled peacocks.',
     signatureJewel: 'dior-unicorn',
-    jewels: ['dior-unicorn', 'dior-amethyst', 'peacock-1940s', 'trifari-plume', 'cartier-guard', 'dior-snowflake'],
+    jewels: ['dior-unicorn', 'dior-amethyst', 'dior-snowflake', 'tiffany-shells', 'trifari-plume', 'peacock-1940s'],
     swatch: 'linear-gradient(135deg, #fde2ec, #eca2c0)',
     moves: 22,
     targetScore: 7600,
@@ -570,12 +670,12 @@ export const STAGES = [
     stage: 6,
     eraId: 'mid-century',
     decade: '1960s',
-    style: 'Cocktail & Modernist Gold',
-    title: 'Swinging 60s Cocktail Glam',
-    designers: ['Andrew Grima', 'Jean Schlumberger', 'Kenneth Jay Lane', 'John Donald'],
-    curatorNote: 'Andrew Grima’s explosive turquoise-gold starburst, Schlumberger sapphire bouquets & emerald fruit, KJL peach coral, and brutalist gold.',
+    style: 'Swinging 60s · Sculptural Gold',
+    title: 'Swinging 60s Sculptural Gold',
+    designers: ['Andrew Grima', 'Jean Schlumberger', 'John Donald', 'Arthur King'],
+    curatorNote: 'Bold textured 18k gold & raw minerals: Andrew Grima’s turquoise starburst, Schlumberger’s gem bouquets, John Donald’s brutalist amethyst, Arthur King tourmalines & KJL coral.',
     signatureJewel: 'grima-turquoise',
-    jewels: ['grima-turquoise', 'schlumberger-sapphire', 'schlumberger-fruit', 'donald-amethyst', 'kjl-coral', 'dior-unicorn'],
+    jewels: ['grima-turquoise', 'schlumberger-sapphire', 'schlumberger-fruit', 'donald-amethyst', 'king-tourmaline', 'kjl-coral'],
     swatch: 'linear-gradient(135deg, #daf7f2, #86d8cc)',
     moves: 22,
     targetScore: 9400,
@@ -584,36 +684,36 @@ export const STAGES = [
   },
   {
     stage: 7,
-    eraId: 'paris-runway',
-    decade: 'Renaissance–1900',
-    style: 'Baroque & Archaeological',
-    title: 'Baroque & Merman Revival',
-    designers: ['The Canning Jewel', 'Castellani', 'Arthur Giuliano', 'Christian Dior'],
-    curatorNote: 'Maximalist museum treasures: the iconic baroque-pearl Canning Merman, Castellani granulated gold scarabs, and seed-pearl amethysts.',
+    eraId: 'victorian-revival',
+    decade: '1850–1900',
+    style: 'Victorian Archaeological & Baroque',
+    title: 'Victorian & Renaissance Revival',
+    designers: ['The Canning Jewel', 'Castellani', 'Arthur Giuliano'],
+    curatorNote: 'Opulent 19th-century historical revivals: the baroque-pearl Canning Merman, Castellani granulated gold scarabs, Giuliano’s polychrome enamel caduceus & seed-pearl classics.',
     signatureJewel: 'canning-merman',
-    jewels: ['canning-merman', 'giuliano-caduceus', 'castellani-gold', 'dior-amethyst', 'victorian-turquoise', 'amethyst-pearl'],
+    jewels: ['canning-merman', 'giuliano-caduceus', 'castellani-gold', 'castellani-scarab', 'victorian-turquoise', 'amethyst-pearl'],
     swatch: 'linear-gradient(135deg, #faf0dc, #e5b78b)',
     moves: 23,
     targetScore: 11800,
-    goal: { type: 'gilded', count: 6, label: 'Polish 6 Gold Tiles' },
+    goal: { type: 'gilded', count: 6, label: 'Polish 6 Showcase Tiles' },
     gildedTiles: [
       [1, 3], [2, 3], [3, 1], [3, 3], [3, 5], [5, 3]
     ]
   },
   {
     stage: 8,
-    eraId: 'power-80s',
-    decade: 'Modern Couture',
-    style: 'Maximalist Haute Joaillerie',
-    title: 'Maximalist Grand Finale',
-    designers: ['Wallace Chan', 'Cindy Chao', 'Andrew Grima', 'Paul Flato'],
-    curatorNote: 'Pure dopamine opulence: Wallace Chan’s electric titanium butterfly, Cindy Chao’s ruby blossom, Andrew Grima’s starburst & Cartier’s moonstone owl.',
+    eraId: 'contemporary-haute',
+    decade: '2000–2022',
+    style: 'Contemporary Haute Joaillerie',
+    title: '21st-Century Masterworks',
+    designers: ['Wallace Chan', 'Cindy Chao', 'Boucheron', 'Stephen Webster'],
+    curatorNote: 'Cutting-edge 21st-century alchemy: Wallace Chan’s titanium butterfly, Cindy Chao’s ruby blossom, Boucheron’s holographic crystal prism, Stephen Webster’s sapphire fish & Corvaja gold.',
     signatureJewel: 'wallace-butterfly',
-    jewels: ['wallace-butterfly', 'cindy-ruby', 'grima-turquoise', 'schlumberger-fruit', 'cartier-owl', 'flato-feet'],
-    swatch: 'linear-gradient(135deg, #ff79b8, #9f1b74)',
+    jewels: ['wallace-butterfly', 'cindy-ruby', 'faisceaux-prism', 'webster-fish', 'corvaja-gold', 'short-enamel'],
+    swatch: 'linear-gradient(135deg, #ff79b8, #70d6ff)',
     moves: 25,
     targetScore: 15000,
-    goal: { type: 'gilded', count: 8, label: 'Polish 8 Gold Tiles' },
+    goal: { type: 'gilded', count: 8, label: 'Polish 8 Showcase Tiles' },
     gildedTiles: [
       [1, 2], [1, 4], [2, 1], [2, 5],
       [4, 1], [4, 5], [5, 2], [5, 4]

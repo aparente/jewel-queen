@@ -5,6 +5,7 @@ __pycache__/
 # Intermediate raw downloads & QA contact sheets (final sprites in assets/museum_jewels & assets/museum_hires are tracked)
 assets/raw/
 assets/museum_raw/
+assets/curate_v2/
 assets/*_preview.png
 assets/*_sheet*.jpg
 assets/curated_museum_sheet.png
