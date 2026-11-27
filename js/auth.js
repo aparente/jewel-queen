@@ -28,8 +28,27 @@ export class CollectorAuth {
     this.user = null;
     this.collectorName = localStorage.getItem(NAME_STORAGE_KEY) || '';
     this.whatnotHandle = sanitizeHandle(localStorage.getItem(WHATNOT_STORAGE_KEY) || '');
+    this.enabledProviders = { google: false, facebook: false, email: true };
     this.syncStatus = this.configured ? 'connecting' : 'local';
     this._syncTimer = null;
+  }
+
+  async _fetchAuthSettings() {
+    try {
+      const resp = await fetch(`${SUPABASE_CONFIG.url}/auth/v1/settings`, {
+        headers: { apikey: SUPABASE_CONFIG.publishableKey }
+      });
+      if (!resp.ok) return;
+      const json = await resp.json();
+      const ext = json?.external || {};
+      this.enabledProviders = {
+        google: Boolean(ext.google),
+        facebook: Boolean(ext.facebook),
+        email: ext.email !== false
+      };
+    } catch {
+      // Keep safe defaults
+    }
   }
 
   async init() {
@@ -37,6 +56,7 @@ export class CollectorAuth {
       this._emit();
       return;
     }
+    await this._fetchAuthSettings();
     try {
       const { createClient } = await import(SUPABASE_CDN);
       this.client = createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.publishableKey, {
@@ -113,6 +133,13 @@ export class CollectorAuth {
   async signInWithProvider(provider) {
     if (!this.configured || !this.client) {
       return { ok: false, reason: 'not-configured' };
+    }
+    // Re-check live provider status before redirecting so users never hit a raw 400 JSON page
+    if (!this.enabledProviders[provider]) {
+      await this._fetchAuthSettings();
+      if (!this.enabledProviders[provider]) {
+        return { ok: false, reason: 'provider_not_enabled' };
+      }
     }
     const redirectTo = `${window.location.origin}${window.location.pathname}`;
     const { error } = await this.client.auth.signInWithOAuth({
@@ -240,6 +267,7 @@ export class CollectorAuth {
         displayName: this.getDisplayName(),
         whatnotHandle: this.getWhatnotHandle(),
         avatarUrl: this.getAvatarUrl(),
+        enabledProviders: this.enabledProviders,
         syncStatus: this.syncStatus
       });
     }

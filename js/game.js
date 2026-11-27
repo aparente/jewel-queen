@@ -1702,12 +1702,14 @@ class JewelQueenGame {
       if (!res.ok && this.ssoNotice) {
         this.ssoNotice.hidden = false;
         const label = provider === 'facebook' ? 'Facebook' : 'Google';
-        this.ssoNotice.textContent =
-          res.reason === 'not-configured'
-            ? 'Cloud SSO is not configured yet.'
-            : /not enabled/i.test(res.reason)
-              ? `${label} OAuth is not toggled on yet in Supabase Auth Providers — use the Email Link box below right now, or toggle ${label} on in your Supabase dashboard.`
-              : `Sign-in notice: ${res.reason}`;
+        if (res.reason === 'provider_not_enabled' || /not enabled/i.test(res.reason)) {
+          this.ssoNotice.textContent = `${label} sign-in is awaiting activation in Supabase Auth Providers — enter your email below for an instant 1-tap Magic Link right now!`;
+          document.getElementById('magicEmailInput')?.focus();
+        } else if (res.reason === 'not-configured') {
+          this.ssoNotice.textContent = 'Cloud SSO is not configured yet.';
+        } else {
+          this.ssoNotice.textContent = `Sign-in notice: ${res.reason}`;
+        }
       }
     };
     document.getElementById('facebookSignInBtn')?.addEventListener('click', () => handleSSO('facebook'));
@@ -1888,6 +1890,22 @@ class JewelQueenGame {
     const welcomeSignInStrip = document.getElementById('welcomeSignInStrip');
     if (welcomeSignInStrip) welcomeSignInStrip.hidden = signedIn;
 
+    // Auto-show/hide Google & Facebook buttons based on live Supabase /auth/v1/settings
+    const providers = st.enabledProviders || { google: false, facebook: false, email: true };
+    const fbBtn = document.getElementById('facebookSignInBtn');
+    const ggBtn = document.getElementById('googleSignInBtn');
+    const wFbBtn = document.getElementById('welcomeFbBtn');
+    const wGgBtn = document.getElementById('welcomeGoogleBtn');
+    if (fbBtn) fbBtn.hidden = !providers.facebook;
+    if (ggBtn) ggBtn.hidden = !providers.google;
+    if (wFbBtn) wFbBtn.hidden = !providers.facebook;
+    if (wGgBtn) wGgBtn.hidden = !providers.google;
+    const wSsoRow = document.querySelector('.welcome-sso-row');
+    if (wSsoRow) {
+      const visibleCount = [providers.facebook, providers.google, true].filter(Boolean).length;
+      wSsoRow.style.gridTemplateColumns = `repeat(${visibleCount}, 1fr)`;
+    }
+
     if (signedIn && st.avatarUrl) {
       if (avatarImg) { avatarImg.src = st.avatarUrl; avatarImg.hidden = false; }
       if (defaultIcon) defaultIcon.hidden = true;
@@ -1912,6 +1930,7 @@ class JewelQueenGame {
       displayName: this.auth.getDisplayName(),
       whatnotHandle: this.auth.getWhatnotHandle(),
       avatarUrl: this.auth.getAvatarUrl(),
+      enabledProviders: this.auth.enabledProviders,
       syncStatus: this.auth.syncStatus
     });
     this.accountDialog.showModal();
