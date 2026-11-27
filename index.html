@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
     <meta name="theme-color" content="#030305" />
     <meta
@@ -37,7 +37,7 @@
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=2.4" />
   </head>
   <body>
     <div class="velvet-backdrop" aria-hidden="true"></div>
@@ -122,6 +122,7 @@
             class="icon-btn"
             id="muteBtn"
             aria-label="Toggle Sound"
+            aria-pressed="false"
             title="Toggle Sound"
           >
             <svg id="soundOnIcon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -166,9 +167,9 @@
 
         <div class="hud-plaque hud-goal">
           <span class="hud-label">GOAL</span>
-          <div class="goal-display" id="goalDisplay">
+          <button type="button" class="goal-display" id="goalDisplay" aria-label="Exhibition goal">
             <span class="hud-value" id="goalText">2,200</span>
-          </div>
+          </button>
         </div>
 
         <div class="hud-divider" aria-hidden="true"></div>
@@ -229,7 +230,7 @@
 
           <div class="board-stage" id="boardStage">
             <div class="board-cells" id="boardCells" aria-hidden="true"></div>
-            <div class="board-tiles" id="boardTiles" role="grid" aria-label="7 by 7 jewelry tray"></div>
+            <div class="board-tiles" id="boardTiles" role="region" aria-label="7 by 7 jewelry tray. Use arrow keys to move, Enter or Space to select and swap, I to inspect in Loupe."></div>
             <canvas class="fx-canvas" id="fxCanvas" aria-hidden="true"></canvas>
           </div>
         </div>
@@ -257,7 +258,7 @@
     </main>
 
     <!-- Exhibition Complete / Curtain Call Modal -->
-    <dialog class="velvet-dialog" id="resultDialog">
+    <dialog class="velvet-dialog" id="resultDialog" aria-labelledby="resultTitle">
       <div class="dialog-card">
         <img src="assets/museum_jewels/lavabre-tiara.png" alt="" class="dialog-tiara" width="76" height="76" />
         <p class="dialog-kicker" id="resultKicker">EXHIBITION COMPLETE</p>
@@ -287,12 +288,12 @@
     </dialog>
 
     <!-- Virtual Estate Collection Vault (Pokédex + Signature Lineup) -->
-    <dialog class="velvet-dialog lookbook-dialog" id="lookbookDialog">
+    <dialog class="velvet-dialog lookbook-dialog" id="lookbookDialog" aria-labelledby="lookbookTitle">
       <div class="dialog-card lookbook-card vault-card">
         <div class="lookbook-header">
           <div>
             <p class="dialog-kicker">PRIVATE ARCHIVE</p>
-            <h2 class="dialog-title">MY COLLECTION</h2>
+            <h2 class="dialog-title" id="lookbookTitle">MY COLLECTION</h2>
           </div>
           <div class="lookbook-header-actions">
             <button type="button" class="share-pill-btn" id="openShareFromVaultBtn">Share Vault ↗</button>
@@ -323,10 +324,10 @@
         </section>
 
         <div class="vault-filters" id="vaultFilters" role="tablist" aria-label="Filter collection">
-          <button type="button" class="filter-pill is-active" data-filter="all">All</button>
-          <button type="button" class="filter-pill" data-filter="owned">Owned</button>
-          <button type="button" class="filter-pill" data-filter="missing">Missing</button>
-          <button type="button" class="filter-pill" data-filter="grails">Grails</button>
+          <button type="button" class="filter-pill is-active" role="tab" aria-selected="true" data-filter="all">All</button>
+          <button type="button" class="filter-pill" role="tab" aria-selected="false" data-filter="owned">Owned</button>
+          <button type="button" class="filter-pill" role="tab" aria-selected="false" data-filter="missing">Missing</button>
+          <button type="button" class="filter-pill" role="tab" aria-selected="false" data-filter="grails">Grails</button>
         </div>
 
         <div class="pokedex-grid" id="lookbookGrid"></div>
@@ -334,12 +335,12 @@
     </dialog>
 
     <!-- Curated Historical Jewelry Tour Modal -->
-    <dialog class="velvet-dialog lookbook-dialog" id="erasDialog">
+    <dialog class="velvet-dialog lookbook-dialog" id="erasDialog" aria-labelledby="erasTitle">
       <div class="dialog-card lookbook-card">
         <div class="lookbook-header">
           <div>
             <p class="dialog-kicker">HISTORICAL TOUR</p>
-            <h2 class="dialog-title">ERAS &amp; STYLES</h2>
+            <h2 class="dialog-title" id="erasTitle">ERAS &amp; STYLES</h2>
           </div>
           <button type="button" class="icon-btn" id="closeErasBtn" aria-label="Close Eras Guide">✕</button>
         </div>
@@ -356,10 +357,10 @@
     </dialog>
 
     <!-- Quick How-to-Play Guide Modal -->
-    <dialog class="velvet-dialog" id="helpDialog">
+    <dialog class="velvet-dialog" id="helpDialog" aria-labelledby="helpTitle">
       <div class="dialog-card help-card">
         <p class="dialog-kicker">GALLERY GUIDE</p>
-        <h2 class="dialog-title">HOW TO PLAY</h2>
+        <h2 class="dialog-title" id="helpTitle">HOW TO PLAY</h2>
         <div class="help-steps">
           <div class="help-step">
             <span class="help-badge">1</span>
@@ -399,12 +400,12 @@
     </dialog>
 
     <!-- Collector Profile, Facebook & Google SSO, and Leaderboard Modal -->
-    <dialog class="velvet-dialog account-dialog" id="accountDialog">
+    <dialog class="velvet-dialog account-dialog" id="accountDialog" aria-labelledby="accountTitle">
       <div class="dialog-card account-card">
         <div class="lookbook-header">
           <div>
             <p class="dialog-kicker">COLLECTOR PASSPORT</p>
-            <h2 class="dialog-title">SIGN IN &amp; SYNC</h2>
+            <h2 class="dialog-title" id="accountTitle">SIGN IN &amp; SYNC</h2>
           </div>
           <button type="button" class="icon-btn" id="closeAccountBtn" aria-label="Close Collector Account">✕</button>
         </div>
@@ -460,6 +461,7 @@
               autocomplete="name"
             />
             <div class="whatnot-input-wrap">
+              <label for="collectorWhatnotInput" class="sr-only">Whatnot handle (optional)</label>
               <span class="whatnot-at" aria-hidden="true">@</span>
               <input
                 type="text"
@@ -502,12 +504,12 @@
     </dialog>
 
     <!-- Viral Shareable Vault Card Preview Modal -->
-    <dialog class="velvet-dialog share-dialog" id="shareDialog">
+    <dialog class="velvet-dialog share-dialog" id="shareDialog" aria-labelledby="shareTitle">
       <div class="dialog-card share-card">
         <div class="lookbook-header">
           <div>
             <p class="dialog-kicker">READY FOR INSTAGRAM &amp; FACEBOOK</p>
-            <h2 class="dialog-title">YOUR VAULT CARD</h2>
+            <h2 class="dialog-title" id="shareTitle">YOUR VAULT CARD</h2>
           </div>
           <button type="button" class="icon-btn" id="closeShareBtn" aria-label="Close Share Card">✕</button>
         </div>
@@ -529,7 +531,7 @@
     </dialog>
 
     <!-- Interactive 3x Jeweler's Loupe Zoom & History Inspector Modal -->
-    <dialog class="velvet-dialog loupe-dialog" id="loupeDialog">
+    <dialog class="velvet-dialog loupe-dialog" id="loupeDialog" aria-labelledby="loupeTitle">
       <div class="dialog-card loupe-card">
         <div class="loupe-topbar">
           <div>
@@ -539,13 +541,22 @@
           <button type="button" class="icon-btn" id="closeLoupeBtn" aria-label="Close Jeweler's Loupe">✕</button>
         </div>
 
+        <div class="loupe-controls-row">
+          <div class="loupe-zoom-controls" role="group" aria-label="Optical zoom magnification">
+            <button type="button" class="zoom-pill is-active" data-zoom="1" aria-pressed="true">1×</button>
+            <button type="button" class="zoom-pill" data-zoom="2" aria-pressed="false">2×</button>
+            <button type="button" class="zoom-pill" data-zoom="3" aria-pressed="false">3×</button>
+          </div>
+          <div class="loupe-pan-controls" id="loupePanControls" role="group" aria-label="Pan zoomed image" hidden>
+            <button type="button" class="pan-btn" data-pan="left" aria-label="Pan left">←</button>
+            <button type="button" class="pan-btn" data-pan="up" aria-label="Pan up">↑</button>
+            <button type="button" class="pan-btn" data-pan="down" aria-label="Pan down">↓</button>
+            <button type="button" class="pan-btn" data-pan="right" aria-label="Pan right">→</button>
+          </div>
+        </div>
+
         <div class="loupe-stage" id="loupeStage" title="Drag to pan when zoomed">
           <img id="loupeImg" class="loupe-img" src="" alt="" draggable="false" />
-          <div class="loupe-zoom-controls" role="group" aria-label="Optical zoom magnification">
-            <button type="button" class="zoom-pill is-active" data-zoom="1">1×</button>
-            <button type="button" class="zoom-pill" data-zoom="2">2×</button>
-            <button type="button" class="zoom-pill" data-zoom="3">3×</button>
-          </div>
           <span class="loupe-pan-hint" id="loupePanHint">Tap 2× / 3× to zoom in</span>
         </div>
 
@@ -575,6 +586,6 @@
       </div>
     </dialog>
 
-    <script type="module" src="js/game.js"></script>
+    <script type="module" src="js/game.js?v=2.4"></script>
   </body>
 </html>

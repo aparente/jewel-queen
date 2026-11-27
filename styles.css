@@ -3,14 +3,26 @@
   --gallery-black: #030305;
   --gallery-surface: rgba(14, 14, 19, 0.86);
   --gallery-glass: rgba(255, 255, 255, 0.035);
-  --hairline: rgba(255, 255, 255, 0.11);
-  --hairline-soft: rgba(255, 255, 255, 0.065);
+  --hairline: rgba(255, 255, 255, 0.42);
+  --hairline-soft: rgba(255, 255, 255, 0.14);
   --pearl: #f5f2ed;
-  --pearl-soft: rgba(245, 242, 237, 0.72);
-  --silver-muted: rgba(214, 212, 224, 0.52);
+  --pearl-soft: rgba(245, 242, 237, 0.80);
+  --silver-muted: rgba(220, 218, 232, 0.70);
   --prism-grad: linear-gradient(125deg, #c6f7f2 0%, #e4d4ff 48%, #f9e6d8 100%);
   --font-serif: 'Cormorant Garamond', Georgia, serif;
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 *,
@@ -28,9 +40,10 @@ html,
 body {
   margin: 0;
   padding: 0;
-  height: 100%;
-  height: 100dvh;
-  overflow: hidden;
+  min-height: 100%;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
   background-color: var(--gallery-black);
   color: var(--pearl);
   font-family: var(--font-sans);
@@ -61,7 +74,7 @@ body {
   position: relative;
   width: 100%;
   max-width: 440px;
-  height: 100dvh;
+  min-height: 100dvh;
   margin: 0 auto;
   padding:
     max(12px, env(safe-area-inset-top))
@@ -104,8 +117,9 @@ body {
 }
 
 .era-picker-btn {
-  margin: 4px 0 0;
-  padding: 0;
+  margin: 2px 0 0;
+  padding: 4px 0;
+  min-height: 26px;
   border: none;
   background: none;
   display: inline-flex;
@@ -122,12 +136,13 @@ body {
   color: #ffffff;
 }
 
-.era-picker-btn:focus-visible,
-.icon-btn:focus-visible,
-.spin-btn:focus-visible,
-.gold-cta:focus-visible,
-.velvet-secondary:focus-visible {
-  outline: 1.5px solid rgba(255, 255, 255, 0.72);
+/* Unified WCAG 2.2 AA Focus-Visible Ring Across Every Interactive Element */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+[tabindex='0']:focus-visible,
+.jewel-tile:focus-visible {
+  outline: 2px solid #c8f3ee;
   outline-offset: 2px;
 }
 
@@ -282,8 +297,20 @@ body {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  margin-top: 3px;
+  margin-top: 2px;
+  min-height: 26px;
+  min-width: 48px;
+  padding: 2px 6px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
   cursor: pointer;
+}
+
+.goal-display:disabled {
+  cursor: default;
 }
 
 .goal-icon {
@@ -510,19 +537,17 @@ body {
 
 /* Tactile Pure Black Velvet Collector's Presentation Tray (Default) */
 .board-area {
-  flex: 1 1 auto;
-  min-height: 0;
-  max-height: 416px;
+  flex: 0 0 auto;
   width: 100%;
-  container-type: size;
+  container-type: inline-size;
   display: grid;
   place-items: center;
 }
 
 .board-shell {
   position: relative;
-  width: min(100cqw, 100cqh, 412px);
-  height: min(100cqw, 100cqh, 412px);
+  width: clamp(276px, min(100cqw, calc(100dvh - 300px)), 412px);
+  height: clamp(276px, min(100cqw, calc(100dvh - 300px)), 412px);
   display: grid;
   place-items: center;
   padding: 13px;
@@ -891,10 +916,10 @@ body {
   text-align: center;
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   letter-spacing: 0.06em;
-  color: rgba(245, 242, 237, 0.42);
-  line-height: 1.2;
+  color: rgba(245, 242, 237, 0.64);
+  line-height: 1.25;
 }
 
 .footer-stat strong {
@@ -906,10 +931,11 @@ body {
 .footer-loupe-btn {
   border: none;
   background: none;
-  padding: 2px 0;
+  min-height: 28px;
+  padding: 4px 2px;
   color: var(--pearl-soft);
   font: inherit;
-  font-size: 0.64rem;
+  font-size: 0.66rem;
   letter-spacing: 0.04em;
   cursor: pointer;
   transition: color 160ms ease;
@@ -1241,19 +1267,19 @@ body {
   aspect-ratio: 1 / 1;
   border-radius: 10px;
   background: #060609;
-  border: 1px dashed rgba(255, 255, 255, 0.14);
+  border: 1px dashed rgba(255, 255, 255, 0.36);
   display: grid;
   place-items: center;
   padding: 4px;
-  cursor: pointer;
-  color: rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.34);
   font-size: 0.72rem;
   transition: border-color 160ms ease, transform 140ms ease;
 }
 
 .showcase-slot.is-filled {
+  cursor: pointer;
   border-style: solid;
-  border-color: rgba(255, 255, 255, 0.34);
+  border-color: rgba(255, 255, 255, 0.48);
   box-shadow: inset 0 0 10px rgba(214, 240, 255, 0.08);
 }
 
@@ -1270,13 +1296,14 @@ body {
 }
 
 .filter-pill {
+  min-height: 28px;
   padding: 6px 6px;
   border-radius: 99px;
-  border: 1px solid var(--hairline-soft);
-  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--hairline);
+  background: rgba(255, 255, 255, 0.03);
   color: var(--silver-muted);
   font-family: var(--font-sans);
-  font-size: 0.64rem;
+  font-size: 0.66rem;
   font-weight: 500;
   letter-spacing: 0.06em;
   cursor: pointer;
@@ -1338,9 +1365,8 @@ body {
 }
 
 .dex-card.is-locked {
-  opacity: 0.68;
   border-style: dashed;
-  border-color: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.36);
 }
 
 .dex-card-top {
@@ -1518,18 +1544,27 @@ body {
 .era-jewels-strip {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 5px;
   margin: 2px 0 8px;
 }
 
-.era-jewels-strip img {
-  width: 25px;
-  height: 25px;
-  object-fit: contain;
-  border-radius: 6px;
+.era-jewel-btn {
+  width: 28px;
+  height: 28px;
   padding: 2px;
+  border-radius: 7px;
+  border: 1px solid var(--hairline);
   background: #060609;
-  border: 1px solid var(--hairline-soft);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.era-jewel-btn img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
 }
 
 .era-card-footer {
@@ -1546,13 +1581,14 @@ body {
 }
 
 .era-play-btn {
-  padding: 5px 11px;
+  min-height: 28px;
+  padding: 6px 12px;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.68);
   background: var(--prism-grad);
   color: #0b0a12;
   font-family: var(--font-sans);
-  font-size: 0.62rem;
+  font-size: 0.64rem;
   font-weight: 600;
   letter-spacing: 0.1em;
   cursor: pointer;
@@ -1693,29 +1729,48 @@ body {
   transition: none;
 }
 
-.loupe-zoom-controls {
-  position: absolute;
-  top: 8px;
-  right: 8px;
+.loupe-controls-row {
   display: flex;
-  gap: 3px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.loupe-zoom-controls,
+.loupe-pan-controls {
+  display: flex;
+  gap: 4px;
   padding: 3px;
   border-radius: 99px;
   background: rgba(8, 8, 12, 0.78);
   border: 1px solid var(--hairline);
-  backdrop-filter: blur(8px);
 }
 
-.zoom-pill {
+.zoom-pill,
+.pan-btn {
   border: none;
   background: transparent;
   color: var(--silver-muted);
   font-family: var(--font-sans);
-  font-size: 0.66rem;
+  font-size: 0.68rem;
   font-weight: 500;
-  padding: 3px 8px;
+  min-width: 32px;
+  min-height: 26px;
+  padding: 4px 8px;
   border-radius: 99px;
   cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.pan-btn {
+  min-width: 28px;
+  padding: 4px 6px;
+  color: var(--pearl);
+}
+
+.pan-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .zoom-pill.is-active {
@@ -1968,10 +2023,12 @@ body {
 .tutorial-skip-btn {
   border: none;
   background: none;
-  padding: 0 2px;
+  min-width: 38px;
+  min-height: 26px;
+  padding: 4px 8px;
   color: var(--silver-muted);
   font-family: var(--font-sans);
-  font-size: 0.62rem;
+  font-size: 0.66rem;
   letter-spacing: 0.06em;
   cursor: pointer;
 }
@@ -2064,10 +2121,14 @@ body {
 .invite-close-btn {
   border: none;
   background: none;
-  color: var(--silver-muted);
-  font-size: 0.72rem;
+  color: var(--pearl-soft);
+  font-size: 0.78rem;
+  min-width: 28px;
+  min-height: 28px;
+  display: grid;
+  place-items: center;
   cursor: pointer;
-  padding: 0 2px;
+  padding: 0;
 }
 
 /* Vault Share Pill Button */
@@ -2185,8 +2246,8 @@ body {
 }
 
 .sso-facebook {
-  background: #1877f2;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: #1463cc;
+  border: 1px solid rgba(255, 255, 255, 0.24);
   color: #ffffff;
 }
 
@@ -2290,12 +2351,16 @@ body {
 }
 
 .social-pill {
-  padding: 5px 10px;
+  min-height: 28px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 11px;
   border-radius: 99px;
   border: 1px solid var(--hairline);
   background: rgba(255, 255, 255, 0.035);
   color: var(--pearl-soft);
-  font-size: 0.66rem;
+  font-size: 0.68rem;
   text-decoration: none;
   transition: border-color 150ms ease, background 150ms ease, color 150ms ease;
 }
@@ -2314,7 +2379,8 @@ body {
 .collector-name-input {
   flex: 1;
   min-width: 0;
-  padding: 9px 11px;
+  min-height: 36px;
+  padding: 8px 11px;
   border-radius: 10px;
   border: 1px solid var(--hairline);
   background: rgba(255, 255, 255, 0.04);
@@ -2324,18 +2390,19 @@ body {
 }
 
 .collector-name-input:focus {
-  outline: none;
-  border-color: rgba(198, 247, 242, 0.6);
+  border-color: #c8f3ee;
 }
 
 .save-name-btn {
-  padding: 0 14px;
+  min-height: 36px;
+  flex-shrink: 0;
+  padding: 8px 14px;
   border-radius: 10px;
   border: 1px solid var(--hairline);
   background: rgba(255, 255, 255, 0.08);
   color: var(--pearl);
   font-family: var(--font-sans);
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   font-weight: 500;
   cursor: pointer;
 }

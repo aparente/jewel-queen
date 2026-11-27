@@ -219,8 +219,9 @@ class JewelQueenGame {
     const ro = new ResizeObserver(() => this.fx.resize());
     ro.observe(this.boardStage);
 
-    // Pointer swipe & tap handling on the board
+    // Pointer swipe, tap & keyboard handling on the board
     this.boardTiles.addEventListener('pointerdown', (e) => this._onPointerDown(e));
+    this.boardTiles.addEventListener('keydown', (e) => this._onBoardKeyDown(e));
     window.addEventListener('pointermove', (e) => this._onPointerMove(e));
     window.addEventListener('pointerup', () => this._onPointerUp());
     window.addEventListener('pointercancel', () => this._onPointerUp());
@@ -305,7 +306,9 @@ class JewelQueenGame {
       audio.playSelect();
       this.vaultFilter = btn.dataset.filter;
       document.querySelectorAll('#vaultFilters .filter-pill').forEach((p) => {
-        p.classList.toggle('is-active', p === btn);
+        const active = p === btn;
+        p.classList.toggle('is-active', active);
+        p.setAttribute('aria-selected', String(active));
       });
       this._renderLookbook();
     });
@@ -338,6 +341,8 @@ class JewelQueenGame {
   _syncMuteIcon() {
     this.soundOnIcon.hidden = audio.muted;
     this.soundOffIcon.hidden = !audio.muted;
+    this.muteBtn.setAttribute('aria-pressed', String(audio.muted));
+    this.muteBtn.setAttribute('aria-label', audio.muted ? 'Unmute Sound' : 'Mute Sound');
   }
 
   startStage(stageNum, opts = {}) {
@@ -482,7 +487,9 @@ class JewelQueenGame {
     const el = document.createElement('div');
     el.className = 'jewel-tile';
     el.dataset.uid = String(tile.uid);
-    el.setAttribute('role', 'gridcell');
+    el.setAttribute('role', 'button');
+    el.setAttribute('aria-pressed', 'false');
+    el.tabIndex = tile.r === 0 && tile.c === 0 ? 0 : -1;
     const inner = document.createElement('div');
     inner.className = 'jewel-inner';
     const img = document.createElement('img');
@@ -497,11 +504,13 @@ class JewelQueenGame {
   _syncTileVisual(tile, el = tile.el) {
     if (!el) return;
     const img = el.querySelector('.jewel-img');
+    let labelName = '';
     if (tile.special === 'tiara') {
       el.dataset.special = 'tiara';
       el.style.setProperty('--jewel-glow', TIARA_PIECE.glow);
       img.src = TIARA_PIECE.img;
       img.alt = TIARA_PIECE.name;
+      labelName = `${TIARA_PIECE.name} (Royal Tiara Wild)`;
     } else {
       const meta = JEWEL_MAP[tile.type] || JEWELS[0];
       if (tile.special) el.dataset.special = tile.special;
@@ -509,6 +518,84 @@ class JewelQueenGame {
       el.style.setProperty('--jewel-glow', meta.glow);
       img.src = meta.img;
       img.alt = meta.name;
+      const specLabel =
+        tile.special === 'bomb'
+          ? ' (Aura Burst)'
+          : tile.special === 'line-h' || tile.special === 'line-v'
+            ? ' (Light Beam)'
+            : '';
+      labelName = `${meta.name}${specLabel}`;
+    }
+    el.setAttribute('aria-label', `Row ${tile.r + 1} Column ${tile.c + 1}: ${labelName}`);
+  }
+
+  _focusTileAt(r, c) {
+    if (!inBounds(r, c)) return;
+    const target = this.grid[r]?.[c];
+    if (!target?.el) return;
+    this.boardTiles.querySelectorAll('.jewel-tile[tabindex="0"]').forEach((t) => {
+      t.tabIndex = -1;
+    });
+    target.el.tabIndex = 0;
+    target.el.focus();
+  }
+
+  _onBoardKeyDown(e) {
+    const tile = this._tileFromEvent(e);
+    if (!tile || this.isBusy || this.stageEnded) return;
+    const dirs = {
+      ArrowUp: [-1, 0],
+      ArrowDown: [1, 0],
+      ArrowLeft: [0, -1],
+      ArrowRight: [0, 1]
+    };
+    if (dirs[e.key]) {
+      e.preventDefault();
+      const [dr, dc] = dirs[e.key];
+      const nr = tile.r + dr;
+      const nc = tile.c + dc;
+      if (!inBounds(nr, nc)) return;
+      if (this.selected && this.selected === tile) {
+        audio.unlock();
+        const sr = tile.r;
+        const sc = tile.c;
+        this._setSelected(null);
+        this._attemptSwap(sr, sc, nr, nc);
+        setTimeout(() => this._focusTileAt(nr, nc), 240);
+      } else {
+        this._focusTileAt(nr, nc);
+      }
+      return;
+    }
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      audio.unlock();
+      if (!this.selected) {
+        audio.playSelect();
+        this._setSelected(tile);
+      } else if (this.selected === tile) {
+        this._setSelected(null);
+      } else if (Math.abs(this.selected.r - tile.r) + Math.abs(this.selected.c - tile.c) === 1) {
+        const sr = this.selected.r;
+        const sc = this.selected.c;
+        this._setSelected(null);
+        this._attemptSwap(sr, sc, tile.r, tile.c);
+      } else {
+        audio.playSelect();
+        this._setSelected(tile);
+      }
+      return;
+    }
+    if (e.key === 'Escape' && this.selected) {
+      e.preventDefault();
+      this._setSelected(null);
+      return;
+    }
+    if (e.key === 'i' || e.key === 'I') {
+      e.preventDefault();
+      const id = tile.special === 'tiara' ? 'tiara' : tile.type;
+      const eraIds = [...this._activeJewelPool().map((j) => j.id), 'tiara'];
+      this.openLoupe(id, eraIds);
     }
   }
 
@@ -635,10 +722,12 @@ class JewelQueenGame {
   _setSelected(tile) {
     if (this.selected && this.selected.el) {
       this.selected.el.classList.remove('is-selected');
+      this.selected.el.setAttribute('aria-pressed', 'false');
     }
     this.selected = tile;
     if (tile && tile.el) {
       tile.el.classList.add('is-selected');
+      tile.el.setAttribute('aria-pressed', 'true');
     }
   }
 
@@ -1227,6 +1316,10 @@ class JewelQueenGame {
     }
 
     this.isBusy = false;
+    // Keep roving keyboard tabindex intact if the previous tabstop tile was cleared
+    if (!this.boardTiles.querySelector('.jewel-tile[tabindex="0"]') && this.grid[0]?.[0]?.el) {
+      this.grid[0][0].el.tabIndex = 0;
+    }
     if (this.tutorial?.active) {
       this.tutorial.onMatchResolved(true);
     } else {
@@ -1255,6 +1348,10 @@ class JewelQueenGame {
       return;
     }
     this.isBusy = false;
+    // Keep roving keyboard tabindex intact if the previous tabstop tile was cleared
+    if (!this.boardTiles.querySelector('.jewel-tile[tabindex="0"]') && this.grid[0]?.[0]?.el) {
+      this.grid[0][0].el.tabIndex = 0;
+    }
     if (this.tutorial?.active) {
       this.tutorial.onVaultDrawComplete();
     } else {
@@ -1436,12 +1533,18 @@ class JewelQueenGame {
     const g = this.stageCfg.goal;
     if (g.type === 'gilded') {
       const done = this.gildedTotal - this.gilded.size;
-      this.goalDisplay.innerHTML = `<span class="goal-tile-swatch"></span><span class="hud-value">${done}/${this.gildedTotal}</span>`;
+      this.goalDisplay.disabled = true;
+      this.goalDisplay.setAttribute('aria-label', `Showcase tiles polished: ${done} of ${this.gildedTotal}`);
+      this.goalDisplay.innerHTML = `<span class="goal-tile-swatch" aria-hidden="true"></span><span class="hud-value">${done}/${this.gildedTotal}</span>`;
     } else if (g.type === 'collect') {
       const meta = JEWEL_MAP[g.jewelId];
       const shown = Math.min(this.collectedGoal, g.count);
-      this.goalDisplay.innerHTML = `<img class="goal-icon" src="${meta.img}" alt="${meta.shortName}" /><span class="hud-value">${shown}/${g.count}</span>`;
+      this.goalDisplay.disabled = false;
+      this.goalDisplay.setAttribute('aria-label', `Collect ${shown} of ${g.count} ${meta.name}. Tap to inspect in Loupe.`);
+      this.goalDisplay.innerHTML = `<img class="goal-icon" src="${meta.img}" alt="" aria-hidden="true" /><span class="hud-value">${shown}/${g.count}</span>`;
     } else {
+      this.goalDisplay.disabled = true;
+      this.goalDisplay.setAttribute('aria-label', `Score goal: ${this.stageCfg.targetScore.toLocaleString()}`);
       this.goalDisplay.innerHTML = `<span class="hud-value">${this.stageCfg.targetScore.toLocaleString()}</span>`;
     }
 
@@ -1920,7 +2023,7 @@ class JewelQueenGame {
       .join('');
 
     this.lookbookGrid.querySelectorAll('.dex-card').forEach((card) => {
-      card.addEventListener('click', () => {
+      const activate = () => {
         const id = card.dataset.jewelId;
         const owned = (this.collectionCounts[id] || 0) > 0;
         audio.playSelect();
@@ -1930,6 +2033,13 @@ class JewelQueenGame {
         } else {
           // Jump straight into the Era where this missing jewel can be hunted!
           this.startStage(Number(card.dataset.homeStage) || 1);
+        }
+      };
+      card.addEventListener('click', activate);
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          activate();
         }
       });
     });
@@ -1964,6 +2074,33 @@ class JewelQueenGame {
         audio.playSelect();
         this._setLoupeZoom(Number(btn.dataset.zoom));
       });
+    });
+
+    // Non-drag pan buttons (WCAG 2.2 SC 2.5.7 Dragging Movements alternative)
+    this.loupeDialog.querySelectorAll('.pan-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        audio.playSelect();
+        this._nudgeLoupePan(btn.dataset.pan);
+      });
+    });
+
+    // Keyboard shortcuts inside Loupe (1/2/3 zoom, Arrow pan when zoomed or Prev/Next when 1x)
+    this.loupeDialog.addEventListener('keydown', (e) => {
+      if (e.key === '1' || e.key === '2' || e.key === '3') {
+        e.preventDefault();
+        audio.playSelect();
+        this._setLoupeZoom(Number(e.key));
+      } else if (this.loupeState.zoom > 1 && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+        e.preventDefault();
+        const dir = e.key.replace('Arrow', '').toLowerCase();
+        this._nudgeLoupePan(dir);
+      } else if (this.loupeState.zoom === 1 && e.key === 'ArrowLeft') {
+        e.preventDefault();
+        document.getElementById('loupePrevBtn')?.click();
+      } else if (this.loupeState.zoom === 1 && e.key === 'ArrowRight') {
+        e.preventDefault();
+        document.getElementById('loupeNextBtn')?.click();
+      }
     });
 
     // Tap photo stage to cycle zoom (1x -> 2x -> 3x -> 1x) when not dragging
@@ -2107,6 +2244,17 @@ class JewelQueenGame {
     this._setLoupeZoom(1);
   }
 
+  _nudgeLoupePan(dir) {
+    if (this.loupeState.zoom <= 1) return;
+    const step = 42;
+    const limit = (this.loupeState.zoom - 1) * 95;
+    if (dir === 'left') this.loupeState.panX = Math.min(limit, this.loupeState.panX + step);
+    if (dir === 'right') this.loupeState.panX = Math.max(-limit, this.loupeState.panX - step);
+    if (dir === 'up') this.loupeState.panY = Math.min(limit, this.loupeState.panY + step);
+    if (dir === 'down') this.loupeState.panY = Math.max(-limit, this.loupeState.panY - step);
+    this._applyLoupeTransform();
+  }
+
   _setLoupeZoom(level) {
     this.loupeState.zoom = level;
     if (level === 1) {
@@ -2114,10 +2262,14 @@ class JewelQueenGame {
       this.loupeState.panY = 0;
     }
     this.loupeStage.classList.toggle('is-zoomed', level > 1);
+    const panControls = document.getElementById('loupePanControls');
+    if (panControls) panControls.hidden = level <= 1;
     this.loupePanHint.textContent =
-      level === 1 ? 'Tap photo or 2× / 3× to zoom in' : `${level}× Loupe · Drag to inspect details`;
+      level === 1 ? 'Tap photo or 2× / 3× to zoom in' : `${level}× Loupe · Drag or use arrows to pan`;
     this.loupeDialog.querySelectorAll('.zoom-pill').forEach((btn) => {
-      btn.classList.toggle('is-active', Number(btn.dataset.zoom) === level);
+      const active = Number(btn.dataset.zoom) === level;
+      btn.classList.toggle('is-active', active);
+      btn.setAttribute('aria-pressed', String(active));
     });
     this._applyLoupeTransform();
   }
@@ -2137,7 +2289,10 @@ class JewelQueenGame {
       const miniTray = (st.jewels || [])
         .map((id) => JEWEL_MAP[id])
         .filter(Boolean)
-        .map((j) => `<img src="${j.img}" alt="${j.shortName}" title="Tap to zoom: ${j.name}" data-inspect-id="${j.id}" loading="lazy" style="cursor:pointer" />`)
+        .map(
+          (j) =>
+            `<button type="button" class="era-jewel-btn" data-inspect-id="${j.id}" aria-label="Inspect ${j.name}" title="Tap to zoom: ${j.name}"><img src="${j.img}" alt="" aria-hidden="true" loading="lazy" /></button>`
+        )
         .join('');
       return `
         <article class="era-card ${isCurrent ? 'is-active' : ''}">
