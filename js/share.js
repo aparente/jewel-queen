@@ -1,12 +1,11 @@
 /**
- * Jewel Queen — Viral Collector Vault Share Card Generator (1080×1350 4:5 Portrait)
- * Generates a museum-grade black-velvet Collector Card PNG showcasing:
- *   - Collector display name & rank
- *   - Estate Valuation ($), Acquired count (X / 45), & Best Score
- *   - Top 5 Signature Lineup (or top 5 rarest discovered V&A pieces) with real museum photography
- *   - Subtle gallery credit: "Curated in the spirit of Connie Parente · @parenteconnie"
- * Supports 1-tap native mobile Share Sheet (Instagram Stories, Facebook, Messenger, Messages)
- * with instant Download PNG + Facebook Share + Copy Challenge Link fallback on desktop.
+ * Jewel Queen — Viral Collector Vault Share Card Generator
+ * Supports BOTH social formats optimized for antique/vintage jewelry communities:
+ *   - 'feed'  (1080×1350 · 4:5 Portrait): Instagram Feed, Facebook Groups & Posts, Messenger
+ *   - 'story' (1080×1920 · 9:16 Vertical): TikTok Photo Mode, Instagram Stories & Facebook Stories
+ * Showcases Collector Name, optional Whatnot @handle, Estate Valuation ($), Acquired (/45),
+ * Best Score, Top 5 Signature Velvet Tray with real V&A Museum photography, and Connie Parente's
+ * @jewelqueen (Whatnot) & @parenteconnie (Instagram) gallery credit.
  */
 
 import { JEWELS, JEWEL_MAP, TIARA_PIECE } from './data.js';
@@ -53,7 +52,6 @@ export function computeVaultStats(collectionCounts = {}, showcaseIds = []) {
     }
   }
 
-  // Pick 5 featured jewels: user's pinned Signature Lineup first, then highest-value owned, then iconic museum highlights
   const featured = [];
   const used = new Set();
 
@@ -78,7 +76,6 @@ export function computeVaultStats(collectionCounts = {}, showcaseIds = []) {
     }
   }
 
-  // Fill any remaining showcase slots with iconic museum preview pieces so even brand-new players get a gorgeous card
   const fallbackIds = ['wallace-butterfly', 'cindy-ruby', 'cartier-lapis', 'lalique-medusa', 'flato-feet'];
   for (const fid of fallbackIds) {
     if (featured.length >= 5) break;
@@ -110,9 +107,10 @@ export function computeVaultStats(collectionCounts = {}, showcaseIds = []) {
 }
 
 export function buildChallengeUrl({ collectorName, whatnotHandle, totalEstate, ownedCount, bestScore }) {
-  const base = window.location.origin.startsWith('http') && !window.location.origin.includes('localhost')
-    ? `${window.location.origin}${window.location.pathname}`
-    : LIVE_URL;
+  const base =
+    window.location.origin.startsWith('http') && !window.location.origin.includes('localhost')
+      ? `${window.location.origin}${window.location.pathname}`
+      : LIVE_URL;
   const u = new URL(base);
   if (collectorName) u.searchParams.set('invite', collectorName.slice(0, 28));
   if (whatnotHandle) u.searchParams.set('wn', whatnotHandle.replace(/^@+/, '').slice(0, 28));
@@ -127,10 +125,13 @@ export async function renderVaultShareCard({
   whatnotHandle = '',
   bestScore = 0,
   collectionCounts = {},
-  showcaseIds = []
+  showcaseIds = [],
+  format = 'feed' // 'feed' (1080x1350) | 'story' (1080x1920 for TikTok / IG Stories)
 }) {
+  const isStory = format === 'story';
   const W = 1080;
-  const H = 1350;
+  const H = isStory ? 1920 : 1350;
+  const yOff = isStory ? 225 : 0; // Safe vertical breathing room for TikTok/IG Story overlays
   const canvas = document.createElement('canvas');
   canvas.width = W;
   canvas.height = H;
@@ -144,15 +145,15 @@ export async function renderVaultShareCard({
   ctx.fillStyle = '#030306';
   ctx.fillRect(0, 0, W, H);
 
-  const aura1 = ctx.createRadialGradient(W * 0.22, H * 0.22, 20, W * 0.22, H * 0.22, 540);
-  aura1.addColorStop(0, 'rgba(130, 232, 224, 0.14)');
+  const aura1 = ctx.createRadialGradient(W * 0.22, H * 0.22, 20, W * 0.22, H * 0.22, 580);
+  aura1.addColorStop(0, 'rgba(130, 232, 224, 0.15)');
   aura1.addColorStop(0.55, 'rgba(148, 128, 255, 0.06)');
   aura1.addColorStop(1, 'rgba(3, 3, 6, 0)');
   ctx.fillStyle = aura1;
   ctx.fillRect(0, 0, W, H);
 
-  const aura2 = ctx.createRadialGradient(W * 0.8, H * 0.72, 20, W * 0.8, H * 0.72, 560);
-  aura2.addColorStop(0, 'rgba(244, 152, 204, 0.13)');
+  const aura2 = ctx.createRadialGradient(W * 0.8, H * 0.72, 20, W * 0.8, H * 0.72, 600);
+  aura2.addColorStop(0, 'rgba(244, 152, 204, 0.14)');
   aura2.addColorStop(0.6, 'rgba(130, 178, 255, 0.05)');
   aura2.addColorStop(1, 'rgba(3, 3, 6, 0)');
   ctx.fillStyle = aura2;
@@ -161,38 +162,51 @@ export async function renderVaultShareCard({
   // Delicate museum gallery frame hairline
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
   ctx.lineWidth = 1.5;
-  roundRectPath(ctx, 44, 44, W - 88, H - 88, 30);
+  roundRectPath(ctx, 44, isStory ? 110 : 44, W - 88, H - (isStory ? 220 : 88), 30);
   ctx.stroke();
 
-  // 2. Editorial Header
+  // Story/TikTok top viral challenge pill
   ctx.textAlign = 'center';
-  ctx.fillStyle = 'rgba(214, 212, 224, 0.62)';
+  if (isStory) {
+    roundRectPath(ctx, W / 2 - 260, 158, 520, 50, 25);
+    ctx.fillStyle = 'rgba(198, 247, 242, 0.11)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(198, 247, 242, 0.35)';
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+    ctx.fillStyle = '#d4f4ef';
+    ctx.font = '600 19px Inter, -apple-system, sans-serif';
+    ctx.fillText('CAN YOU BEAT MY ESTATE VAULT?', W / 2, 190);
+  }
+
+  // 2. Editorial Header
+  ctx.fillStyle = 'rgba(214, 212, 224, 0.66)';
   ctx.font = '500 21px Inter, -apple-system, sans-serif';
-  ctx.fillText('V&A MUSEUM ARCHIVE EDITION  ·  ' + stats.rankTitle, W / 2, 118);
+  ctx.fillText('V&A MUSEUM ARCHIVE EDITION  ·  ' + stats.rankTitle, W / 2, 118 + yOff);
 
   ctx.fillStyle = '#f5f2ed';
   ctx.font = '300 78px "Cormorant Garamond", Georgia, serif';
-  ctx.fillText('J E W E L   Q U E E N', W / 2, 202);
+  ctx.fillText('J E W E L   Q U E E N', W / 2, 202 + yOff);
 
-  ctx.fillStyle = 'rgba(245, 242, 237, 0.76)';
+  ctx.fillStyle = 'rgba(245, 242, 237, 0.78)';
   ctx.font = 'italic 400 34px "Cormorant Garamond", Georgia, serif';
   const subtitleLine = cleanWn
     ? `${displayName}’s Private Vault  ·  Whatnot @${cleanWn}`
     : `${displayName}’s Private Vault`;
-  ctx.fillText(subtitleLine, W / 2, 256);
+  ctx.fillText(subtitleLine, W / 2, 256 + yOff);
 
   // 3. Borderless Hairline Metrics Placard
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.11)';
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
   ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.moveTo(96, 298);
-  ctx.lineTo(W - 96, 298);
-  ctx.moveTo(96, 424);
-  ctx.lineTo(W - 96, 424);
-  ctx.moveTo(W * 0.365, 322);
-  ctx.lineTo(W * 0.365, 400);
-  ctx.moveTo(W * 0.665, 322);
-  ctx.lineTo(W * 0.665, 400);
+  ctx.moveTo(96, 298 + yOff);
+  ctx.lineTo(W - 96, 298 + yOff);
+  ctx.moveTo(96, 424 + yOff);
+  ctx.lineTo(W - 96, 424 + yOff);
+  ctx.moveTo(W * 0.365, 322 + yOff);
+  ctx.lineTo(W * 0.365, 400 + yOff);
+  ctx.moveTo(W * 0.665, 322 + yOff);
+  ctx.lineTo(W * 0.665, 400 + yOff);
   ctx.stroke();
 
   const metrics = [
@@ -201,40 +215,38 @@ export async function renderVaultShareCard({
     { x: W * 0.81, label: 'BEST SCORE', val: bestScore.toLocaleString(), accent: '#e6dcff' }
   ];
   for (const m of metrics) {
-    ctx.fillStyle = 'rgba(214, 212, 224, 0.56)';
+    ctx.fillStyle = 'rgba(214, 212, 224, 0.62)';
     ctx.font = '500 18px Inter, -apple-system, sans-serif';
-    ctx.fillText(m.label, m.x, 344);
+    ctx.fillText(m.label, m.x, 344 + yOff);
     ctx.fillStyle = m.accent;
     ctx.font = '500 44px Inter, -apple-system, sans-serif';
-    ctx.fillText(m.val, m.x, 398);
+    ctx.fillText(m.val, m.x, 398 + yOff);
   }
 
   // 4. Pure Black Velvet Collector's Vitrine (5 Real Museum Jewels)
-  roundRectPath(ctx, 84, 466, W - 168, 636, 28);
+  roundRectPath(ctx, 84, 466 + yOff, W - 168, 636, 28);
   ctx.fillStyle = '#09090d';
   ctx.fill();
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.09)';
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.10)';
   ctx.lineWidth = 1.5;
   ctx.stroke();
 
-  ctx.fillStyle = 'rgba(214, 212, 224, 0.52)';
+  ctx.fillStyle = 'rgba(214, 212, 224, 0.58)';
   ctx.font = '500 19px Inter, -apple-system, sans-serif';
   ctx.fillText(
     stats.ownedCount > 0 ? 'SIGNATURE VELVET TRAY  ·  CURATED HIGHLIGHTS' : 'CURATED V&A MUSEUM HIGHLIGHTS',
     W / 2,
-    514
+    514 + yOff
   );
 
-  // Load the 5 jewel sprites in parallel
   const loadedImgs = await Promise.all(stats.featured.map((f) => loadImage(f.piece.img)));
 
-  // Top row: 2 large hero compartments; Bottom row: 3 compartments
   const slots = [
-    { x: 124, y: 544, w: 400, h: 256 },
-    { x: 556, y: 544, w: 400, h: 256 },
-    { x: 124, y: 822, w: 264, h: 244 },
-    { x: 408, y: 822, w: 264, h: 244 },
-    { x: 692, y: 822, w: 264, h: 244 }
+    { x: 124, y: 544 + yOff, w: 400, h: 256 },
+    { x: 556, y: 544 + yOff, w: 400, h: 256 },
+    { x: 124, y: 822 + yOff, w: 264, h: 244 },
+    { x: 408, y: 822 + yOff, w: 264, h: 244 },
+    { x: 692, y: 822 + yOff, w: 264, h: 244 }
   ];
 
   slots.forEach((slot, i) => {
@@ -255,7 +267,7 @@ export async function renderVaultShareCard({
     wellGrad.addColorStop(1, '#060609');
     ctx.fillStyle = wellGrad;
     ctx.fill();
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.09)';
     ctx.lineWidth = 1;
     ctx.stroke();
 
@@ -272,38 +284,46 @@ export async function renderVaultShareCard({
       ctx.restore();
     }
 
-    // Jewel short name & maker
     ctx.fillStyle = '#f5f2ed';
-    ctx.font = i < 2 ? '500 22px "Cormorant Garamond", Georgia, serif' : '500 19px "Cormorant Garamond", Georgia, serif';
+    ctx.font =
+      i < 2
+        ? '500 22px "Cormorant Garamond", Georgia, serif'
+        : '500 19px "Cormorant Garamond", Georgia, serif';
     ctx.fillText(entry.piece.shortName, slot.x + slot.w / 2, slot.y + slot.h - 42);
 
     const maker = (entry.piece.designers || '').split('·')[0].trim();
     const rLabel = (RARITY_META[entry.tier.rarity]?.label || '').toUpperCase();
-    ctx.fillStyle = 'rgba(214, 212, 224, 0.56)';
+    ctx.fillStyle = 'rgba(214, 212, 224, 0.64)';
     ctx.font = '500 14px Inter, -apple-system, sans-serif';
     ctx.fillText(i < 2 ? `${maker} · ${rLabel}` : maker, slot.x + slot.w / 2, slot.y + slot.h - 18);
   });
 
   // 5. Connie Parente Brand Colophon & Viral Invite Footer
-  ctx.fillStyle = 'rgba(245, 242, 237, 0.8)';
+  const footerBase = isStory ? 1170 + yOff + 42 : 1170;
+  ctx.fillStyle = 'rgba(245, 242, 237, 0.84)';
   ctx.font = 'italic 400 29px "Cormorant Garamond", Georgia, serif';
-  ctx.fillText('Connie Parente · IG @parenteconnie · Whatnot @jewelqueen', W / 2, 1170);
+  ctx.fillText('Connie Parente · IG @parenteconnie · Whatnot @jewelqueen', W / 2, footerBase);
 
-  ctx.fillStyle = 'rgba(214, 212, 224, 0.52)';
+  ctx.fillStyle = 'rgba(214, 212, 224, 0.58)';
   ctx.font = '400 20px Inter, -apple-system, sans-serif';
-  ctx.fillText('A gallery game made by & for family — can you collect all 45 V&A treasures?', W / 2, 1212);
+  ctx.fillText('A gallery game made by & for family — can you collect all 45 V&A treasures?', W / 2, footerBase + 42);
 
-  // Subtle luminous pill URL at bottom
-  roundRectPath(ctx, W / 2 - 235, 1236, 470, 44, 22);
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.055)';
+  roundRectPath(ctx, W / 2 - 235, footerBase + 66, 470, 44, 22);
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.065)';
   ctx.fill();
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.16)';
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.22)';
   ctx.lineWidth = 1;
   ctx.stroke();
 
   ctx.fillStyle = '#d4f4ef';
   ctx.font = '500 20px Inter, -apple-system, sans-serif';
-  ctx.fillText('aparente.github.io/jewel-queen', W / 2, 1265);
+  ctx.fillText('aparente.github.io/jewel-queen', W / 2, footerBase + 95);
+
+  if (isStory) {
+    ctx.fillStyle = 'rgba(214, 212, 224, 0.45)';
+    ctx.font = '500 16px Inter, -apple-system, sans-serif';
+    ctx.fillText('#VINTAGEJEWELRY  ·  #ANTIQUEJEWELRY  ·  #WHATNOT  ·  #JEWELQUEEN', W / 2, footerBase + 162);
+  }
 
   const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png', 0.96));
   const dataUrl = canvas.toDataURL('image/png');
@@ -315,10 +335,17 @@ export async function renderVaultShareCard({
     bestScore
   });
 
+  const topNames = stats.featured
+    .slice(0, 2)
+    .map((f) => f.piece.shortName)
+    .join(' & ');
+
   const shareText =
     stats.ownedCount > 0
-      ? `My Jewel Queen Estate Vault is valued at ${formatEstateMoney(stats.totalEstate)} (${stats.ownedCount}/${stats.totalCount} real V&A museum jewels)! Inspired by Connie Parente (IG @parenteconnie · Whatnot @jewelqueen) — see if you can top my vault:`
-      : `Discover 45 real V&A Museum vintage jewels in Jewel Queen — inspired by Connie Parente (IG @parenteconnie · Whatnot @jewelqueen):`;
+      ? `My Jewel Queen Estate Vault just hit ${formatEstateMoney(stats.totalEstate)} (${stats.ownedCount}/${stats.totalCount} real V&A Museum pieces — featuring ${topNames}) ✨ Inspired by Connie Parente (Whatnot @jewelqueen · IG @parenteconnie). Can you beat my vault?`
+      : `Match & collect 45 real V&A Museum vintage & antique jewels in Jewel Queen — inspired by Connie Parente (Whatnot @jewelqueen · IG @parenteconnie) ✨`;
 
-  return { blob, dataUrl, shareUrl, shareText, stats };
+  const viralCaption = `${shareText}\n\nPlay free: ${shareUrl}\n\n#vintagejewelry #antiquejewelry #whatnot #jewelqueen #artdecojewelry #finejewelry #jewelrycollector`;
+
+  return { blob, dataUrl, shareUrl, shareText, viralCaption, stats, format };
 }

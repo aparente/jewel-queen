@@ -37,7 +37,7 @@
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=2.5" />
+    <link rel="stylesheet" href="styles.css?v=2.6" />
   </head>
   <body>
     <div class="velvet-backdrop" aria-hidden="true"></div>
@@ -203,21 +203,22 @@
         </div>
       </section>
 
-      <!-- Interactive 4-Step Guided Gallery Tutorial Strip -->
+      <!-- Interactive 6-Step Guided Gallery Tutorial Strip -->
       <aside class="tutorial-bar" id="tutorialBar" hidden aria-live="polite">
         <div class="tutorial-bar-top">
-          <span class="tutorial-kicker" id="tutorialKicker">STEP 1 OF 4 · ALIGN THREE</span>
+          <span class="tutorial-kicker" id="tutorialKicker">STEP 1 OF 6 · MATCH 3 &amp; REACH YOUR GOAL</span>
           <div class="tutorial-bar-right">
             <div class="tutorial-dots" id="tutorialDots" aria-hidden="true"></div>
             <button type="button" class="tutorial-skip-btn" id="tutorialSkipBtn">Skip</button>
           </div>
         </div>
+        <div class="tutorial-rule-chip" id="tutorialRuleChip">RULE · Complete the GOAL above before MOVES run out</div>
         <div class="tutorial-bar-body">
           <p class="tutorial-text" id="tutorialText">
-            Swipe or tap the two glowing jewels to align 3 in a row.
+            Swipe or tap the two glowing jewels to align 3.
           </p>
           <button type="button" class="tutorial-action-btn" id="tutorialActionBtn" hidden>
-            BEGIN EXHIBITION
+            START PLAYING
           </button>
         </div>
       </aside>
@@ -515,15 +516,71 @@
       </div>
     </dialog>
 
-    <!-- Viral Shareable Vault Card Preview Modal -->
+    <!-- First-Visit Luxury Gallery Welcome & Quick Sign-In Invitation Modal -->
+    <dialog class="velvet-dialog welcome-dialog" id="welcomeDialog" aria-labelledby="welcomeTitle">
+      <div class="dialog-card welcome-card">
+        <p class="dialog-kicker">PRIVATE EXHIBITION INVITATION</p>
+        <h2 class="dialog-title welcome-title" id="welcomeTitle">JEWEL QUEEN</h2>
+
+        <div class="welcome-showcase" aria-hidden="true">
+          <img src="assets/museum_jewels/lalique-medusa.png" alt="" />
+          <img src="assets/museum_jewels/cartier-lapis.png" alt="" />
+          <img src="assets/museum_jewels/wallace-butterfly.png" alt="" />
+          <img src="assets/museum_jewels/cindy-ruby.png" alt="" />
+        </div>
+
+        <p class="welcome-lead">
+          Match &amp; collect <strong>45 real Victoria &amp; Albert Museum jewels</strong> across 8 historic eras — build your million-dollar Estate Vault and share your Signature Tray with fellow collectors.
+        </p>
+
+        <div class="welcome-rules-grid">
+          <div class="welcome-rule">
+            <strong>Match 3, 4 &amp; 5</strong>
+            <span>Align 3 to score &amp; collect. Match 4 for a Light Beam, L/T for Aura Burst, 5 for the Royal Tiara.</span>
+          </div>
+          <div class="welcome-rule">
+            <strong>Vault Draw &amp; 3× Loupe</strong>
+            <span>Charge Vault Draw for 3× Aura &amp; gem rain. Hold any jewel to zoom 3× &amp; read its museum history.</span>
+          </div>
+        </div>
+
+        <div class="dialog-actions">
+          <button type="button" class="gold-cta" id="welcomeStartTourBtn">PLAY 45-SEC GUIDED TOUR →</button>
+          <button type="button" class="velvet-secondary" id="welcomeSkipBtn">JUMP STRAIGHT INTO GALLERY</button>
+        </div>
+
+        <div class="welcome-signin-strip" id="welcomeSignInStrip">
+          <span class="welcome-signin-label">SYNC YOUR VAULT &amp; JOIN THE COLLECTORS' LEADERBOARD</span>
+          <div class="welcome-sso-row">
+            <button type="button" class="welcome-sso-pill sso-facebook" id="welcomeFbBtn">Facebook</button>
+            <button type="button" class="welcome-sso-pill sso-google" id="welcomeGoogleBtn">Google</button>
+            <button type="button" class="welcome-sso-pill welcome-email-pill" id="welcomeEmailBtn">Email Link</button>
+          </div>
+        </div>
+
+        <p class="connie-credit-line">
+          Made by &amp; for family ·
+          <a href="https://www.whatnot.com/user/jewelqueen" target="_blank" rel="noopener noreferrer" class="gold-link">Whatnot @jewelqueen</a>
+          ·
+          <a href="https://www.instagram.com/parenteconnie/?hl=en" target="_blank" rel="noopener noreferrer" class="gold-link">@parenteconnie</a>
+        </p>
+      </div>
+    </dialog>
+
+    <!-- Viral Shareable Vault Card Preview Modal (Feed 4:5 + TikTok/Story 9:16) -->
     <dialog class="velvet-dialog share-dialog" id="shareDialog" aria-labelledby="shareTitle">
       <div class="dialog-card share-card">
         <div class="lookbook-header">
           <div>
-            <p class="dialog-kicker">READY FOR INSTAGRAM &amp; FACEBOOK</p>
+            <p class="dialog-kicker">TIKTOK · INSTAGRAM · FACEBOOK · WHATNOT</p>
             <h2 class="dialog-title" id="shareTitle">YOUR VAULT CARD</h2>
           </div>
           <button type="button" class="icon-btn" id="closeShareBtn" aria-label="Close Share Card">✕</button>
+        </div>
+
+        <div class="share-format-tabs" id="shareFormatTabs" role="tablist" aria-label="Share card format">
+          <button type="button" class="filter-pill is-active" role="tab" aria-selected="true" data-format="story">9:16 TikTok / Story</button>
+          <button type="button" class="filter-pill" role="tab" aria-selected="false" data-format="feed">4:5 IG / Facebook</button>
         </div>
 
         <div class="share-preview-frame">
@@ -531,11 +588,12 @@
         </div>
 
         <div class="dialog-actions">
-          <button type="button" class="gold-cta" id="nativeShareBtn">SHARE CARD TO IG / FB / MESSAGES</button>
+          <button type="button" class="gold-cta" id="nativeShareBtn">SHARE CARD TO TIKTOK / IG / FB</button>
           <div class="share-quick-row">
             <button type="button" class="velvet-secondary" id="downloadCardBtn">Save PNG</button>
+            <button type="button" class="velvet-secondary" id="copyCaptionBtn">Caption+#</button>
             <button type="button" class="velvet-secondary" id="shareFacebookLinkBtn">Facebook</button>
-            <button type="button" class="velvet-secondary" id="copyChallengeLinkBtn">Copy Link</button>
+            <button type="button" class="velvet-secondary" id="copyChallengeLinkBtn">Link</button>
           </div>
         </div>
         <p class="share-status" id="shareStatus" role="status" aria-live="polite"></p>
@@ -598,6 +656,6 @@
       </div>
     </dialog>
 
-    <script type="module" src="js/game.js?v=2.5"></script>
+    <script type="module" src="js/game.js?v=2.6"></script>
   </body>
 </html>

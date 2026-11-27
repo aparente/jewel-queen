@@ -156,6 +156,8 @@ class JewelQueenGame {
 
     this.tutorial = new GalleryTutorial(this);
     this.lastShareData = null;
+    this.shareFormat = 'story';
+    this._wasSignedIn = false;
 
     this.auth = new CollectorAuth({
       onStateChange: (st) => this._syncAccountUI(st),
@@ -166,7 +168,12 @@ class JewelQueenGame {
     this._checkViralInviteBanner();
     this.startStage(1, { skipTutorialCheck: true });
 
-    if (this.tutorial.shouldAutoStart()) {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('tutorial') === '1') {
+      this.tutorial.start(false);
+    } else if (params.get('welcome') === '1' || (!localStorage.getItem('jq_welcomed') && params.get('tutorial') !== '0')) {
+      this.welcomeDialog?.showModal();
+    } else if (this.tutorial.shouldAutoStart()) {
       this.tutorial.start(false);
     }
   }
@@ -1620,6 +1627,7 @@ class JewelQueenGame {
   }
 
   _bindAccountAndShareEvents() {
+    this.welcomeDialog = document.getElementById('welcomeDialog');
     this.accountDialog = document.getElementById('accountDialog');
     this.shareDialog = document.getElementById('shareDialog');
     this.sharePreviewImg = document.getElementById('sharePreviewImg');
@@ -1627,6 +1635,46 @@ class JewelQueenGame {
     this.collectorNameInput = document.getElementById('collectorNameInput');
     this.collectorWhatnotInput = document.getElementById('collectorWhatnotInput');
     this.ssoNotice = document.getElementById('ssoNotice');
+
+    // First-visit Welcome Invitation controls
+    document.getElementById('welcomeStartTourBtn')?.addEventListener('click', () => {
+      audio.unlock();
+      audio.playSelect();
+      localStorage.setItem('jq_welcomed', '1');
+      this.welcomeDialog?.close();
+      this.tutorial.start(true);
+    });
+    document.getElementById('welcomeSkipBtn')?.addEventListener('click', () => {
+      audio.unlock();
+      audio.playSelect();
+      localStorage.setItem('jq_welcomed', '1');
+      localStorage.setItem('jq_tutorial_done', '1');
+      this.welcomeDialog?.close();
+    });
+    document.getElementById('welcomeFbBtn')?.addEventListener('click', () => {
+      localStorage.setItem('jq_welcomed', '1');
+      this.welcomeDialog?.close();
+      this._openAccountModal();
+      document.getElementById('facebookSignInBtn')?.click();
+    });
+    document.getElementById('welcomeGoogleBtn')?.addEventListener('click', () => {
+      localStorage.setItem('jq_welcomed', '1');
+      this.welcomeDialog?.close();
+      this._openAccountModal();
+      document.getElementById('googleSignInBtn')?.click();
+    });
+    document.getElementById('welcomeEmailBtn')?.addEventListener('click', () => {
+      localStorage.setItem('jq_welcomed', '1');
+      this.welcomeDialog?.close();
+      this._openAccountModal();
+      setTimeout(() => document.getElementById('magicEmailInput')?.focus(), 80);
+    });
+    this.welcomeDialog?.addEventListener('click', (e) => {
+      if (e.target === this.welcomeDialog) {
+        localStorage.setItem('jq_welcomed', '1');
+        this.welcomeDialog.close();
+      }
+    });
 
     // Replay guided tutorial from How-to-Play modal
     document.getElementById('replayTutorialBtn')?.addEventListener('click', () => {
@@ -1746,9 +1794,34 @@ class JewelQueenGame {
       this._downloadShareCard();
     });
 
+    // Share format tabs (9:16 TikTok/Story vs 4:5 IG/Facebook)
+    document.getElementById('shareFormatTabs')?.addEventListener('click', (e) => {
+      const btn = e.target.closest('.filter-pill');
+      if (!btn) return;
+      audio.playSelect();
+      this.shareFormat = btn.dataset.format || 'story';
+      document.querySelectorAll('#shareFormatTabs .filter-pill').forEach((p) => {
+        const active = p === btn;
+        p.classList.toggle('is-active', active);
+        p.setAttribute('aria-selected', String(active));
+      });
+      this._renderShareCardPreview();
+    });
+
     document.getElementById('downloadCardBtn')?.addEventListener('click', () => {
       audio.playSelect();
       this._downloadShareCard();
+    });
+
+    document.getElementById('copyCaptionBtn')?.addEventListener('click', async () => {
+      audio.playSelect();
+      if (!this.lastShareData) return;
+      try {
+        await navigator.clipboard.writeText(this.lastShareData.viralCaption);
+        this.shareStatus.textContent = 'Viral caption + #hashtags copied for TikTok, IG, FB & Whatnot!';
+      } catch {
+        this.shareStatus.textContent = this.lastShareData.shareUrl;
+      }
     });
 
     document.getElementById('shareFacebookLinkBtn')?.addEventListener('click', () => {
@@ -1763,11 +1836,24 @@ class JewelQueenGame {
       if (!this.lastShareData) return;
       try {
         await navigator.clipboard.writeText(`${this.lastShareData.shareText} ${this.lastShareData.shareUrl}`);
-        this.shareStatus.textContent = 'Challenge link copied — paste in IG Story, Facebook or text!';
+        this.shareStatus.textContent = 'Challenge link copied — paste in TikTok bio, IG Story, FB or text!';
       } catch {
         this.shareStatus.textContent = this.lastShareData.shareUrl;
       }
     });
+  }
+
+  _announceLoginWelcome(displayName, whatnotHandle) {
+    this.acquireToastImg.src = TIARA_PIECE.img;
+    this.acquireToastImg.alt = TIARA_PIECE.name;
+    this.acquireToastKicker.textContent = '✦ WELCOME TO THE GALLERY · VAULT SYNCED';
+    const wnSuffix = whatnotHandle ? ` (@${whatnotHandle})` : '';
+    this.acquireToastTitle.textContent = `Welcome, ${displayName}${wnSuffix}!`;
+    this.acquireToast.hidden = false;
+    if (this.acquireToastTimer) clearTimeout(this.acquireToastTimer);
+    this.acquireToastTimer = setTimeout(() => {
+      this.acquireToast.hidden = true;
+    }, 4200);
   }
 
   _syncAccountUI(st) {
@@ -1788,9 +1874,19 @@ class JewelQueenGame {
     }
 
     const signedIn = Boolean(st.user);
+    if (signedIn && !this._wasSignedIn) {
+      this._wasSignedIn = true;
+      localStorage.setItem('jq_welcomed', '1');
+      if (this.welcomeDialog?.open) this.welcomeDialog.close();
+      this._announceLoginWelcome(st.displayName, st.whatnotHandle);
+    } else if (!signedIn) {
+      this._wasSignedIn = false;
+    }
     if (signedInPanel) signedInPanel.hidden = !signedIn;
     if (ssoButtons) ssoButtons.hidden = signedIn;
     if (syncDot) syncDot.hidden = !signedIn;
+    const welcomeSignInStrip = document.getElementById('welcomeSignInStrip');
+    if (welcomeSignInStrip) welcomeSignInStrip.hidden = signedIn;
 
     if (signedIn && st.avatarUrl) {
       if (avatarImg) { avatarImg.src = st.avatarUrl; avatarImg.hidden = false; }
@@ -1847,28 +1943,40 @@ class JewelQueenGame {
   }
 
   async openShareCardModal() {
-    this.shareStatus.textContent = 'Composing museum card…';
     this.shareDialog.showModal();
+    await this._renderShareCardPreview();
+  }
+
+  async _renderShareCardPreview() {
+    this.shareStatus.textContent =
+      this.shareFormat === 'story'
+        ? 'Composing 9:16 TikTok & Story card…'
+        : 'Composing 4:5 Instagram & Facebook card…';
     this.lastShareData = await renderVaultShareCard({
       collectorName: this.auth?.getDisplayName() || 'Private Collector',
       whatnotHandle: this.auth?.getWhatnotHandle() || '',
       bestScore: Math.max(this.bestScore, this.score),
       collectionCounts: this.collectionCounts,
-      showcaseIds: this.showcaseIds
+      showcaseIds: this.showcaseIds,
+      format: this.shareFormat
     });
     this.sharePreviewImg.src = this.lastShareData.dataUrl;
-    this.shareStatus.textContent = 'Ready for Instagram Stories, Facebook & Messages.';
+    this.shareStatus.textContent =
+      this.shareFormat === 'story'
+        ? '9:16 card ready for TikTok Photo Mode, IG Stories & FB Stories.'
+        : '4:5 card ready for Instagram Feed, Facebook Groups & Messages.';
   }
 
   _downloadShareCard() {
     if (!this.lastShareData?.dataUrl) return;
+    const suffix = this.shareFormat === 'story' ? 'story-9x16' : 'feed-4x5';
     const a = document.createElement('a');
     a.href = this.lastShareData.dataUrl;
-    a.download = 'jewel-queen-vault.png';
+    a.download = `jewel-queen-vault-${suffix}.png`;
     document.body.appendChild(a);
     a.click();
     a.remove();
-    this.shareStatus.textContent = 'Saved jewel-queen-vault.png — ready to post!';
+    this.shareStatus.textContent = `Saved jewel-queen-vault-${suffix}.png — ready to post!`;
   }
 
   async _handleStageWin() {
@@ -1899,7 +2007,8 @@ class JewelQueenGame {
     this.resultKicker.textContent = `${this.stageCfg.decade.toUpperCase()} EXHIBITION COMPLETE`;
     this.resultTitle.textContent = 'JEWEL QUEEN!';
     this.resultStars.textContent = stars;
-    this.resultSummary.textContent = `You curated ${this.stageCfg.title} (${this.stageCfg.designers.join(', ')}) with dazzling flair.`;
+    const vaultStats = computeVaultStats(this.collectionCounts, this.showcaseIds);
+    this.resultSummary.textContent = `You curated ${this.stageCfg.title}. Estate Vault: ${formatEstateMoney(vaultStats.totalEstate)} (${vaultStats.ownedCount}/${vaultStats.totalCount} V&A jewels).`;
     this.resultScore.textContent = this.score.toLocaleString();
     this.resultBonus.textContent = `+${movesBonus.toLocaleString()}`;
     this.resultPrimaryBtn.textContent = `NEXT: ${nextCfg.decade.toUpperCase()} ${nextCfg.title.split(' ')[0].toUpperCase()} →`;

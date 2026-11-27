@@ -1,10 +1,13 @@
 /**
- * Jewel Queen — Interactive 4-Step Guided Gallery Tutorial
- * Hands-on, deterministic onboarding directly on the black velvet tray:
- *   Step 1: Swipe or tap two highlighted jewels to make a Match 3
- *   Step 2: Swap two highlighted jewels to forge a Match 4 Light Beam power jewel
- *   Step 3: Tap VAULT DRAW to experience the 3-chamber bonus & cut-gemstone rain
- *   Step 4: Discover the 3x Jeweler's Loupe & My Collection (45 V&A Museum pieces)
+ * Jewel Queen — Expanded 6-Step Interactive Hands-On Gallery Tutorial
+ * Teaches every core game dynamic, rule, power-jewel combo, and viral collection loop
+ * directly on the live black velvet tray in ~45 seconds:
+ *   Step 1: Match 3 & understand Goals + Collection unlocks
+ *   Step 2: Match 4 in a line to forge a Light Beam power jewel (explains 4 / L-T / 5 rules)
+ *   Step 3: Actually trigger/fire your Light Beam jewel to sweep an entire row or column!
+ *   Step 4: Tap VAULT DRAW for 3x Luminous Aura, extra moves & cut-gemstone rain
+ *   Step 5: Discover 3x Museum Loupe zoom & touring all 8 historical eras
+ *   Step 6: Track Estate Value ($), pin Top 5 & share to TikTok / IG / FB / Whatnot
  */
 
 const STORAGE_KEY = 'jq_tutorial_done';
@@ -13,13 +16,15 @@ export class GalleryTutorial {
   constructor(game) {
     this.game = game;
     this.active = false;
-    this.step = 0; // 1..4
+    this.step = 0; // 1..6
     this.highlightedTiles = [];
-    this.highlightedEl = null;
+    this.highlightedEls = [];
+    this.targetSwap = null;
 
     this.barEl = document.getElementById('tutorialBar');
     this.kickerEl = document.getElementById('tutorialKicker');
     this.textEl = document.getElementById('tutorialText');
+    this.ruleChipEl = document.getElementById('tutorialRuleChip');
     this.actionBtn = document.getElementById('tutorialActionBtn');
     this.skipBtn = document.getElementById('tutorialSkipBtn');
     this.dotsEl = document.getElementById('tutorialDots');
@@ -29,7 +34,10 @@ export class GalleryTutorial {
     }
     if (this.actionBtn) {
       this.actionBtn.addEventListener('click', () => {
-        if (this.step === 4) {
+        if (this.step === 5) {
+          this.step = 6;
+          this._renderStep();
+        } else if (this.step === 6) {
           this.finish(true);
         }
       });
@@ -56,6 +64,7 @@ export class GalleryTutorial {
   finish(markDone = true) {
     this.active = false;
     this.step = 0;
+    this.targetSwap = null;
     this._clearHighlights();
     if (this.barEl) this.barEl.hidden = true;
     if (markDone) {
@@ -65,19 +74,17 @@ export class GalleryTutorial {
   }
 
   /**
-   * Ensure a guaranteed, visually obvious Match-3 right at the center of the tray
-   * without triggering pre-existing matches.
+   * Step 1: Guaranteed clean Match-3 right at the center of the velvet tray: (3,3) <-> (3,4)
    */
   _stageStep1Board() {
     const pool = this.game._activeJewelPool().map((j) => j.id);
     if (pool.length < 5) return;
     const [A, B, C, D, E] = pool;
-    // Deterministic 7x7 starter board with zero initial matches and a clean Match-3 at (3,2)<->(3,3)
     const layout = [
       [A, B, C, D, E, A, B],
       [C, D, E, A, B, C, D],
       [E, A, B, C, D, E, A],
-      [D, B, B, C, B, A, E], // Swap (3,3)=C with (3,4)=B -> 3x B at (3,1),(3,2),(3,3)!
+      [D, B, B, C, B, A, E], // Swap (3,3)=C with (3,4)=B -> 3x B at (3,1),(3,2),(3,3)
       [B, E, A, D, C, B, C],
       [A, C, D, E, A, D, B],
       [C, D, E, B, D, E, A]
@@ -90,8 +97,7 @@ export class GalleryTutorial {
   }
 
   /**
-   * Find an existing Match-4 swap on the live board, or craft one cleanly near the center
-   * so the player always experiences forging a Light Beam jewel!
+   * Step 2: Guarantee a crisp 4-in-a-row swap so the player forges a real Light Beam power jewel.
    */
   _ensureMatch4Swap() {
     const found = this._find4MatchSwap();
@@ -100,11 +106,7 @@ export class GalleryTutorial {
       return;
     }
     const pool = this.game._activeJewelPool().map((j) => j.id);
-    const A = pool[0];
-    const B = pool[1];
-    const C = pool[2];
-    const D = pool[3];
-    // Gently arrange row 3 & (2,3) into an unmistakable 4-in-a-row swap: (2,3)<->(3,3)
+    const [A, B, C, D] = pool;
     const g = this.game.grid;
     const set = (r, c, type) => {
       if (g[r]?.[c]) {
@@ -118,13 +120,74 @@ export class GalleryTutorial {
     set(3, 3, B);
     set(3, 4, A);
     set(2, 3, A);
-    // Prevent accidental vertical matches at (2,3)/(3,3) or row 3 neighbors
     if (g[3]?.[0]?.type === A) set(3, 0, C);
     if (g[3]?.[5]?.type === A) set(3, 5, D);
     if (g[1]?.[3]?.type === A) set(1, 3, C);
     if (g[4]?.[3]?.type === B) set(4, 3, D);
     if (g[2]?.[2]?.type === A && g[2]?.[1]?.type === A) set(2, 2, C);
     if (g[2]?.[4]?.type === A && g[2]?.[5]?.type === A) set(2, 4, D);
+
+    this.targetSwap = [
+      [2, 3],
+      [3, 3]
+    ];
+  }
+
+  /**
+   * Step 3: Find a live swap that triggers an existing power jewel on the board,
+   * or stage a guaranteed Light Beam activation right in the center so the player
+   * feels the explosive row-sweep laser firsthand!
+   */
+  _ensurePowerTriggerSwap() {
+    const g = this.game.grid;
+    const N = g.length;
+
+    // Look for any existing special tile that already has a valid swap
+    for (let r = 0; r < N; r++) {
+      for (let c = 0; c < N; c++) {
+        const a = g[r][c];
+        if (!a || !a.special) continue;
+        for (const [dr, dc] of [[0, 1], [1, 0], [0, -1], [-1, 0]]) {
+          const nr = r + dr;
+          const nc = c + dc;
+          if (nr < 0 || nr >= N || nc < 0 || nc >= N) continue;
+          const b = g[nr][nc];
+          if (!b) continue;
+          if (a.special === 'tiara' || b.special) {
+            this.targetSwap = [[r, c], [nr, nc]];
+            return;
+          }
+          g[r][c] = b;
+          g[nr][nc] = a;
+          const ok = this._runLenAt(r, c) >= 3 || this._runLenAt(nr, nc) >= 3;
+          g[r][c] = a;
+          g[nr][nc] = b;
+          if (ok) {
+            this.targetSwap = [[r, c], [nr, nc]];
+            return;
+          }
+        }
+      }
+    }
+
+    // Otherwise craft a glowing Light Beam trigger right in row 3: swap (2,3) with (3,3)!
+    const pool = this.game._activeJewelPool().map((j) => j.id);
+    const [A, B, C, D] = pool;
+    const set = (r, c, type, spec = null) => {
+      if (g[r]?.[c]) {
+        g[r][c].type = type;
+        g[r][c].special = spec;
+        this.game._syncTileVisual(g[r][c]);
+      }
+    };
+    set(3, 1, A, 'line-h');
+    set(3, 2, A, null);
+    set(3, 3, B, null);
+    set(2, 3, A, null);
+    if (g[3]?.[0]?.type === A) set(3, 0, C);
+    if (g[3]?.[4]?.type === A) set(3, 4, D);
+    if (g[1]?.[3]?.type === A) set(1, 3, C);
+    if (g[4]?.[3]?.type === B) set(4, 3, D);
 
     this.targetSwap = [
       [2, 3],
@@ -139,10 +202,7 @@ export class GalleryTutorial {
       for (let c = 0; c < N; c++) {
         const a = g[r][c];
         if (!a || a.special) continue;
-        for (const [dr, dc] of [
-          [0, 1],
-          [1, 0]
-        ]) {
+        for (const [dr, dc] of [[0, 1], [1, 0]]) {
           const nr = r + dr;
           const nc = c + dc;
           if (nr >= N || nc >= N) continue;
@@ -174,15 +234,18 @@ export class GalleryTutorial {
     return Math.max(h, v);
   }
 
-  onMatchResolved(hadSpecialCreated) {
+  onMatchResolved() {
     if (!this.active) return;
     if (this.step === 1) {
       this.step = 2;
       this._ensureMatch4Swap();
       this._renderStep();
     } else if (this.step === 2) {
-      // Advance whether they matched 4 or cleared a cascade
       this.step = 3;
+      this._ensurePowerTriggerSwap();
+      this._renderStep();
+    } else if (this.step === 3) {
+      this.step = 4;
       this.game.slot.setCharge(100);
       this.game.slot.setBanner('TUTORIAL · TAP VAULT DRAW NOW', true);
       this._renderStep();
@@ -191,15 +254,18 @@ export class GalleryTutorial {
 
   onVaultDrawComplete() {
     if (!this.active) return;
-    if (this.step === 3) {
-      this.step = 4;
+    if (this.step === 4) {
+      this.step = 5;
       this._renderStep();
     }
   }
 
   onLoupeOrCollectionOpened() {
     if (!this.active) return;
-    if (this.step === 4) {
+    if (this.step === 5) {
+      this.step = 6;
+      this._renderStep();
+    } else if (this.step === 6) {
       this.finish(true);
     }
   }
@@ -209,9 +275,17 @@ export class GalleryTutorial {
       el?.classList.remove('is-tutorial-focus');
     }
     this.highlightedTiles = [];
-    if (this.highlightedEl) {
-      this.highlightedEl.classList.remove('is-tutorial-ring');
-      this.highlightedEl = null;
+    for (const el of this.highlightedEls) {
+      el?.classList.remove('is-tutorial-ring');
+    }
+    this.highlightedEls = [];
+  }
+
+  _highlightEl(id) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.classList.add('is-tutorial-ring');
+      this.highlightedEls.push(el);
     }
   }
 
@@ -222,24 +296,40 @@ export class GalleryTutorial {
 
     const steps = {
       1: {
-        kicker: 'STEP 1 OF 4 · ALIGN THREE',
-        text: 'Swipe or tap the two glowing jewels to align 3 in a row.',
+        kicker: 'STEP 1 OF 6 · MATCH 3 & REACH YOUR GOAL',
+        rule: 'RULE · Complete the GOAL above before MOVES run out',
+        text: 'Swipe or tap the two glowing jewels to align 3. Every match scores points and permanently unlocks those real V&A Museum pieces in your Vault.',
         cta: ''
       },
       2: {
-        kicker: 'STEP 2 OF 4 · FORGE A LIGHT BEAM',
-        text: 'Swap the glowing jewels to match 4 — creating a luminous row-sweeping jewel.',
+        kicker: 'STEP 2 OF 6 · FORGE POWER JEWELS',
+        rule: '4 = Light Beam · L/T = Aura Burst · 5 = Royal Tiara Wild',
+        text: 'Swap the glowing jewels to match 4 in a line — forging a glowing Light Beam power jewel!',
         cta: ''
       },
       3: {
-        kicker: 'STEP 3 OF 4 · CURATOR’S VAULT DRAW',
-        text: 'Matches charge the archive bar. Tap VAULT DRAW for 3× Aura, extra moves & gem rain.',
+        kicker: 'STEP 3 OF 6 · FIRE YOUR LIGHT BEAM',
+        rule: 'COMBO TIP · Swap any 2 power jewels together for a mega blast',
+        text: 'Now match the glowing Light Beam jewel to fire a laser sweep across the entire row for big cascade multipliers!',
         cta: ''
       },
       4: {
-        kicker: 'STEP 4 OF 4 · LOUPE & COLLECTION',
-        text: 'Hold any jewel to zoom 3× & read its V&A story. Open ◆ My Collection to track & share all 45 pieces.',
-        cta: 'BEGIN EXHIBITION'
+        kicker: 'STEP 4 OF 6 · CURATOR’S VAULT DRAW',
+        rule: 'REWARDS · 3× Luminous Aura, +Moves, Power Jewels & Gem Rain',
+        text: 'Matches charge the 3-chamber archive bar. Tap VAULT DRAW now to pull 3 museum pieces and rain faceted gemstones!',
+        cta: ''
+      },
+      5: {
+        kicker: 'STEP 5 OF 6 · 3× LOUPE & 8 HISTORIC ERAS',
+        rule: 'HOLD ANY JEWEL · Zoom 3× & read its real V&A museum story',
+        text: 'Tap the Era title to tour all 8 eras (Art Nouveau, Art Deco, Dior, 1960s Gold & 2022 Couture), or hold any piece for 3× Loupe zoom.',
+        cta: 'NEXT →'
+      },
+      6: {
+        kicker: 'STEP 6 OF 6 · COLLECT ALL 45 & SHARE YOUR VAULT',
+        rule: 'GO VIRAL · Share your 9:16 Vault Card on TikTok, IG, FB & Whatnot',
+        text: 'Open ◆ My Collection to track your $ Estate Value, pin your Top 5 Signature Tray, and challenge fellow jewelry collectors!',
+        cta: 'START PLAYING'
       }
     };
 
@@ -247,6 +337,7 @@ export class GalleryTutorial {
     if (!cfg) return;
 
     this.kickerEl.textContent = cfg.kicker;
+    if (this.ruleChipEl) this.ruleChipEl.textContent = cfg.rule;
     this.textEl.textContent = cfg.text;
     if (cfg.cta) {
       this.actionBtn.textContent = cfg.cta;
@@ -256,12 +347,12 @@ export class GalleryTutorial {
     }
 
     if (this.dotsEl) {
-      this.dotsEl.innerHTML = [1, 2, 3, 4]
+      this.dotsEl.innerHTML = [1, 2, 3, 4, 5, 6]
         .map((n) => `<span class="tut-dot ${n === this.step ? 'is-active' : n < this.step ? 'is-done' : ''}"></span>`)
         .join('');
     }
 
-    if ((this.step === 1 || this.step === 2) && this.targetSwap) {
+    if ((this.step === 1 || this.step === 2 || this.step === 3) && this.targetSwap) {
       for (const [r, c] of this.targetSwap) {
         const el = this.game.grid[r]?.[c]?.el;
         if (el) {
@@ -269,18 +360,13 @@ export class GalleryTutorial {
           this.highlightedTiles.push(el);
         }
       }
-    } else if (this.step === 3) {
-      const btn = document.getElementById('spinBtn');
-      if (btn) {
-        btn.classList.add('is-tutorial-ring');
-        this.highlightedEl = btn;
-      }
     } else if (this.step === 4) {
-      const btn = document.getElementById('lookbookBtn');
-      if (btn) {
-        btn.classList.add('is-tutorial-ring');
-        this.highlightedEl = btn;
-      }
+      this._highlightEl('spinBtn');
+    } else if (this.step === 5) {
+      this._highlightEl('erasBtn');
+      this._highlightEl('footerLoupeBtn');
+    } else if (this.step === 6) {
+      this._highlightEl('lookbookBtn');
     }
   }
 }
