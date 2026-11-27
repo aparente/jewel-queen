@@ -1,14 +1,12 @@
 /**
  * Supabase Public Client Configuration (safe for static GitHub Pages frontend).
- * NEVER place a service_role or secret key here — ONLY your project's URL and
- * Publishable (or anon) public key from Supabase Dashboard -> Project Settings -> API.
- *
- * Leave blank to run seamlessly in local Collector Profile mode until configured.
+ * Uses the modern Publishable Key (NEVER service_role or secret keys).
+ * Project: jewel-queen (pxohihigptyrsfvvowwa, us-west-1)
  */
 
 export const SUPABASE_CONFIG = {
-  url: '',
-  publishableKey: ''
+  url: 'https://pxohihigptyrsfvvowwa.supabase.co',
+  publishableKey: 'sb_publishable_26rltASPjySMfSkc_1RRAw_vbC6TbIh'
 };
 
 export function isSupabaseConfigured() {

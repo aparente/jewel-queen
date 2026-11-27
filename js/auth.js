@@ -7,7 +7,7 @@
 
 import { SUPABASE_CONFIG, isSupabaseConfigured } from './supabase-config.js';
 
-const SUPABASE_CDN = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm';
+const SUPABASE_CDN = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/+esm';
 const NAME_STORAGE_KEY = 'jq_collector_name';
 const WHATNOT_STORAGE_KEY = 'jq_whatnot_handle';
 
@@ -118,6 +118,25 @@ export class CollectorAuth {
     const { error } = await this.client.auth.signInWithOAuth({
       provider, // 'facebook' | 'google'
       options: { redirectTo }
+    });
+    if (error) {
+      return { ok: false, reason: error.message };
+    }
+    return { ok: true };
+  }
+
+  async signInWithEmail(email) {
+    if (!this.configured || !this.client) {
+      return { ok: false, reason: 'not-configured' };
+    }
+    const clean = (email || '').trim();
+    if (!clean || !clean.includes('@')) {
+      return { ok: false, reason: 'Please enter a valid email address.' };
+    }
+    const emailRedirectTo = `${window.location.origin}${window.location.pathname}`;
+    const { error } = await this.client.auth.signInWithOtp({
+      email: clean,
+      options: { emailRedirectTo }
     });
     if (error) {
       return { ok: false, reason: error.message };

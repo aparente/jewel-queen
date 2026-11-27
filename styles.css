@@ -2257,6 +2257,12 @@ input:focus-visible,
   color: #141418;
 }
 
+.magic-link-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 2px;
+}
+
 .sso-notice {
   margin: 0;
   padding: 8px 10px;

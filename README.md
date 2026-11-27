@@ -25,16 +25,17 @@
   - `1200×630` Open Graph preview card for Facebook, Messenger, WhatsApp & iMessage.
   - 1-tap `1080×1350` portrait **Shareable Vault Card PNG** displaying the collector's Name, optional **Whatnot `@handle`**, Estate Value, Acquired count (`/45`), Best Score, Top 5 Velvet Tray, and Connie Parente's `@jewelqueen` / `@parenteconnie` colophon.
   - Personalized Challenge Invite URLs (`?invite=...&wn=...&estate=...`).
-- **Collector Passport & Cloud Sync Layer (`js/auth.js`, `supabase/schema.sql`):** Guest Collector Profile + optional Whatnot `@handle` works immediately; Facebook & Google SSO + cross-device Cloud Vault Sync + Collectors' Leaderboard activate once Supabase keys are configured.
+- **Collector Passport & Live Supabase Cloud Sync (`js/auth.js`, `js/supabase-config.js`, `supabase/schema.sql`):** Connected to Supabase (`pxohihigptyrsfvvowwa`) with Row-Level Security on `collector_profiles`. Instant **Email Magic Link** sign-in, cross-device Estate Vault sync, and the live **Collectors' Leaderboard** (with clickable Whatnot `@handle` links) are active now; **Google & Facebook OAuth** buttons are wired and activate as soon as OAuth Client IDs are toggled on in Supabase Auth Providers.
 - **WCAG 2.2 Level AA Accessible:** Pinch-to-zoom & 200%-zoom scroll reflow (`1.4.4`, `1.4.10`), full keyboard playability on the 7×7 board (roving `tabindex`, Arrow keys, `Enter`/`Space` select-and-swap, `I` for Loupe), non-drag arrow pan buttons & keyboard shortcuts in the 3× Loupe (`2.5.7`), all interactive targets ≥ `24×24px` (`2.5.8`), AA text (`≥ 5.7:1`) & UI border (`≥ 4.0:1`) contrast (`1.4.3`, `1.4.11`), unified `:focus-visible` rings, labelled inputs, and semantic ARIA across all 7 dialogs.
 
 ---
 
 ## Upcoming Features & Roadmap
 
-### 1. Live Facebook & Google SSO + Collectors' Leaderboard Activation *(Next Up)*
-- [ ] Connect a free [Supabase](https://supabase.com) project by running [`supabase/schema.sql`](supabase/schema.sql) in the SQL Editor, enabling Google & Facebook OAuth providers, and adding the public Project URL + Publishable key in [`js/supabase-config.js`](js/supabase-config.js).
-- [ ] Enable cross-device Estate Vault sync (Instagram in-app browser ↔ Facebook ↔ Safari ↔ Desktop) and live Collectors' Leaderboard with clickable Whatnot `@handle` links.
+### 1. Finish Toggling On Google & Facebook OAuth Providers *(Next Up)*
+- [x] Supabase project (`jewel-queen` · `pxohihigptyrsfvvowwa`) created, `collector_profiles` RLS migration applied (0 security advisor issues), Publishable key wired, and instant Email Magic Link sign-in + Leaderboard live.
+- [ ] In [Supabase Auth URL Configuration](https://supabase.com/dashboard/project/pxohihigptyrsfvvowwa/auth/url-configuration), set **Site URL** to `https://aparente.github.io/jewel-queen/` and add it to **Redirect URLs**.
+- [ ] In [Supabase Auth Providers](https://supabase.com/dashboard/project/pxohihigptyrsfvvowwa/auth/providers), paste your Google Cloud OAuth Client ID/Secret and Meta Developer Facebook App ID/Secret (using callback URL `https://pxohihigptyrsfvvowwa.supabase.co/auth/v1/callback`).
 
 ### 2. Customizable Collector Trays & Gallery Backgrounds
 - [ ] Surface an in-gallery tray material switcher so players can toggle between **Pure Black Velvet** (default), **Living Black Opal** (already prototyped on branch `tray/living-opal` / tag `checkpoint/v1.3-living-opal-tray`), and future velvet/mineral finishes.

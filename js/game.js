@@ -1647,20 +1647,36 @@ class JewelQueenGame {
       if (e.target === this.accountDialog) this.accountDialog.close();
     });
 
-    // Facebook & Google SSO buttons
+    // Facebook, Google & Email Magic Link sign-in buttons
     const handleSSO = async (provider) => {
       audio.playSelect();
       const res = await this.auth.signInWithProvider(provider);
       if (!res.ok && this.ssoNotice) {
         this.ssoNotice.hidden = false;
+        const label = provider === 'facebook' ? 'Facebook' : 'Google';
         this.ssoNotice.textContent =
           res.reason === 'not-configured'
-            ? 'Facebook & Google SSO is ready — add your free Supabase URL & Publishable Key in js/supabase-config.js to turn on live Cloud Sync. You can still set your name & share your Vault Card below right now!'
-            : `Sign-in paused: ${res.reason}`;
+            ? 'Cloud SSO is not configured yet.'
+            : /not enabled/i.test(res.reason)
+              ? `${label} OAuth is not toggled on yet in Supabase Auth Providers — use the Email Link box below right now, or toggle ${label} on in your Supabase dashboard.`
+              : `Sign-in notice: ${res.reason}`;
       }
     };
     document.getElementById('facebookSignInBtn')?.addEventListener('click', () => handleSSO('facebook'));
     document.getElementById('googleSignInBtn')?.addEventListener('click', () => handleSSO('google'));
+
+    const magicEmailInput = document.getElementById('magicEmailInput');
+    document.getElementById('magicEmailBtn')?.addEventListener('click', async () => {
+      audio.playSelect();
+      if (!magicEmailInput) return;
+      const res = await this.auth.signInWithEmail(magicEmailInput.value);
+      if (this.ssoNotice) {
+        this.ssoNotice.hidden = false;
+        this.ssoNotice.textContent = res.ok
+          ? `Magic sign-in link sent to ${magicEmailInput.value.trim()} — tap the link in your inbox to sync your Vault!`
+          : res.reason;
+      }
+    });
     document.getElementById('signOutBtn')?.addEventListener('click', async () => {
       audio.playSelect();
       await this.auth.signOut();
