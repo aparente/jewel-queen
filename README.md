@@ -26,7 +26,7 @@
   - 1-tap **9:16 TikTok / Story (`1080×1920`)** and **4:5 IG / Facebook (`1080×1350`)** **Shareable Vault Card PNGs** displaying the collector's Name, optional **Whatnot `@handle`**, Estate Value, Acquired count (`/45`), Best Score, Top 5 Velvet Tray, and Connie Parente's `@jewelqueen` / `@parenteconnie` colophon.
   - 1-tap **Copy Viral Caption + `#hashtags`** (`#vintagejewelry #antiquejewelry #whatnot #jewelqueen ...`) and personalized Challenge Invite URLs (`?invite=...&wn=...&estate=...`).
 - **Collector Passport & Live Supabase Cloud Sync (`js/auth.js`, `js/supabase-config.js`, `supabase/schema.sql`):** Connected to Supabase (`pxohihigptyrsfvvowwa`) with Row-Level Security on `collector_profiles`. Instant **Email Magic Link** sign-in, cross-device Estate Vault sync, and the live **Collectors' Leaderboard** (with clickable Whatnot `@handle` links) are active now; **Google & Facebook OAuth** buttons are wired and activate as soon as OAuth Client IDs are toggled on in Supabase Auth Providers.
-- **WCAG 2.2 Level AA Accessible:** Pinch-to-zoom & 200%-zoom scroll reflow (`1.4.4`, `1.4.10`), full keyboard playability on the 7×7 board (roving `tabindex`, Arrow keys, `Enter`/`Space` select-and-swap, `I` for Loupe), non-drag arrow pan buttons & keyboard shortcuts in the 3× Loupe (`2.5.7`), all interactive targets ≥ `24×24px` (`2.5.8`), AA text (`≥ 5.7:1`) & UI border (`≥ 4.0:1`) contrast (`1.4.3`, `1.4.11`), unified `:focus-visible` rings, labelled inputs, and semantic ARIA across all 7 dialogs.
+- **WCAG 2.2 Level AA Accessible + Automated Post-Commit Skill & Hook:** Pinch-to-zoom & 200%-zoom scroll reflow (`1.4.4`, `1.4.10`), full keyboard playability on the 7×7 board (roving `tabindex`, Arrow keys, `Enter`/`Space` select-and-swap, `I` for Loupe), non-drag arrow pan buttons & keyboard shortcuts in the 3× Loupe (`2.5.7`), all interactive targets ≥ `24×24px` (`2.5.8`), AA text (`≥ 5.7:1`) & UI border (`≥ 4.0:1`) contrast (`1.4.3`, `1.4.11`), unified `:focus-visible` rings, labelled inputs, and semantic ARIA across all 7 dialogs — continuously enforced by the workspace skill (`.agents/skills/wcag22-accessibility-check/`) and post-commit hook (`.githooks/post-commit` + `.agents/hooks.json`) that auto-fixes deterministic regressions and re-commits cleanly with `[skip-a11y]`.
 
 ---
 
@@ -52,6 +52,7 @@ See [`CHECKPOINTS.md`](CHECKPOINTS.md) for all saved checkpoint tags and planned
 - [ ] `game/maximalist-slots` — 5×3 museum slot cabinet with cascading jewel reels & collector jackpots
 
 ### Recently Completed
+- [x] **WCAG 2.2 Accessibility Skill & Post-Commit Auto-Fix Hook:** Packaged the accessibility audit as a reusable Antigravity skill (`.agents/skills/wcag22-accessibility-check/`) and wired both a Git `post-commit` hook (`.githooks/post-commit`) and Antigravity lifecycle hooks (`.agents/hooks.json`) to run after every commit, auto-fix deterministic WCAG 2.2 regressions, and re-commit without looping.
 - [x] **Welcome Invitation, Login Greeting, 6-Step Hands-On Tutorial & 9:16 TikTok/Story Share Cards (`checkpoint/v2.5-viral-onboarding`):** First-visit museum invitation, personalized login welcome toast, 6-step tutorial (including firing a forged Light Beam), 9:16 (`1080×1920`) + 4:5 (`1080×1350`) Vault Cards, and 1-tap viral caption + hashtags.
 - [x] **Live Supabase Cloud Sync & Instant Email Magic Link:** Dedicated `jewel-queen` project (`pxohihigptyrsfvvowwa`) with verified RLS and 0 security warnings.
 - [x] **WCAG 2.2 Level AA Accessibility Pass (`checkpoint/v2.4-wcag22-aa`):** Pinch-zoom & scroll reflow, keyboard playability on the 7×7 board, non-drag 3× Loupe pan controls, ≥ `24×24px` target sizes, AA text & UI border contrast, `:focus-visible` rings, and full ARIA/dialog semantics.
@@ -64,6 +65,13 @@ See [`CHECKPOINTS.md`](CHECKPOINTS.md) for all saved checkpoint tags and planned
 ## Local Development
 
 ```bash
+# Enable tracked Git post-commit WCAG 2.2 accessibility hook (once per clone)
+git config core.hooksPath .githooks
+
+# Run the WCAG 2.2 accessibility skill checker manually anytime
+node .agents/skills/wcag22-accessibility-check/scripts/wcag22_check.mjs
+
+# Start local preview server
 python3 -m http.server 8765 --directory .
 # Open http://localhost:8765/
 ```

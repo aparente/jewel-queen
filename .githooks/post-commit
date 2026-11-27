@@ -1,0 +1,45 @@
+#!/bin/sh
+# Jewel Queen — Post-Commit WCAG 2.2 AA Accessibility Hook
+# Runs the wcag22-accessibility-check skill script after every commit, auto-fixes
+# deterministic WCAG 2.2 issues, and re-commits cleanly with [skip-a11y] to avoid loops.
+
+# Loop guard: never recurse on auto-fix commits or nested invocations
+if [ "${A11Y_POST_COMMIT_RUNNING:-0}" = "1" ]; then
+  exit 0
+fi
+
+LAST_MSG="$(git log -1 --pretty=%s 2>/dev/null || true)"
+case "$LAST_MSG" in
+  *"[skip-a11y]"*|a11y:*)
+    exit 0
+    ;;
+esac
+
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+CHECKER="$REPO_ROOT/.agents/skills/wcag22-accessibility-check/scripts/wcag22_check.mjs"
+
+if [ ! -f "$CHECKER" ]; then
+  exit 0
+fi
+
+echo "[post-commit a11y] Running WCAG 2.2 AA accessibility check..."
+A11Y_POST_COMMIT_RUNNING=1 node "$CHECKER" --fix --root "$REPO_ROOT"
+CHECK_EXIT=$?
+
+# Save machine-readable report for the Antigravity Stop hook too
+mkdir -p "$REPO_ROOT/.agents"
+node "$CHECKER" --json --root "$REPO_ROOT" > "$REPO_ROOT/.agents/.a11y-last-report.json" 2>/dev/null || true
+
+# If --fix modified tracked web files, stage and re-commit automatically
+CHANGED="$(git status --porcelain -- index.html styles.css js/ 2>/dev/null || true)"
+if [ -n "$CHANGED" ]; then
+  echo "[post-commit a11y] Auto-fixed WCAG 2.2 AA issue(s); creating follow-up commit..."
+  git add -- index.html styles.css js/
+  A11Y_POST_COMMIT_RUNNING=1 git commit --no-verify -m "a11y: auto-fix WCAG 2.2 AA accessibility issues [skip-a11y]"
+  # Re-run report so status reflects the clean re-committed state
+  node "$CHECKER" --json --root "$REPO_ROOT" > "$REPO_ROOT/.agents/.a11y-last-report.json" 2>/dev/null || true
+elif [ "$CHECK_EXIT" -ne 0 ]; then
+  echo "[post-commit a11y] Manual WCAG 2.2 AA fixes required (see report above)."
+fi
+
+exit 0

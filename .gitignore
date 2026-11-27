@@ -1,6 +1,7 @@
 .DS_Store
 __pycache__/
 *.pyc
+.agents/.a11y-last-report.json
 
 # Intermediate raw downloads & QA contact sheets (final sprites in assets/museum_jewels & assets/museum_hires are tracked)
 assets/raw/
