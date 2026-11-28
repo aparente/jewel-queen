@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#030305" />
+    <title>Privacy Policy — JEWEL QUEEN</title>
+    <meta
+      name="description"
+      content="Privacy Policy for Jewel Queen — how Collector Passport sign-in, cloud vault sync, leaderboard profiles, and data deletion work."
+    />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="120x120" href="assets/app-logo-120.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #030305;
+        --surface: #0b0c11;
+        --border: rgba(245, 242, 237, 0.22);
+        --text: #f4f1ec;
+        --muted: #c2bdb4;
+        --accent: #e8d5a8;
+        --font-serif: 'Cormorant Garamond', Georgia, serif;
+        --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--font-sans);
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      a {
+        color: var(--accent);
+        text-underline-offset: 3px;
+      }
+
+      a:hover {
+        color: #ffffff;
+      }
+
+      a:focus-visible,
+      button:focus-visible {
+        outline: 2px solid #ffffff;
+        outline-offset: 3px;
+        border-radius: 4px;
+      }
+
+      .page-wrap {
+        max-width: 740px;
+        margin: 0 auto;
+        padding: 36px 20px 64px;
+      }
+
+      .doc-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 12px;
+        padding-bottom: 28px;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 32px;
+      }
+
+      .doc-logo {
+        width: 76px;
+        height: 76px;
+        border-radius: 16px;
+        display: block;
+      }
+
+      .doc-kicker {
+        margin: 0;
+        font-size: 0.72rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .doc-title {
+        margin: 0;
+        font-family: var(--font-serif);
+        font-weight: 400;
+        font-size: clamp(2rem, 5vw, 2.75rem);
+        letter-spacing: 0.06em;
+        line-height: 1.15;
+      }
+
+      .doc-meta {
+        margin: 0;
+        font-size: 0.84rem;
+        color: var(--muted);
+      }
+
+      .top-nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 14px;
+        margin-top: 6px;
+      }
+
+      .top-nav a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 36px;
+        padding: 6px 14px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        text-decoration: none;
+        font-size: 0.82rem;
+        letter-spacing: 0.04em;
+        color: var(--text);
+      }
+
+      .top-nav a:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      main section {
+        margin-bottom: 28px;
+        padding: 22px 24px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+      }
+
+      h2 {
+        margin: 0 0 10px;
+        font-family: var(--font-serif);
+        font-weight: 600;
+        font-size: 1.45rem;
+        letter-spacing: 0.03em;
+        color: #ffffff;
+      }
+
+      p {
+        margin: 0 0 12px;
+        font-size: 0.94rem;
+        color: var(--text);
+      }
+
+      p:last-child {
+        margin-bottom: 0;
+      }
+
+      ul {
+        margin: 8px 0 12px;
+        padding-left: 20px;
+      }
+
+      li {
+        margin-bottom: 8px;
+        font-size: 0.94rem;
+        color: var(--text);
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .doc-footer {
+        margin-top: 36px;
+        padding-top: 20px;
+        border-top: 1px solid var(--border);
+        text-align: center;
+        font-size: 0.84rem;
+        color: var(--muted);
+      }
+
+      .doc-footer nav {
+        display: flex;
+        justify-content: center;
+        gap: 18px;
+        margin-bottom: 10px;
+      }
+
+      .doc-footer nav a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 32px;
+        padding: 4px 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-wrap">
+      <header class="doc-header">
+        <a href="./" aria-label="Return to Jewel Queen">
+          <img src="assets/app-logo-120.png" alt="Jewel Queen museum tiara emblem" class="doc-logo" width="76" height="76" />
+        </a>
+        <p class="doc-kicker">JEWEL QUEEN — GALLERY ARCHIVE</p>
+        <h1 class="doc-title">Privacy Policy</h1>
+        <p class="doc-meta">Effective Date: November 27, 2026 · Contact: <a href="mailto:support@angelica-parente.com">support@angelica-parente.com</a></p>
+        <nav class="top-nav" aria-label="Document navigation">
+          <a href="./">← Back to Jewel Queen</a>
+          <a href="terms.html">Terms of Service</a>
+        </nav>
+      </header>
+
+      <main>
+        <section>
+          <h2>1. Overview</h2>
+          <p>
+            Jewel Queen (<a href="https://aparente.github.io/jewel-queen/">https://aparente.github.io/jewel-queen/</a>) is a web-based vintage and museum jewelry collection game operated by Angelica Parente ("we", "us", "our"). This Privacy Policy explains what information is stored when you play, how optional cloud sign-in works, and how we may handle data as the app evolves.
+          </p>
+          <p>
+            You can play Jewel Queen without creating an account. Creating a Collector Passport is completely optional and is used to sync your vault across devices and appear on the Collectors' Leaderboard.
+          </p>
+        </section>
+
+        <section>
+          <h2>2. Information We Collect &amp; Store</h2>
+          <ul>
+            <li>
+              <strong>Local Device Storage (No Account Needed):</strong> Your game progress, unlocked museum jewels, pinned 5-piece Signature Lineup, high scores, and display preferences are saved locally in your browser via <code>localStorage</code>.
+            </li>
+            <li>
+              <strong>Optional Account &amp; OAuth Sign-In:</strong> If you choose to sign in using Email Magic Link, Google Sign-In, or Facebook Login (powered by Supabase Auth), we receive basic authentication details provided by your chosen sign-in method — specifically your email address, account identifier, and (when provided by Google or Facebook) your display name and profile image URL.
+            </li>
+            <li>
+              <strong>Collector Profile &amp; Leaderboard Data:</strong> When signed in, we store your Collector Display Name, optional Whatnot <code>@handle</code>, avatar URL, best score, virtual Estate Valuation, acquired jewel IDs, and pinned showcase lineup in our Supabase database so your collection syncs across devices and can appear on the public Collectors' Leaderboard.
+            </li>
+            <li>
+              <strong>Gameplay, Product &amp; Performance Analytics:</strong> We may collect pseudonymous usage, gameplay, and technical telemetry — such as exhibitions played, level completion and drop-off rates, feature usage (Loupe, Vault Draw, Share Cards, Era switching), referral/invite link parameters, page load and rendering performance, crash/error diagnostics, device/viewport type, and approximate region — to optimize gameplay balance, performance, features, growth, and business or monetization strategies.
+            </li>
+            <li>
+              <strong>Support Communications:</strong> If you email <a href="mailto:support@angelica-parente.com">support@angelica-parente.com</a>, we keep your message and email address to respond and troubleshoot issues.
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>3. How We Use Google &amp; Social Sign-In Data</h2>
+          <p>
+            When you sign in with Google or Facebook, we request only basic identity information (email address and basic profile name/avatar) solely to authenticate your Collector Passport, prevent duplicate accounts, and sync your Jewel Queen progress. We do <strong>not</strong> access your emails, contacts, files, calendar, posts, or friends lists, and we do not use Google OAuth user data for third-party advertising.
+          </p>
+          <p>
+            Our use of information received from Google APIs adheres to the
+            <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener noreferrer">Google API Services User Data Policy</a>, including the Limited Use requirements.
+          </p>
+        </section>
+
+        <section>
+          <h2>4. Service Providers, Analytics &amp; External Links</h2>
+          <p>We rely on trusted infrastructure and product tools to operate and improve the game:</p>
+          <ul>
+            <li><strong>GitHub Pages</strong> hosts the static web application and assets.</li>
+            <li><strong>Supabase</strong> provides optional authentication, cloud vault storage, leaderboard queries, and first-party gameplay/product analytics with Row-Level Security.</li>
+            <li><strong>Analytics &amp; Telemetry Providers:</strong> We may use first-party or third-party product analytics, session/funnel measurement, and performance monitoring tools (which may use cookies or local browser identifiers) to understand engagement, retention, and technical stability.</li>
+            <li><strong>Google Fonts</strong> serves display typography.</li>
+          </ul>
+          <p>
+            Jewel Queen also includes optional outbound links to external websites (such as the Victoria &amp; Albert Museum archive, Whatnot, and Instagram). Clicking an external link is governed by that third party's own privacy policy. Jewel Queen is an independent project and is not affiliated with or endorsed by Google, Meta/Facebook, Whatnot, or the Victoria &amp; Albert Museum.
+          </p>
+        </section>
+
+        <section>
+          <h2>5. Future Features &amp; Monetization</h2>
+          <p>
+            Today, Jewel Queen is free to play and does not process payments. As Jewel Queen grows, we may introduce new features or monetization models — including optional paid memberships, cosmetic or collector upgrades, virtual items, sponsorships, affiliate or shopping links, A/B experiments, or advertising — informed by gameplay and product analytics.
+          </p>
+          <p>
+            Before introducing payment processing, personalized advertising, or materially different data sharing, we will update this Privacy Policy with specific details and obtain any consent or opt-out controls required by applicable law.
+          </p>
+        </section>
+
+        <section>
+          <h2>6. Your Choices &amp; Data Deletion</h2>
+          <ul>
+            <li><strong>Clear Local Progress:</strong> You can clear local gameplay data at any time through your browser's site data settings.</li>
+            <li><strong>Sign Out or Edit Profile:</strong> While signed in, you can update your Collector Display Name and optional Whatnot handle or sign out from the Collector Passport menu.</li>
+            <li><strong>Delete Your Account &amp; Cloud Data:</strong> To request permanent deletion of your Collector Passport, email record, and leaderboard entry, email <a href="mailto:support@angelica-parente.com">support@angelica-parente.com</a> with the subject line <em>"Data Deletion Request"</em> from (or referencing) the email associated with your account. We will complete verified deletion requests within 30 days.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>7. Children's Privacy</h2>
+          <p>
+            Jewel Queen is not directed to children under 13 (or the minimum age of digital consent in your jurisdiction), and we do not knowingly collect personal information from children under 13. If you believe a child has created an account, please email <a href="mailto:support@angelica-parente.com">support@angelica-parente.com</a> and we will promptly delete the data.
+          </p>
+        </section>
+
+        <section>
+          <h2>8. Updates to This Policy</h2>
+          <p>
+            We may update this Privacy Policy from time to time to reflect product improvements, legal requirements, or new business models. The Effective Date at the top of this page indicates when it was last revised.
+          </p>
+        </section>
+      </main>
+
+      <footer class="doc-footer">
+        <nav aria-label="Footer legal links">
+          <a href="./">Play Jewel Queen</a>
+          <a href="privacy.html" aria-current="page">Privacy Policy</a>
+          <a href="terms.html">Terms of Service</a>
+        </nav>
+        <p>Questions? Contact <a href="mailto:support@angelica-parente.com">support@angelica-parente.com</a></p>
+      </footer>
+    </div>
+  </body>
+</html>

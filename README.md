@@ -42,21 +42,25 @@
 - [x] In [Supabase Auth URL Configuration](https://supabase.com/dashboard/project/pxohihigptyrsfvvowwa/auth/url-configuration), set **Site URL** to `https://aparente.github.io/jewel-queen/` and added `https://aparente.github.io/jewel-queen/**` to **Redirect URLs**.
 - [ ] In [Supabase Auth Providers](https://supabase.com/dashboard/project/pxohihigptyrsfvvowwa/auth/providers), paste your Google Cloud OAuth Client ID/Secret (and optional Meta Developer Facebook App ID/Secret) using callback URL `https://pxohihigptyrsfvvowwa.supabase.co/auth/v1/callback`.
 
-### 2. Customizable Collector Trays & Gallery Backgrounds
+### 2. Gameplay, Product & Growth Analytics
+- [ ] Instrument lightweight, privacy-friendly event & performance analytics (funnel drop-off across Welcome → Tutorial → Era completion, Share Card conversions, `?invite=` viral K-factor, Loupe & Vault Draw engagement, WebGL/frame-rate telemetry, and retention cohorts) to guide gameplay tuning, feature prioritization, and monetization strategy.
+
+### 3. Customizable Collector Trays & Gallery Backgrounds
 - [ ] Surface an in-gallery tray material switcher so players can toggle between **Pure Black Velvet** (default), **Living Black Opal** (already prototyped on branch `tray/living-opal` / tag `checkpoint/v1.3-living-opal-tray`), and future velvet/mineral finishes.
 
-### 3. Collector Virality & Community Features
+### 4. Collector Virality & Community Features
 - [ ] **Daily Curated Exhibition Challenge:** One shared daily board & featured V&A grail so collectors in Facebook & Instagram groups can compare scores on the exact same tray.
 - [ ] **Public Shareable Vault Page (`?vault=<handle>`):** Let friends inspect another collector's full pinned 5-piece Signature Lineup in 3× Loupe zoom.
 - [ ] **Optional "Shop Connie's Real Vault" Showcase:** Standalone off-platform browse drawer linking Connie's real Whatnot `@jewelqueen` vintage pieces (strictly separate from live-show gameplay to stay 100% compliant with Whatnot policies).
 
-### 4. Experimental Game Mode Branches *(Shared 45-Piece V&A Core)*
+### 5. Experimental Game Mode Branches *(Shared 45-Piece V&A Core)*
 See [`CHECKPOINTS.md`](CHECKPOINTS.md) for all saved checkpoint tags and planned spin-off branches:
 - [ ] `game/pokemon-collector` — Estate auction pulls, rarity drops, appraisal mini-games & Fantasy Lineup scoring
 - [ ] `game/jewel-asteroids` — Mobile arcade spin collecting drifting museum jewels across black velvet space
 - [ ] `game/maximalist-slots` — 5×3 museum slot cabinet with cascading jewel reels & collector jackpots
 
 ### Recently Completed
+- [x] **App Logo, Favicons, Privacy Policy & Terms of Service:** Custom museum tiara icon (`assets/app-logo-512.png`, `120×120` Google OAuth icon, `apple-touch-icon.png`, `favicon-32.png`) plus gallery-styled [`privacy.html`](privacy.html) and [`terms.html`](terms.html) covering OAuth Limited Use, analytics telemetry, data deletion, V&A attribution, and future monetization flexibility.
 - [x] **WCAG 2.2 Accessibility Skill & Post-Commit Auto-Fix Hook:** Packaged the accessibility audit as a reusable Antigravity skill (`.agents/skills/wcag22-accessibility-check/`) and wired both a Git `post-commit` hook (`.githooks/post-commit`) and Antigravity lifecycle hooks (`.agents/hooks.json`) to run after every commit, auto-fix deterministic WCAG 2.2 regressions, and re-commit without looping.
 - [x] **Welcome Invitation, Login Greeting, 6-Step Hands-On Tutorial & 9:16 TikTok/Story Share Cards (`checkpoint/v2.5-viral-onboarding`):** First-visit museum invitation, personalized login welcome toast, 6-step tutorial (including firing a forged Light Beam), 9:16 (`1080×1920`) + 4:5 (`1080×1350`) Vault Cards, and 1-tap viral caption + hashtags.
 - [x] **Live Supabase Cloud Sync & Instant Email Magic Link:** Dedicated `jewel-queen` project (`pxohihigptyrsfvvowwa`) with verified RLS and 0 security warnings.
