@@ -1,8 +1,13 @@
-# JEWEL QUEEN — Gallery Archive
+<p align="center">
+  <img src="assets/app-logo-512.png" alt="Jewel Queen museum platinum, diamond, and ruby tiara emblem" width="160" />
+</p>
 
-**Play live on mobile or desktop:** https://aparente.github.io/jewel-queen/
+<h1 align="center">JEWEL QUEEN — Gallery Archive</h1>
 
-*A private gallery game made by & for family — inspired by Connie Parente (**Whatnot [`@jewelqueen`](https://www.whatnot.com/user/jewelqueen)** · **Instagram [`@parenteconnie`](https://www.instagram.com/parenteconnie/?hl=en)**).*
+<p align="center">
+  <strong>Play live on mobile or desktop:</strong> <a href="https://aparente.github.io/jewel-queen/">https://aparente.github.io/jewel-queen/</a><br />
+  <em>A private gallery game made by &amp; for family — inspired by Connie Parente (<strong>Whatnot <a href="https://www.whatnot.com/user/jewelqueen">@jewelqueen</a></strong> · <strong>Instagram <a href="https://www.instagram.com/parenteconnie/?hl=en">@parenteconnie</a></strong>).</em>
+</p>
 
 ---
 
@@ -34,8 +39,8 @@
 
 ### 1. Finish Toggling On Google & Facebook OAuth Providers *(Next Up)*
 - [x] Supabase project (`jewel-queen` · `pxohihigptyrsfvvowwa`) created, `collector_profiles` RLS migration applied (0 security advisor issues), Publishable key wired, and instant Email Magic Link sign-in + Leaderboard live.
-- [ ] In [Supabase Auth URL Configuration](https://supabase.com/dashboard/project/pxohihigptyrsfvvowwa/auth/url-configuration), set **Site URL** to `https://aparente.github.io/jewel-queen/` and add it to **Redirect URLs**.
-- [ ] In [Supabase Auth Providers](https://supabase.com/dashboard/project/pxohihigptyrsfvvowwa/auth/providers), paste your Google Cloud OAuth Client ID/Secret and Meta Developer Facebook App ID/Secret (using callback URL `https://pxohihigptyrsfvvowwa.supabase.co/auth/v1/callback`).
+- [x] In [Supabase Auth URL Configuration](https://supabase.com/dashboard/project/pxohihigptyrsfvvowwa/auth/url-configuration), set **Site URL** to `https://aparente.github.io/jewel-queen/` and added `https://aparente.github.io/jewel-queen/**` to **Redirect URLs**.
+- [ ] In [Supabase Auth Providers](https://supabase.com/dashboard/project/pxohihigptyrsfvvowwa/auth/providers), paste your Google Cloud OAuth Client ID/Secret (and optional Meta Developer Facebook App ID/Secret) using callback URL `https://pxohihigptyrsfvvowwa.supabase.co/auth/v1/callback`.
 
 ### 2. Customizable Collector Trays & Gallery Backgrounds
 - [ ] Surface an in-gallery tray material switcher so players can toggle between **Pure Black Velvet** (default), **Living Black Opal** (already prototyped on branch `tray/living-opal` / tag `checkpoint/v1.3-living-opal-tray`), and future velvet/mineral finishes.
